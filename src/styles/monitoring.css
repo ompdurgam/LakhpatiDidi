@@ -1,0 +1,634 @@
+.district-map button {
+  width: 70px;
+  height: 48px;
+}
+.district-map button span,
+.district-map button small {
+  display: block;
+}
+.district-map button small {
+  margin-top: 2px;
+  font: 5px "Noto Sans Devanagari";
+}
+.district-map-card > .map-legend {
+  justify-content: center;
+}
+.district-matrix {
+  margin-top: 14px;
+  padding: 18px;
+}
+.matrix-triple-legend {
+  display: flex;
+  gap: 8px;
+}
+.matrix-triple-legend span {
+  color: #758078;
+  font-size: 6px;
+}
+.matrix-triple-legend i {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 2px;
+  border-radius: 1px;
+}
+.matrix-triple-legend i.sanctioned {
+  background: var(--ld-green-500);
+}
+.matrix-triple-legend i.pending {
+  background: #dca63b;
+}
+.matrix-triple-legend i.overdue {
+  background: #bd5547;
+}
+.district-matrix-scroll {
+  margin-top: 12px;
+  overflow-x: auto;
+}
+.district-matrix-head,
+.district-matrix-row {
+  min-width: 760px;
+  display: grid;
+  grid-template-columns: 110px repeat(5, 1fr);
+  gap: 5px;
+  align-items: center;
+}
+.district-matrix-head {
+  padding: 7px;
+  background: #f3f6f3;
+  color: #748078;
+  font-size: 6px;
+}
+.district-matrix-row {
+  min-height: 42px;
+  padding: 5px 7px;
+  border-bottom: 1px solid var(--ld-surface-alt);
+}
+.district-matrix-row > strong {
+  color: #46564b;
+  font-size: 7px;
+}
+.district-matrix-row > div {
+  padding: 6px;
+  border-radius: 5px;
+  background: #f4f7f4;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  text-align: center;
+}
+.district-matrix-row b {
+  color: var(--ld-green-650);
+  font: 700 7px Inter;
+}
+.district-matrix-row em {
+  color: #a36d1a;
+  font: 700 7px Inter;
+  font-style: normal;
+}
+.district-matrix-row small {
+  color: #66746b;
+  font: 700 7px Inter;
+}
+.district-matrix-row small.red {
+  border-radius: 3px;
+  background: #fae4e0;
+  color: #b24e41;
+}
+.district-insights-grid,
+.district-charts-grid,
+.district-report-grid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap: 14px;
+}
+.candidate-villages,
+.collector-escalations,
+.sector-donut-card,
+.income-band-chart,
+.block-report-status,
+.district-due-card,
+.district-certification {
+  padding: 17px;
+}
+.candidate-table {
+  margin-top: 10px;
+}
+.candidate-table > div {
+  min-height: 38px;
+  border-bottom: 1px solid var(--ld-surface-alt);
+  display: grid;
+  grid-template-columns: 1fr 0.5fr 0.7fr auto;
+  align-items: center;
+  gap: 6px;
+  font-size: 7px;
+}
+.candidate-table .head {
+  min-height: 28px;
+  background: #f5f7f4;
+  color: #7c877f;
+}
+.candidate-table strong {
+  color: #405045;
+}
+.candidate-table b {
+  font: 600 7px Inter;
+}
+.candidate-table button {
+  height: 27px;
+  border: 1px solid #8eae96;
+  border-radius: 6px;
+  background: var(--ld-green-50);
+  color: #2f6d48;
+  padding: 0 7px;
+  font-size: 6px;
+}
+.collector-escalations > div:not(.card-head) {
+  min-height: 49px;
+  border-bottom: 1px solid var(--ld-surface-alt);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.collector-escalations p {
+  flex: 1;
+  margin: 0;
+}
+.collector-escalations strong,
+.collector-escalations small {
+  display: block;
+}
+.collector-escalations strong {
+  color: #46564b;
+  font-size: 6.5px;
+}
+.collector-escalations small {
+  color: #8a7b73;
+  font-size: 5.5px;
+}
+.collector-escalations > div > b {
+  color: #b24e41;
+  font: 600 6px Inter;
+}
+.district-donut-wrap {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+}
+.sector-donut {
+  width: 145px;
+  height: 145px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--ld-green-500) 0 28%,
+    #85a965 28% 40%,
+    #dca63b 40% 56%,
+    #5b8fa9 56% 64%,
+    #8a7058 64% 78%,
+    #b77a59 78% 87%,
+    #8d7ab5 87% 91%,
+    #718a79 91% 100%
+  );
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+.sector-donut::after {
+  content: "";
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: white;
+  position: absolute;
+}
+.sector-donut > span {
+  position: relative;
+  z-index: 1;
+  color: var(--ld-text-strong);
+  text-align: center;
+  font: 700 14px Inter;
+}
+.sector-donut small {
+  display: block;
+  color: var(--ld-text-muted);
+  font: 6px "Noto Sans Devanagari";
+}
+.sector-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+.sector-legend span {
+  color: #657269;
+  font-size: 6px;
+}
+.sector-legend i {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 4px;
+  border-radius: 2px;
+}
+.income-band-chart > div:not(.card-head) {
+  margin-top: 13px;
+  display: grid;
+  grid-template-columns: 55px 1fr 50px;
+  align-items: center;
+  gap: 7px;
+}
+.income-band-chart span {
+  color: #657269;
+  font: 600 7px Inter;
+}
+.income-band-chart i {
+  height: 14px;
+  border-radius: 4px;
+  background: #e8ece8;
+  overflow: hidden;
+}
+.income-band-chart i b {
+  display: block;
+  height: 100%;
+  background: #7e9f89;
+}
+.income-band-chart i .band-2 {
+  background: #dca63b;
+}
+.income-band-chart i .band-3 {
+  background: var(--ld-green-500);
+}
+.income-band-chart strong {
+  text-align: right;
+  font: 600 7px Inter;
+}
+.block-report-status > div:not(.card-head) {
+  min-height: 36px;
+  border-bottom: 1px solid var(--ld-surface-alt);
+  display: grid;
+  grid-template-columns: 1fr 0.8fr auto;
+  align-items: center;
+  gap: 6px;
+}
+.block-report-status strong {
+  color: #46564b;
+  font-size: 7px;
+}
+.block-report-status div > span {
+  color: var(--ld-text-muted);
+  font-size: 6px;
+}
+.district-due-card {
+  display: grid;
+  grid-template-columns: 42px 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+.district-due-card > span {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--ld-gold-50);
+  color: #a56f1a;
+  display: grid;
+  place-items: center;
+}
+.district-due-card small,
+.district-due-card strong,
+.district-due-card p {
+  display: block;
+  margin: 0;
+}
+.district-due-card small {
+  color: #7d8980;
+  font-size: 6px;
+}
+.district-due-card strong {
+  color: var(--ld-text-strong);
+  font-size: 13px;
+}
+.district-due-card p {
+  color: var(--ld-text-muted);
+  font-size: 6.5px;
+}
+.district-due-card .primary {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+.district-certification {
+  grid-column: 1 / -1;
+}
+.state-top-grid,
+.state-analysis-grid,
+.state-compliance-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 14px;
+  margin-top: 14px;
+}
+.state-map-card,
+.statewide-funnel,
+.state-heatmap,
+.financial-support,
+.crp-mapping,
+.reporting-compliance {
+  padding: 17px;
+}
+.state-regions {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 0.8fr 1.3fr 0.8fr;
+  gap: 8px;
+  align-items: start;
+}
+.state-regions > div {
+  padding: 9px;
+  border-radius: 12px;
+  background: #f3f7f4;
+}
+.state-regions h4 {
+  margin: 0 0 7px;
+  color: #53645a;
+  text-align: center;
+  font-size: 7px;
+}
+.state-regions > div > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+.state-regions button {
+  width: 34px;
+  height: 31px;
+  border: 2px solid white;
+  border-radius: 7px 10px 8px 11px;
+  color: #3e654a;
+  font: 600 6px "Noto Sans Devanagari";
+}
+.state-regions button.low {
+  background: #dcebdd;
+}
+.state-regions button.medium {
+  background: #8fba9b;
+  color: white;
+}
+.state-regions button.high {
+  background: #34764e;
+  color: white;
+}
+.statewide-funnel > div:not(.card-head) {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: 55px 1fr 48px;
+  align-items: center;
+  gap: 6px;
+}
+.statewide-funnel span,
+.statewide-funnel small {
+  color: #77837a;
+  font-size: 6px;
+}
+.statewide-funnel i {
+  height: 20px;
+}
+.statewide-funnel i b {
+  display: flex;
+  height: 100%;
+  min-width: 44px;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: 3px 8px 8px 3px;
+  background: var(--ld-green-500);
+  color: white;
+  padding-right: 6px;
+  font: 600 6px Inter;
+}
+.department-leaderboard,
+.certification-kanban {
+  margin-top: 14px;
+  overflow: hidden;
+}
+.department-leaderboard > .card-head,
+.certification-kanban > .card-head {
+  padding: 16px;
+}
+.department-leaderboard table {
+  min-width: 720px;
+}
+.heatmap-grid {
+  margin-top: 11px;
+  display: grid;
+  grid-template-columns: 75px repeat(6, 1fr);
+  gap: 4px;
+  align-items: center;
+}
+.heatmap-grid b,
+.heatmap-grid strong {
+  color: #647168;
+  text-align: center;
+  font-size: 5.5px;
+}
+.heatmap-grid strong {
+  text-align: left;
+}
+.heatmap-grid span {
+  height: 28px;
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  font: 600 6px Inter;
+}
+.heatmap-grid span.low {
+  background: #e4f0e6;
+  color: var(--ld-green-700);
+}
+.heatmap-grid span.medium {
+  background: var(--ld-gold-50);
+  color: #9f6b1a;
+}
+.heatmap-grid span.high {
+  background: #f3c2ba;
+  color: #a84438;
+}
+.financial-support > div:not(.card-head) {
+  min-height: 49px;
+  border-bottom: 1px solid var(--ld-surface-alt);
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: center;
+  gap: 7px;
+}
+.financial-support > div > span {
+  width: 27px;
+  height: 27px;
+  border-radius: 7px;
+  background: #e5f0e7;
+  color: var(--ld-green-700);
+  display: grid;
+  place-items: center;
+}
+.financial-support strong {
+  color: #46564b;
+  font-size: 7px;
+}
+.financial-support b {
+  color: var(--ld-green-600);
+  font: 700 8px Inter;
+}
+.financial-support small {
+  grid-column: 2 / -1;
+  margin-top: -15px;
+  color: var(--ld-text-muted);
+  font-size: 5.5px;
+}
+.crp-big-stats {
+  margin-top: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.crp-big-stats > div {
+  padding: 12px;
+  border-radius: 8px;
+  background: #f3f7f4;
+}
+.crp-big-stats strong,
+.crp-big-stats span {
+  display: block;
+}
+.crp-big-stats strong {
+  color: var(--ld-green-600);
+  font: 700 19px Inter;
+}
+.crp-big-stats span {
+  color: #768179;
+  font-size: 6.5px;
+}
+.crp-mapping > i {
+  display: block;
+  height: 7px;
+  margin-top: 12px;
+  border-radius: 4px;
+  background: #e7ece8;
+  overflow: hidden;
+}
+.crp-mapping > i b {
+  display: block;
+  height: 100%;
+  background: var(--ld-green-500);
+}
+.crp-mapping > p {
+  color: #7d8980;
+  font-size: 6.5px;
+}
+.reporting-compliance {
+  display: grid;
+  grid-template-columns: 1fr 120px 1fr;
+  align-items: center;
+}
+.reporting-compliance > .card-head {
+  grid-column: 1 / -1;
+}
+.compliance-donut {
+  width: 105px;
+  height: 105px;
+  border-radius: 50%;
+  background: conic-gradient(var(--ld-green-500) 0 82%, #c75a49 82% 100%);
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+.compliance-donut::after {
+  content: "";
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: white;
+  position: absolute;
+}
+.compliance-donut span {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: var(--ld-text-strong);
+  font: 700 16px Inter;
+}
+.compliance-donut small {
+  display: block;
+  color: var(--ld-text-muted);
+  font: 6px "Noto Sans Devanagari";
+}
+.reporting-compliance > div:last-child p {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #69766d;
+  font-size: 7px;
+}
+.reporting-compliance p i {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+}
+.reporting-compliance p i.on-time {
+  background: var(--ld-green-500);
+}
+.reporting-compliance p i.late {
+  background: #c75a49;
+}
+.reporting-compliance p strong {
+  margin-left: auto;
+  font: 700 9px Inter;
+}
+.kanban-columns {
+  padding: 0 14px 16px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  overflow-x: auto;
+}
+.kanban-columns > div {
+  min-width: 145px;
+  padding: 8px;
+  border-radius: 8px;
+  background: #f3f6f3;
+}
+.kanban-columns h4 {
+  margin: 0 0 8px;
+  color: #526158;
+  font-size: 7px;
+}
+.kanban-columns h4 span {
+  float: right;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: white;
+  display: grid;
+  place-items: center;
+  font: 600 6px Inter;
+}
+.kanban-columns button {
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px;
+  border: 1px solid var(--ld-border-soft);
+  border-radius: 7px;
+  background: white;
+  text-align: left;
+}
+.kanban-columns button strong,
+.kanban-columns button small {
+  display: block;
+}
+.kanban-columns button strong {
+  color: #3f5044;
+  font-size: 7px;
+}
+.kanban-columns button small {
+  margin: 2px 0 5px;
+  color: var(--ld-text-muted);
+  font-size: 5.5px;
+}

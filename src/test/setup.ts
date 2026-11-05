@@ -1,0 +1,23 @@
+import "@testing-library/jest-dom/vitest"
+import "@/i18n"
+
+import { cleanup } from "@testing-library/react"
+import { afterEach } from "vitest"
+
+afterEach(() => cleanup())
+
+// jsdom lacks these browser APIs used by the screens.
+if (!window.matchMedia) {
+  window.matchMedia = (query: string) =>
+    ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    }) as MediaQueryList
+}
+window.scrollTo = () => {}

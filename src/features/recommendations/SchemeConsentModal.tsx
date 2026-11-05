@@ -1,0 +1,95 @@
+import { useState } from "react"
+
+import { Icon } from "@/components/ui/Icon"
+import type { RecommendationScheme } from "@/features/recommendations/types"
+
+export function SchemeConsentModal({
+  schemes,
+  onClose,
+  onConfirm,
+}: {
+  schemes: RecommendationScheme[]
+  onClose: () => void
+  onConfirm: () => void
+}) {
+  const [method, setMethod] = useState<"OTP" | "thumb">("OTP")
+  const [otp, setOtp] = useState(["", "", "", "", "", ""])
+  const [thumb, setThumb] = useState(false)
+  const ready = method === "OTP" ? otp.every(Boolean) : thumb
+  return (
+    <>
+      <div className="scheme-consent-scrim" onClick={onClose} />
+      <div className="scheme-consent-modal">
+        <div className="consent-modal-head">
+          <div>
+            <span>अंतिम चरण</span>
+            <h3>दीदी की सहमति</h3>
+          </div>
+          <button onClick={onClose}>
+            <Icon name="close" size={17} />
+          </button>
+        </div>
+        <div className="selected-scheme-list">
+          <span>चयनित योजनाएँ ({schemes.length})</span>
+          {schemes.map((scheme) => (
+            <div key={scheme.key}>
+              <Icon name="check" size={13} />
+              <strong>{scheme.name}</strong>
+              <small>{scheme.dept}</small>
+            </div>
+          ))}
+        </div>
+        <div className="consent-method modal-method">
+          <button className={method === "OTP" ? "active" : ""} onClick={() => setMethod("OTP")}>
+            6-अंकीय OTP
+          </button>
+          <button className={method === "thumb" ? "active" : ""} onClick={() => setMethod("thumb")}>
+            अंगूठा निशान
+          </button>
+        </div>
+        {method === "OTP" ? (
+          <div className="modal-otp">
+            <p>98•••••412 पर भेजा गया OTP दर्ज करें</p>
+            <div className="otp-boxes">
+              {otp.map((digit, index) => (
+                <input
+                  key={index}
+                  inputMode="numeric"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(event) =>
+                    setOtp(
+                      otp.map((item, itemIndex) =>
+                        itemIndex === index ? event.target.value.slice(-1) : item,
+                      ),
+                    )
+                  }
+                />
+              ))}
+            </div>
+            <button>OTP दोबारा भेजें</button>
+          </div>
+        ) : (
+          <button
+            className={`consent-thumb ${thumb ? "captured" : ""}`}
+            onClick={() => setThumb(true)}
+          >
+            <span className="thumb-mark">अं</span>
+            <div>
+              <strong>{thumb ? "अंगूठा निशान कैप्चर हुआ" : "अंगूठा निशान कैप्चर करें"}</strong>
+              <small>{thumb ? "18 नवंबर 2026 • सत्यापित" : "बायोमेट्रिक डिवाइस पर टैप करें"}</small>
+            </div>
+            {thumb && <Icon name="check" size={17} />}
+          </button>
+        )}
+        <label className="consent-record-note">
+          <input type="checkbox" defaultChecked /> दीदी ने चयनित योजनाओं और DPR निर्माण के लिए सहमति
+          दी है।
+        </label>
+        <button className="primary consent-confirm" disabled={!ready} onClick={onConfirm}>
+          सहमति दर्ज करें और DPR बनाएँ <Icon name="arrow" size={16} />
+        </button>
+      </div>
+    </>
+  )
+}

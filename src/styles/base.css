@@ -1,0 +1,24 @@
+/* Base element styles. */
+@layer base {
+  :root {
+    color: var(--ld-text);
+    background: #f7f7f2;
+    font-family: "Noto Sans Devanagari", "Inter", sans-serif;
+    font-synthesis: none;
+  }
+  body {
+    min-width: 320px;
+    min-height: 100vh;
+  }
+  button,
+  input {
+    font: inherit;
+  }
+  button {
+    cursor: pointer;
+  }
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c8d2ca transparent;
+}

@@ -1,0 +1,221 @@
+@media (max-width: 1000px) {
+  .login-screen {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+  .login-brand-panel {
+    min-height: 320px;
+    padding: 30px;
+  }
+  .district-insights-grid,
+  .district-charts-grid,
+  .district-report-grid,
+  .state-top-grid,
+  .state-analysis-grid,
+  .state-compliance-grid,
+  .survey-settings-admin {
+    grid-template-columns: 1fr;
+  }
+  .district-certification,
+  .conditional-logic {
+    grid-column: auto;
+  }
+}
+@media (max-width: 760px) {
+  .login-screen {
+    padding: 0;
+    display: block;
+  }
+  .login-brand-panel {
+    min-height: 235px;
+    border-radius: 0 0 24px 24px;
+    padding: 24px;
+    display: block;
+  }
+  .login-brand-copy {
+    min-height: 187px;
+  }
+  .login-slider {
+    display: none;
+  }
+  .login-brand-panel h1 {
+    font-size: 28px;
+  }
+  .login-flow {
+    display: none;
+  }
+  .login-card {
+    min-height: calc(100vh - 210px);
+    margin-top: -16px;
+    border-radius: 20px 20px 0 0;
+    padding: 25px 18px;
+  }
+  .role-card-grid {
+    grid-template-columns: 1fr;
+  }
+  .state-regions {
+    grid-template-columns: 1fr;
+  }
+  .kanban-columns {
+    grid-template-columns: repeat(5, 145px);
+  }
+  .district-donut-wrap {
+    flex-direction: column;
+  }
+  .reporting-compliance {
+    grid-template-columns: 1fr 100px 1fr;
+  }
+  .certificate-sheet {
+    padding: 25px 16px;
+  }
+}
+
+.notification-dropdown {
+  position: absolute;
+  z-index: 45;
+  top: 59px;
+  right: 24px;
+  width: 310px;
+  overflow: hidden;
+  border: 1px solid var(--ld-border-soft);
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 12px 30px rgba(28, 46, 33, 0.15);
+}
+.notification-dropdown > div {
+  min-height: 43px;
+  padding: 0 11px;
+  border-bottom: 1px solid #e8ece8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.notification-dropdown > div strong {
+  color: var(--ld-text-strong);
+  font-size: 9px;
+}
+.notification-dropdown > div button {
+  border: 0;
+  background: transparent;
+  color: var(--ld-green-700);
+  font-size: 6.5px;
+}
+.notification-dropdown > button {
+  width: 100%;
+  min-height: 58px;
+  padding: 8px 10px;
+  border: 0;
+  border-bottom: 1px solid #edf0ed;
+  background: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+}
+.notification-dropdown > button:hover {
+  background: #f7faf7;
+}
+.notification-dropdown span.alert {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+}
+.notification-dropdown span.red {
+  background: #fae5e1;
+  color: var(--ld-red-600);
+}
+.notification-dropdown span.amber {
+  background: var(--ld-gold-50);
+  color: #a56f1a;
+}
+.notification-dropdown span.blue {
+  background: #e5eef5;
+  color: #477b9e;
+}
+.notification-dropdown p {
+  margin: 0;
+}
+.notification-dropdown p strong,
+.notification-dropdown p small {
+  display: block;
+}
+.notification-dropdown p strong {
+  color: #3c4c41;
+  font-size: 7.5px;
+}
+.notification-dropdown p small {
+  margin-top: 2px;
+  color: var(--ld-text-muted);
+  font-size: 6px;
+}
+.overview-secondary-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: -1px 0 15px;
+}
+.overview-stat {
+  min-height: 88px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.overview-stat .kpi-icon {
+  margin: 0;
+  flex: 0 0 auto;
+}
+.overview-stat .kpi-icon.red {
+  background: #fae6e2;
+  color: #b04d41;
+}
+.overview-stat > div:last-child {
+  min-width: 0;
+  flex: 1;
+}
+.overview-stat span,
+.overview-stat strong,
+.overview-stat small {
+  display: block;
+}
+.overview-stat span {
+  color: #748078;
+  font-size: 8px;
+}
+.overview-stat strong {
+  margin-top: 2px;
+  color: var(--ld-text-strong);
+  font: 700 15px Inter;
+}
+.overview-stat small {
+  margin-top: 2px;
+  color: var(--ld-text-muted);
+  font-size: 6.5px;
+}
+.overview-stat > div > i {
+  display: block;
+  height: 4px;
+  margin-top: 6px;
+  border-radius: 3px;
+  background: #e6ebe7;
+  overflow: hidden;
+}
+.overview-stat > div > i b {
+  display: block;
+  height: 100%;
+  background: #5b8fa9;
+}
+.overview-operations-grid {
+  margin-top: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+.department-pendency,
+.surveyor-performance {
+  padding: 18px 20px;
+  overflow: hidden;
+}

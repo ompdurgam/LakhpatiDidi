@@ -1,0 +1,48 @@
+{
+  "block": {
+    "overview": "अवलोकन",
+    "households": "परिवार",
+    "applications": "आवेदन",
+    "blcc": "BLCC कार्यवाही",
+    "schemes": "योजनाएँ",
+    "reports": "रिपोर्ट"
+  },
+  "field": {
+    "home": "होम",
+    "households": "परिवार",
+    "survey": "सर्वे",
+    "recommendations": "योजना सुझाव",
+    "income": "मासिक आय",
+    "village": "ग्राम प्रोफ़ाइल"
+  },
+  "department": {
+    "inbox": "इनबॉक्स",
+    "sanctioned": "स्वीकृत",
+    "delivery": "डिलीवरी",
+    "escalations": "एस्केलेशन",
+    "schemes": "योजनाएँ",
+    "reports": "रिपोर्ट"
+  },
+  "district": {
+    "overview": "अवलोकन",
+    "blocks": "ब्लॉक",
+    "departments": "विभाग",
+    "lakhpatiGram": "लखपति ग्राम",
+    "escalations": "एस्केलेशन",
+    "reports": "रिपोर्ट"
+  },
+  "state": {
+    "overview": "अवलोकन",
+    "districts": "जिले",
+    "departments": "विभाग",
+    "certification": "लखपति ग्राम",
+    "escalations": "एस्केलेशन",
+    "reports": "रिपोर्ट"
+  },
+  "admin": {
+    "schemes": "योजना मास्टर",
+    "users": "यूज़र",
+    "geography": "भूगोल",
+    "survey": "फॉर्म सेटिंग"
+  }
+}

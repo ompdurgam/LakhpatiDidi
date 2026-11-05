@@ -1,0 +1,208 @@
+import { useState } from "react"
+
+import { ChipField, ChipGroup } from "@/components/ui/ChipGroup"
+import { FormGroup } from "@/components/ui/FormGroup"
+import { Icon } from "@/components/ui/Icon"
+import { NumberControl } from "@/components/ui/NumberStepper"
+import { IncomeMismatch, NeedsBlock } from "@/features/survey/sections/livelihood/shared"
+import type { CropRow } from "@/features/survey/types"
+
+export function AgricultureSection({ baseline }: { baseline: number }) {
+  const [irrigationMonths, setIrrigationMonths] = useState(6)
+  const [crops, setCrops] = useState<CropRow[]>([
+    {
+      crop: "धान",
+      season: "खरीफ",
+      acres: 1.5,
+      production: 18,
+      sold: 12,
+      consumed: 6,
+    },
+  ])
+  const [income, setIncome] = useState({
+    kharif: 25000,
+    rabi: 7000,
+    horticulture: 0,
+  })
+  const total = income.kharif + income.rabi + income.horticulture
+  const cropTypes = [
+    "धान",
+    "मक्का",
+    "मोटे अनाज",
+    "दलहन",
+    "तिलहन",
+    "सब्जियाँ",
+    "मिर्च/मसाले",
+    "हल्दी",
+    "कॉफ़ी",
+    "मुनगा",
+    "काजू",
+    "पपीता",
+    "केला",
+    "नींबू",
+    "सीताफल",
+    "ऑयल पाम",
+    "मशरूम",
+    "औषधीय पौधे",
+    "नर्सरी",
+  ]
+  const updateCrop = (index: number, patch: Partial<CropRow>) =>
+    setCrops(crops.map((crop, cropIndex) => (cropIndex === index ? { ...crop, ...patch } : crop)))
+  return (
+    <div className="section-form livelihood-form">
+      <IncomeMismatch income={total} baseline={baseline} />
+      <FormGroup title="सिंचाई, मिट्टी और जोखिम">
+        <ChipField label="सिंचाई स्रोत">
+          <ChipGroup
+            options={["कुआँ", "तालाब", "नहर", "वर्षा", "अन्य"]}
+            selected={["तालाब", "वर्षा"]}
+          />
+        </ChipField>
+        <NumberControl
+          label="सिंचाई महीने (0–12)"
+          value={irrigationMonths}
+          onChange={(value) => setIrrigationMonths(Math.min(12, value))}
+        />
+        <ChipField label="मृदा परीक्षण">
+          <ChipGroup
+            options={["पिछले 2 वर्षों में", "नहीं", "रिपोर्ट नहीं मिली"]}
+            selected={["पिछले 2 वर्षों में"]}
+            single
+          />
+        </ChipField>
+        <ChipField label="जलवायु जोखिम">
+          <ChipGroup
+            options={["सूखा", "बाढ़", "अत्यधिक गर्मी", "कीट", "असमय वर्षा", "पता नहीं"]}
+            selected={["सूखा", "असमय वर्षा"]}
+          />
+        </ChipField>
+      </FormGroup>
+      <FormGroup title="फसल विवरण">
+        <div className="crop-rows">
+          {crops.map((crop, index) => (
+            <div className="crop-row" key={`${crop.crop}-${index}`}>
+              <div className="crop-row-head">
+                <strong>फसल {index + 1}</strong>
+                {crops.length > 1 && (
+                  <button
+                    onClick={() => setCrops(crops.filter((_, cropIndex) => cropIndex !== index))}
+                  >
+                    हटाएँ
+                  </button>
+                )}
+              </div>
+              <div className="control-grid">
+                <label className="text-control">
+                  <span>फसल</span>
+                  <input
+                    value={crop.crop}
+                    onChange={(event) => updateCrop(index, { crop: event.target.value })}
+                  />
+                </label>
+                <label className="text-control">
+                  <span>मौसम</span>
+                  <select
+                    value={crop.season}
+                    onChange={(event) => updateCrop(index, { season: event.target.value })}
+                  >
+                    <option>खरीफ</option>
+                    <option>रबी</option>
+                    <option>जायद</option>
+                  </select>
+                </label>
+                {[
+                  ["एकड़", "acres"],
+                  ["उत्पादन क्विंटल", "production"],
+                  ["बेचा", "sold"],
+                  ["स्व-उपभोग", "consumed"],
+                ].map(([label, key]) => (
+                  <label className="text-control" key={key}>
+                    <span>{label}</span>
+                    <input
+                      type="number"
+                      value={crop[key as keyof CropRow] as number}
+                      onChange={(event) => updateCrop(index, { [key]: Number(event.target.value) })}
+                    />
+                  </label>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        <button
+          className="add-row-button"
+          onClick={() =>
+            setCrops([
+              ...crops,
+              {
+                crop: "नई फसल",
+                season: "खरीफ",
+                acres: 0,
+                production: 0,
+                sold: 0,
+                consumed: 0,
+              },
+            ])
+          }
+        >
+          <Icon name="plus" size={14} /> फसल जोड़ें
+        </button>
+      </FormGroup>
+      <FormGroup title="फसल-वार क्षेत्र (एकड़)">
+        <div className="crop-acre-grid">
+          {cropTypes.map((crop, index) => (
+            <label key={crop}>
+              <span>{crop}</span>
+              <input type="number" defaultValue={index === 0 ? 1.5 : 0} step=".1" />
+            </label>
+          ))}
+        </div>
+      </FormGroup>
+      <FormGroup title="वार्षिक आय">
+        <div className="income-entry-grid">
+          {(
+            [
+              ["खरीफ", "kharif"],
+              ["रबी", "rabi"],
+              ["बागवानी", "horticulture"],
+            ] as const
+          ).map(([label, key]) => (
+            <label key={key}>
+              <span>{label} ₹</span>
+              <input
+                type="number"
+                value={income[key]}
+                onChange={(event) => setIncome({ ...income, [key]: Number(event.target.value) })}
+              />
+            </label>
+          ))}
+          <label className="auto-income">
+            <span>कुल (स्वतः)</span>
+            <strong>₹{total.toLocaleString("en-IN")}</strong>
+          </label>
+        </div>
+      </FormGroup>
+      <NeedsBlock
+        received={[
+          "बीज",
+          "जैविक खाद",
+          "उर्वरक",
+          "कीटनाशक",
+          "IPM किट",
+          "कृषि ऋण",
+          "फसल बीमा",
+          "बाजार जुड़ाव",
+        ]}
+        movable={[
+          "बीज किट",
+          "कृषि उपकरण",
+          "पंप सेट (डीज़ल/विद्युत/सौर)",
+          "मल्चिंग शीट",
+          "फल पौध",
+          "ट्री गार्ड",
+        ]}
+        fixed={["ड्रिप/स्प्रिंकलर", "वर्मी-कम्पोस्ट", "NADEP", "शेड नेट/पॉलीहाउस", "कोल्ड स्टोरेज"]}
+      />
+    </div>
+  )
+}

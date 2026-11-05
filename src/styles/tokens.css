@@ -1,0 +1,40 @@
+/* Design tokens. Values are identical to the original Figma export. */
+@theme {
+  --font-sans: "Noto Sans Devanagari", "Inter", sans-serif;
+}
+
+:root {
+  --ld-green-900: #174e31; /* brand / sidebar */
+  --ld-green-700: #34704d; /* primary text & accents */
+  --ld-green-650: #2d714a;
+  --ld-green-600: #286c46;
+  --ld-green-500: #4b875f;
+  --ld-green-50: #edf5ef; /* green tint surface */
+  --ld-gold-500: #f4bd42; /* brand mark */
+  --ld-gold-50: #fff0d2; /* gold tint surface */
+  --ld-orange-500: #e48534; /* brand accent */
+  --ld-red-600: #b44d3f; /* danger */
+  --ld-text: #20251f; /* body text */
+  --ld-heading: #294435;
+  --ld-text-strong: #35473b;
+  --ld-text-muted: #849087;
+  --ld-border: #dfe5df;
+  --ld-border-soft: #dce3dd;
+  --ld-surface: #fafbf9;
+  --ld-surface-alt: #ebeeeb;
+  --ld-page: #f6f7f3; /* app background */
+
+  /* Radius & spacing scale for new components */
+  --ld-radius-sm: 6px;
+  --ld-radius-md: 8px;
+  --ld-radius-lg: 10px;
+  --ld-radius-xl: 12px;
+  --ld-radius-2xl: 24px;
+  --ld-space-1: 4px;
+  --ld-space-2: 8px;
+  --ld-space-3: 12px;
+  --ld-space-4: 16px;
+  --ld-space-5: 24px;
+  --ld-space-6: 32px;
+  --ld-touch-target: 48px;
+}

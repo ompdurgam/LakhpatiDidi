@@ -1,0 +1,336 @@
+.certificate-modal {
+  position: fixed;
+  z-index: 90;
+  left: 50%;
+  top: 50%;
+  width: min(560px, calc(100% - 24px));
+  padding: 14px;
+  border-radius: 14px;
+  background: #f7f3e8;
+  box-shadow: 0 20px 60px rgba(31, 45, 35, 0.25);
+  transform: translate(-50%, -50%);
+}
+.certificate-modal > button:first-child {
+  width: 32px;
+  height: 32px;
+  margin-left: auto;
+  border: 1px solid #ded7c5;
+  border-radius: 7px;
+  background: white;
+  display: grid;
+  place-items: center;
+}
+.certificate-sheet {
+  margin: 10px 0;
+  padding: 42px;
+  border: 8px double #d1ad58;
+  background: #fffdf7;
+  text-align: center;
+  color: #594a2b;
+}
+.certificate-sheet > span,
+.certificate-sheet > small {
+  display: block;
+}
+.certificate-sheet > span {
+  font-size: 10px;
+  font-weight: 700;
+}
+.certificate-sheet > small {
+  margin-top: 3px;
+  font-size: 7px;
+}
+.certificate-sheet h2 {
+  margin: 24px 0 0;
+  color: #8b671f;
+  font-family: serif;
+  font-size: 34px;
+}
+.certificate-sheet > strong {
+  display: block;
+  margin: 16px 0;
+  color: #2f5d3d;
+  font-size: 22px;
+}
+.certificate-sheet p,
+.certificate-sheet > div,
+.certificate-sheet em {
+  font-size: 8px;
+  line-height: 1.7;
+  font-style: normal;
+}
+.certificate-sheet footer {
+  margin-top: 34px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7px;
+}
+.certificate-modal > .primary {
+  width: 100%;
+}
+.editor-chip-field > span,
+.subsidy-by-class > span {
+  display: block;
+  margin-bottom: 5px;
+  color: #738078;
+  font-size: 8px;
+}
+.editor-chip-field > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.editor-chip-field button {
+  min-height: 27px;
+  border: 1px solid var(--ld-border-soft);
+  border-radius: 14px;
+  background: white;
+  color: #657269;
+  padding: 3px 8px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 6.5px;
+}
+.editor-chip-field button.selected {
+  border-color: #92b09a;
+  background: #e8f2e9;
+  color: var(--ld-green-650);
+}
+.subsidy-by-class > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+.subsidy-by-class label {
+  padding: 8px;
+  border: 1px solid var(--ld-border);
+  border-radius: 7px;
+  background: var(--ld-surface);
+  color: #66736a;
+  font-size: 7px;
+}
+.subsidy-by-class input {
+  float: right;
+  width: 55px;
+  border: 0;
+  background: transparent;
+  color: var(--ld-green-600);
+  text-align: right;
+  font: 700 8px Inter;
+}
+.rule-builder > div:first-child > span {
+  color: #748078;
+  font-size: 6px;
+}
+.test-rule-button {
+  width: 100%;
+  min-height: 33px;
+  margin-top: 9px;
+  border: 1px dashed #8fac97 !important;
+  border-radius: 7px;
+  background: var(--ld-green-50) !important;
+  color: #2f6d48 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-weight: 600;
+}
+.rule-test-result {
+  margin-top: 8px;
+  padding: 8px;
+  border-radius: 7px;
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  align-items: center;
+  gap: 6px;
+}
+.rule-test-result.matched {
+  background: #e4f1e7;
+  color: var(--ld-green-650);
+}
+.rule-test-result.not-matched {
+  background: #fae5e1;
+  color: var(--ld-red-600);
+}
+.rule-test-result strong,
+.rule-test-result span {
+  display: block;
+}
+.rule-test-result strong {
+  font-size: 7px;
+}
+.rule-test-result span {
+  font-size: 6px;
+}
+.rule-test-result button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 5.5px;
+}
+.admin-data-table {
+  overflow: hidden;
+}
+.admin-data-table > .card-head,
+.geography-admin > .card-head,
+.section-toggles > .card-head,
+.option-list-editor > .card-head,
+.conditional-logic > .card-head {
+  padding: 16px;
+}
+.admin-data-table table {
+  min-width: 850px;
+}
+.table-reset {
+  border: 1px solid var(--ld-border-soft);
+  border-radius: 5px;
+  background: white;
+  color: var(--ld-green-700);
+  padding: 5px 7px;
+  font-size: 6px;
+}
+.geo-tree {
+  padding: 10px 16px 16px;
+}
+.geo-tree > div,
+.geo-tree > div > div,
+.geo-tree > div > div > div {
+  margin-left: 24px;
+  border-left: 1px dashed #cfd9d1;
+  padding-left: 8px;
+}
+.geo-tree .level {
+  width: 100%;
+  min-height: 40px;
+  margin-top: 5px;
+  border: 1px solid var(--ld-border);
+  border-radius: 7px;
+  background: white;
+  padding: 0 9px;
+  display: grid;
+  grid-template-columns: 18px 1fr auto;
+  align-items: center;
+  gap: 6px;
+  text-align: left;
+}
+.geo-tree .level strong {
+  color: #46564b;
+  font-size: 7px;
+}
+.geo-tree .level span {
+  color: var(--ld-text-muted);
+  font-size: 6px;
+}
+.geo-tree .district {
+  background: var(--ld-green-50);
+}
+.geo-tree .block {
+  background: #f5f8f5;
+}
+.geo-tree .gp {
+  background: #fff9ec;
+}
+.survey-settings-admin {
+  display: grid;
+  grid-template-columns: 0.7fr 1fr;
+  gap: 14px;
+}
+.conditional-logic {
+  grid-column: 1 / -1;
+}
+.section-toggles,
+.option-list-editor,
+.conditional-logic {
+  overflow: hidden;
+}
+.section-toggles > div:not(.card-head) {
+  padding: 0 14px 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 12px;
+}
+.section-toggles label {
+  min-height: 38px;
+  border-bottom: 1px solid var(--ld-surface-alt);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.section-toggles label span {
+  color: #536158;
+  font-size: 7px;
+}
+.section-toggles label button {
+  width: 30px;
+  height: 17px;
+  border: 0;
+  border-radius: 9px;
+  background: #d4dad5;
+  padding: 2px;
+}
+.section-toggles label button i {
+  display: block;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: white;
+}
+.section-toggles label button.on {
+  background: var(--ld-green-500);
+}
+.section-toggles label button.on i {
+  margin-left: 13px;
+}
+.option-list-editor > div:not(.card-head) {
+  min-height: 48px;
+  padding: 0 14px;
+  border-top: 1px solid var(--ld-surface-alt);
+  display: grid;
+  grid-template-columns: 120px 1fr 28px;
+  align-items: center;
+  gap: 7px;
+}
+.option-list-editor strong {
+  color: #46564b;
+  font-size: 7px;
+}
+.option-list-editor span {
+  color: #7d8980;
+  font-size: 6px;
+}
+.option-list-editor > div > button {
+  width: 27px;
+  height: 27px;
+  border: 1px solid var(--ld-border-soft);
+  border-radius: 6px;
+  background: white;
+  color: var(--ld-green-700);
+}
+.conditional-logic > div:not(.card-head) {
+  min-height: 46px;
+  padding: 0 14px;
+  border-top: 1px solid var(--ld-surface-alt);
+  display: grid;
+  grid-template-columns: 1fr 22px 1fr auto;
+  align-items: center;
+  gap: 7px;
+}
+.conditional-logic code {
+  padding: 5px;
+  border-radius: 5px;
+  background: #f1f3f0;
+  color: #4b5c50;
+  font-size: 6px;
+}
+.conditional-logic span {
+  color: #657269;
+  font-size: 6.5px;
+}
+.conditional-logic button {
+  border: 0;
+  background: transparent;
+  color: var(--ld-green-700);
+  font-size: 6px;
+}

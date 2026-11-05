@@ -1,0 +1,245 @@
+.login-emblem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.login-emblem > span {
+  color: #61766a;
+  font: 600 9px Inter;
+  letter-spacing: 1px;
+}
+.login-brand-panel h1 {
+  max-width: 680px;
+  margin: 8px 0 12px;
+  color: var(--ld-heading);
+  font-size: clamp(34px, 4vw, 58px);
+  line-height: 1.17;
+  letter-spacing: -1.5px;
+}
+.login-brand-copy > div:nth-child(2) > p {
+  max-width: 540px;
+  margin: 0;
+  color: #6f8076;
+  font-size: 14px;
+}
+.login-flow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.login-flow span {
+  padding: 7px 10px 7px 7px;
+  border: 1px solid #dbe6dd;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.65);
+  color: #556a5e;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+}
+.login-flow i {
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #dcecdf;
+  color: var(--ld-green-700);
+  display: grid;
+  place-items: center;
+  font: 700 7px Inter;
+  font-style: normal;
+}
+.login-card {
+  min-height: 640px;
+  margin: 0;
+  padding: 34px;
+  border: 1px solid #dde5de;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 20px 60px rgba(36, 61, 44, 0.12);
+}
+.login-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.login-card-head h2 {
+  margin: 4px 0;
+  color: #2e4336;
+  font-size: 25px;
+}
+.login-card-head p {
+  margin: 0;
+  color: #7b877e;
+  font-size: 10px;
+}
+.login-mobile {
+  display: block;
+  margin-top: 28px;
+}
+.login-mobile > span {
+  display: block;
+  margin-bottom: 6px;
+  color: #5c6b61;
+  font-size: 9px;
+}
+.login-mobile > div {
+  height: 47px;
+  border: 1px solid #d6e0d8;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.login-mobile b {
+  height: 100%;
+  padding: 0 12px;
+  border-right: 1px solid var(--ld-border);
+  background: #f5f7f4;
+  color: #536158;
+  display: grid;
+  place-items: center;
+  font: 600 10px Inter;
+}
+.login-mobile input {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  padding: 0 12px;
+  color: var(--ld-text-strong);
+  font: 600 13px Inter;
+  letter-spacing: 1px;
+}
+.send-otp {
+  width: 100%;
+  height: 45px;
+  margin-top: 10px;
+}
+.login-otp {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 10px;
+  background: #f5f8f5;
+}
+.login-otp > div:first-child {
+  display: flex;
+  justify-content: space-between;
+}
+.login-otp strong {
+  color: #435348;
+  font-size: 9px;
+}
+.login-otp span {
+  color: #7e8981;
+  font: 8px Inter;
+}
+.login-otp .otp-boxes {
+  margin-top: 9px;
+}
+.login-otp .otp-boxes input {
+  height: 42px;
+}
+.login-otp > button {
+  margin-top: 7px;
+  border: 0;
+  background: transparent;
+  color: var(--ld-green-700);
+  padding: 0;
+  font-size: 7px;
+}
+.login-otp > button:disabled {
+  color: #8c958f;
+}
+.login-roles {
+  margin-top: 18px;
+}
+.login-roles > div:first-child strong,
+.login-roles > div:first-child span {
+  display: block;
+}
+.login-roles > div:first-child strong {
+  color: var(--ld-text-strong);
+  font-size: 10px;
+}
+.login-roles > div:first-child span {
+  color: var(--ld-text-muted);
+  font-size: 7px;
+}
+.role-card-grid {
+  margin-top: 9px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+.role-card-grid > button {
+  min-height: 68px;
+  border: 1px solid #dce4dd;
+  border-radius: 9px;
+  background: white;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: 32px 1fr 15px;
+  align-items: center;
+  gap: 7px;
+  text-align: left;
+}
+.role-card-grid > button:hover {
+  border-color: #86a68e;
+  background: #f2f8f3;
+}
+.role-card-grid > button > span {
+  width: 31px;
+  height: 31px;
+  border-radius: 8px;
+  background: #e5f0e7;
+  color: var(--ld-green-700);
+  display: grid;
+  place-items: center;
+}
+.role-card-grid strong,
+.role-card-grid small,
+.role-card-grid em {
+  display: block;
+}
+.role-card-grid strong {
+  color: #3c4c41;
+  font-size: 8px;
+}
+.role-card-grid small {
+  color: #69776e;
+  font-size: 6.5px;
+}
+.role-card-grid em {
+  margin-top: 2px;
+  color: #8a948d;
+  font-size: 5.5px;
+  font-style: normal;
+}
+.login-card > footer {
+  margin-top: 20px;
+  color: #919991;
+  text-align: center;
+  font-size: 6px;
+}
+.map-metric-toggle {
+  padding: 3px;
+  border-radius: 7px;
+  background: #edf0ed;
+  display: flex;
+}
+.map-metric-toggle button {
+  height: 27px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #758078;
+  padding: 0 7px;
+  font-size: 6px;
+}
+.map-metric-toggle button.active {
+  background: white;
+  color: var(--ld-green-600);
+  box-shadow: 0 1px 4px rgba(40, 65, 48, 0.1);
+  font-weight: 600;
+}

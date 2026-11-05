@@ -1,0 +1,48 @@
+{
+  "block": {
+    "overview": "Overview",
+    "households": "Households",
+    "applications": "Applications",
+    "blcc": "BLCC Actions",
+    "schemes": "Schemes",
+    "reports": "Reports"
+  },
+  "field": {
+    "home": "Home",
+    "households": "Households",
+    "survey": "Survey",
+    "recommendations": "Recommendations",
+    "income": "Monthly income",
+    "village": "Village profile"
+  },
+  "department": {
+    "inbox": "Inbox",
+    "sanctioned": "Sanctioned",
+    "delivery": "Delivery",
+    "escalations": "Escalations",
+    "schemes": "Schemes",
+    "reports": "Reports"
+  },
+  "district": {
+    "overview": "Overview",
+    "blocks": "Blocks",
+    "departments": "Departments",
+    "lakhpatiGram": "Lakhpati Gram",
+    "escalations": "Escalations",
+    "reports": "Reports"
+  },
+  "state": {
+    "overview": "Overview",
+    "districts": "Districts",
+    "departments": "Departments",
+    "certification": "Lakhpati Gram",
+    "escalations": "Escalations",
+    "reports": "Reports"
+  },
+  "admin": {
+    "schemes": "Scheme master",
+    "users": "Users",
+    "geography": "Geography",
+    "survey": "Form settings"
+  }
+}

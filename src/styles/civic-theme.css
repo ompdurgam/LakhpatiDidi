@@ -1,0 +1,65 @@
+/* Light civic palette */
+.sidebar {
+  background: #edf5ee;
+  color: var(--ld-heading);
+  border-right: 1px solid #d5e4d8;
+}
+.brand {
+  border-bottom-color: #d7e5d9;
+}
+.brand small,
+.scope-card small,
+.scope-card span,
+.profile span {
+  color: #718579;
+}
+.scope-card {
+  background: #f8fbf7;
+  border-color: #d8e7db;
+}
+nav p {
+  color: #789181;
+}
+nav button,
+nav a {
+  color: #536d5d;
+}
+nav button:hover,
+nav a:hover {
+  background: #e1eee4;
+  color: var(--ld-heading);
+}
+nav button.active,
+nav a.active {
+  color: var(--ld-heading);
+  background: #d8eadc;
+  box-shadow: inset 3px 0 #e2a42d;
+}
+.help-card {
+  background: #fff8e8;
+  border-color: #ecdcb6;
+}
+.help-card span {
+  color: #7e8277;
+}
+.help-card button {
+  color: #9a6717;
+}
+.profile {
+  border-top-color: #d7e5d9;
+}
+.primary,
+.start-survey,
+.sticky-dpr {
+  border-color: #e7b64d;
+  background: #f3ca72;
+  color: #3c3524;
+  box-shadow: 0 4px 9px #b8872426;
+}
+.primary:hover {
+  background: #edbf5c;
+}
+.phone-top {
+  background: #dcece0;
+  color: var(--ld-heading);
+}

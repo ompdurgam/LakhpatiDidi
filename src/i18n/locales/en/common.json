@@ -1,0 +1,62 @@
+{
+  "brand": { "name": "Swavalambi Didi", "tagline": "Lakhpati Convergence Portal" },
+  "scope": {
+    "title": "Your area",
+    "block": "Jagdalpur Block",
+    "region": "Bastar District, Chhattisgarh",
+    "breadcrumb": "Bastar / Jagdalpur"
+  },
+  "nav": {
+    "main": "Main menu",
+    "system": "System",
+    "settings": "Settings",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "help": {
+    "title": "Need help?",
+    "line": "Helpline: 1800-233-4522",
+    "button": "Help centre",
+    "sent": "Help request sent"
+  },
+  "profile": { "logout": "Log out" },
+  "header": {
+    "role": "Role",
+    "changeRole": "Change role",
+    "search": "Search Didi, ID...",
+    "notifications": "Notifications"
+  },
+  "lang": { "current": "EN", "other": "हिंदी", "switch": "Change language" },
+  "roles": {
+    "field": "Surveyor / CRP",
+    "block": "Block / CLF",
+    "department": "Department officer",
+    "district": "District / Collector",
+    "state": "State / SMMU",
+    "admin": "Admin"
+  },
+  "pageTitle": {
+    "blockOverview": "Block Overview",
+    "districtOverview": "District Overview",
+    "stateOverview": "State Overview"
+  },
+  "notifications": {
+    "close": "Close",
+    "overdue": "{{id}} overdue",
+    "overdueMeta": "{{name}} • {{dept}} • {{days}} days",
+    "blccTitle": "BLCC meeting tomorrow",
+    "blccMeta": "Decision expected on 7 pending demands",
+    "reportTitle": "DMMU monthly report",
+    "reportMeta": "Submit by 10 December 2026"
+  },
+  "status": {
+    "loading": "Loading…",
+    "empty": "No records found",
+    "notFound": "Page not found",
+    "goHome": "Go to home",
+    "error": "Something went wrong",
+    "retry": "Try again"
+  },
+  "yesNo": { "yes": "Yes", "no": "No" },
+  "actions": { "close": "Close", "cancel": "Cancel", "save": "Save" }
+}

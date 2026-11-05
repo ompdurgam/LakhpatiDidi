@@ -1,0 +1,62 @@
+{
+  "brand": { "name": "स्वावलंबी दीदी", "tagline": "Lakhpati Convergence Portal" },
+  "scope": {
+    "title": "आपका कार्यक्षेत्र",
+    "block": "जगदलपुर ब्लॉक",
+    "region": "बस्तर जिला, छत्तीसगढ़",
+    "breadcrumb": "बस्तर / जगदलपुर"
+  },
+  "nav": {
+    "main": "मुख्य मेनू",
+    "system": "सिस्टम",
+    "settings": "सेटिंग्स",
+    "openMenu": "मेनू खोलें",
+    "closeMenu": "मेनू बंद करें"
+  },
+  "help": {
+    "title": "सहायता चाहिए?",
+    "line": "हेल्पलाइन: 1800-233-4522",
+    "button": "सहायता केंद्र",
+    "sent": "सहायता अनुरोध भेजा गया"
+  },
+  "profile": { "logout": "लॉग आउट" },
+  "header": {
+    "role": "भूमिका",
+    "changeRole": "भूमिका बदलें",
+    "search": "दीदी, ID खोजें...",
+    "notifications": "सूचनाएँ"
+  },
+  "lang": { "current": "हिं", "other": "EN", "switch": "भाषा बदलें" },
+  "roles": {
+    "field": "सर्वेयर / CRP",
+    "block": "ब्लॉक / CLF",
+    "department": "विभाग अधिकारी",
+    "district": "जिला / कलेक्टर",
+    "state": "राज्य / SMMU",
+    "admin": "एडमिन"
+  },
+  "pageTitle": {
+    "blockOverview": "ब्लॉक अवलोकन",
+    "districtOverview": "जिला अवलोकन",
+    "stateOverview": "राज्य अवलोकन"
+  },
+  "notifications": {
+    "close": "बंद करें",
+    "overdue": "{{id}} अतिदेय",
+    "overdueMeta": "{{name}} • {{dept}} • {{days}} दिन",
+    "blccTitle": "BLCC बैठक कल",
+    "blccMeta": "7 लंबित मांगों पर निर्णय अपेक्षित",
+    "reportTitle": "DMMU मासिक रिपोर्ट",
+    "reportMeta": "10 दिसंबर 2026 तक जमा करें"
+  },
+  "status": {
+    "loading": "लोड हो रहा है…",
+    "empty": "कोई रिकॉर्ड नहीं मिला",
+    "notFound": "यह पेज नहीं मिला",
+    "goHome": "होम पर जाएँ",
+    "error": "कुछ गलत हो गया",
+    "retry": "फिर से कोशिश करें"
+  },
+  "yesNo": { "yes": "हाँ", "no": "नहीं" },
+  "actions": { "close": "बंद करें", "cancel": "रद्द करें", "save": "सहेजें" }
+}
