@@ -1,23 +1,25 @@
 import { useState } from "react"
 
 import { ChipField, ChipGroup } from "@/components/ui/ChipGroup"
+import { useTr } from "@/i18n/tr"
 
 export function InstitutionRow({ name, index }: { name: string; index: number }) {
+  const tr = useTr()
   const [exists, setExists] = useState(index < 10 ? "हाँ" : "नहीं")
   return (
     <div className="institution-row">
-      <strong>{name}</strong>
+      <strong>{tr(name)}</strong>
       <ChipField label="मौजूद?">
         <ChipGroup options={["हाँ", "नहीं"]} selected={[exists]} onToggle={setExists} single />
       </ChipField>
       {exists === "हाँ" && (
         <>
           <label>
-            <span>स्थिति</span>
+            <span>{tr("स्थिति")}</span>
             <select defaultValue={index % 4 === 0 ? "आंशिक" : "सक्रिय"}>
-              <option>सक्रिय</option>
-              <option>आंशिक</option>
-              <option>केवल कागज़ पर</option>
+              <option value="सक्रिय">{tr("सक्रिय")}</option>
+              <option value="आंशिक">{tr("आंशिक")}</option>
+              <option value="केवल कागज़ पर">{tr("केवल कागज़ पर")}</option>
             </select>
           </label>
           <ChipField label="परिवार सदस्य?">

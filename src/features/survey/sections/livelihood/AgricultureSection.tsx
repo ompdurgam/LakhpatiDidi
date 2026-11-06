@@ -6,8 +6,10 @@ import { Icon } from "@/components/ui/Icon"
 import { NumberControl } from "@/components/ui/NumberStepper"
 import { IncomeMismatch, NeedsBlock } from "@/features/survey/sections/livelihood/shared"
 import type { CropRow } from "@/features/survey/types"
+import { useTr } from "@/i18n/tr"
 
 export function AgricultureSection({ baseline }: { baseline: number }) {
+  const tr = useTr()
   const [irrigationMonths, setIrrigationMonths] = useState(6)
   const [crops, setCrops] = useState<CropRow[]>([
     {
@@ -51,7 +53,7 @@ export function AgricultureSection({ baseline }: { baseline: number }) {
   return (
     <div className="section-form livelihood-form">
       <IncomeMismatch income={total} baseline={baseline} />
-      <FormGroup title="सिंचाई, मिट्टी और जोखिम">
+      <FormGroup title={tr("सिंचाई, मिट्टी और जोखिम")}>
         <ChipField label="सिंचाई स्रोत">
           <ChipGroup
             options={["कुआँ", "तालाब", "नहर", "वर्षा", "अन्य"]}
@@ -77,37 +79,39 @@ export function AgricultureSection({ baseline }: { baseline: number }) {
           />
         </ChipField>
       </FormGroup>
-      <FormGroup title="फसल विवरण">
+      <FormGroup title={tr("फसल विवरण")}>
         <div className="crop-rows">
           {crops.map((crop, index) => (
             <div className="crop-row" key={`${crop.crop}-${index}`}>
               <div className="crop-row-head">
-                <strong>फसल {index + 1}</strong>
+                <strong>
+                  {tr("फसल")} {index + 1}
+                </strong>
                 {crops.length > 1 && (
                   <button
                     onClick={() => setCrops(crops.filter((_, cropIndex) => cropIndex !== index))}
                   >
-                    हटाएँ
+                    {tr("हटाएँ")}
                   </button>
                 )}
               </div>
               <div className="control-grid">
                 <label className="text-control">
-                  <span>फसल</span>
+                  <span>{tr("फसल")}</span>
                   <input
-                    value={crop.crop}
+                    value={tr(crop.crop)}
                     onChange={(event) => updateCrop(index, { crop: event.target.value })}
                   />
                 </label>
                 <label className="text-control">
-                  <span>मौसम</span>
+                  <span>{tr("मौसम")}</span>
                   <select
-                    value={crop.season}
+                    value={tr(crop.season)}
                     onChange={(event) => updateCrop(index, { season: event.target.value })}
                   >
-                    <option>खरीफ</option>
-                    <option>रबी</option>
-                    <option>जायद</option>
+                    <option value="खरीफ">{tr("खरीफ")}</option>
+                    <option value="रबी">{tr("रबी")}</option>
+                    <option value="जायद">{tr("जायद")}</option>
                   </select>
                 </label>
                 {[
@@ -117,7 +121,7 @@ export function AgricultureSection({ baseline }: { baseline: number }) {
                   ["स्व-उपभोग", "consumed"],
                 ].map(([label, key]) => (
                   <label className="text-control" key={key}>
-                    <span>{label}</span>
+                    <span>{tr(label)}</span>
                     <input
                       type="number"
                       value={crop[key as keyof CropRow] as number}
@@ -145,20 +149,20 @@ export function AgricultureSection({ baseline }: { baseline: number }) {
             ])
           }
         >
-          <Icon name="plus" size={14} /> फसल जोड़ें
+          <Icon name="plus" size={14} /> {tr("फसल जोड़ें")}
         </button>
       </FormGroup>
-      <FormGroup title="फसल-वार क्षेत्र (एकड़)">
+      <FormGroup title={tr("फसल-वार क्षेत्र (एकड़)")}>
         <div className="crop-acre-grid">
           {cropTypes.map((crop, index) => (
             <label key={crop}>
-              <span>{crop}</span>
+              <span>{tr(crop)}</span>
               <input type="number" defaultValue={index === 0 ? 1.5 : 0} step=".1" />
             </label>
           ))}
         </div>
       </FormGroup>
-      <FormGroup title="वार्षिक आय">
+      <FormGroup title={tr("वार्षिक आय")}>
         <div className="income-entry-grid">
           {(
             [
@@ -168,7 +172,7 @@ export function AgricultureSection({ baseline }: { baseline: number }) {
             ] as const
           ).map(([label, key]) => (
             <label key={key}>
-              <span>{label} ₹</span>
+              <span>{tr(label)} ₹</span>
               <input
                 type="number"
                 value={income[key]}
@@ -177,7 +181,7 @@ export function AgricultureSection({ baseline }: { baseline: number }) {
             </label>
           ))}
           <label className="auto-income">
-            <span>कुल (स्वतः)</span>
+            <span>{tr("कुल (स्वतः)")}</span>
             <strong>₹{total.toLocaleString("en-IN")}</strong>
           </label>
         </div>

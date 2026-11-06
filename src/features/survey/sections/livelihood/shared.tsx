@@ -1,16 +1,21 @@
 import { ChipField, ChipGroup } from "@/components/ui/ChipGroup"
 import { Icon } from "@/components/ui/Icon"
 import { TextControl } from "@/components/ui/TextControl"
+import { useTr } from "@/i18n/tr"
 
 export function IncomeMismatch({ income, baseline }: { income: number; baseline: number }) {
+  const tr = useTr()
   if (income === baseline) return null
   return (
     <div className="income-mismatch">
       <Icon name="alert" size={15} />
       <div>
-        <strong>खंड B की आय से मिलान करें</strong>
+        <strong>{tr("खंड B की आय से मिलान करें")}</strong>
         <span>
-          यहाँ ₹{income.toLocaleString("en-IN")} • खंड B में ₹{baseline.toLocaleString("en-IN")}
+          {tr("यहाँ ₹{{here}} • खंड B में ₹{{baseline}}", {
+            here: income.toLocaleString("en-IN"),
+            baseline: baseline.toLocaleString("en-IN"),
+          })}
         </span>
       </div>
     </div>
@@ -26,6 +31,7 @@ export function NeedsBlock({
   movable: string[]
   fixed: string[]
 }) {
+  const tr = useTr()
   return (
     <section className="needs-block">
       <div className="needs-heading">
@@ -33,11 +39,11 @@ export function NeedsBlock({
           <Icon name="scheme" size={17} />
         </span>
         <div>
-          <h4>आवश्यकता</h4>
-          <p>बाजार, सहायता, संपत्ति, प्रशिक्षण और ऋण</p>
+          <h4>{tr("आवश्यकता")}</h4>
+          <p>{tr("बाजार, सहायता, संपत्ति, प्रशिक्षण और ऋण")}</p>
         </div>
       </div>
-      <TextControl label="बाजार में बेचे उत्पाद/सेवाएँ" value="स्थानीय उत्पाद और सेवाएँ" />
+      <TextControl label="बाजार में बेचे उत्पाद/सेवाएँ" value={tr("स्थानीय उत्पाद और सेवाएँ")} />
       <ChipField label="कहाँ बेचते हैं">
         <ChipGroup
           options={["स्थानीय हाट", "मंडी", "बिचौलिया", "अन्य", "लागू नहीं"]}

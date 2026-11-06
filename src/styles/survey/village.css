@@ -11,10 +11,10 @@
 }
 .facility-name strong {
   color: #3c4c41;
-  font-size: 7.5px;
+  font-size: calc(12.5px * var(--font-scale));
 }
 .facility-name .status {
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .facility-row .chip-field,
 .institution-row .chip-field {
@@ -35,7 +35,7 @@
   display: block;
   margin-bottom: 3px;
   color: #6e7a72;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .facility-condition select,
 .institution-row > label select {
@@ -45,7 +45,7 @@
   border-radius: 5px;
   background: var(--ld-surface);
   padding: 0 6px;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .facility-row > .text-control {
   display: block;
@@ -58,7 +58,7 @@
   border-top: 1px solid #e7ece8;
   background: var(--ld-surface);
   color: #2f6d48;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
   font-weight: 600;
 }
 .additional-facilities-note {
@@ -68,7 +68,7 @@
   background: #f1f6f2;
   color: #64766a;
   text-align: center;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .ranked-needs {
   padding: 10px;
@@ -76,7 +76,7 @@
 .ranked-needs h3 {
   margin: 0 0 8px;
   color: var(--ld-text-strong);
-  font-size: 8.5px;
+  font-size: calc(13.5px * var(--font-scale));
 }
 .ranked-needs label {
   display: grid;
@@ -93,7 +93,7 @@
   color: #9f6b1a;
   display: grid;
   place-items: center;
-  font: 700 7px Inter;
+  font: 700 calc(12px * var(--font-scale)) Inter;
 }
 .ranked-needs select {
   height: 32px;
@@ -101,12 +101,12 @@
   border-radius: 6px;
   background: white;
   padding: 0 7px;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .institution-row > strong {
   display: block;
   color: #3c4c41;
-  font-size: 7.5px;
+  font-size: calc(12.5px * var(--font-scale));
 }
 .resource-pond {
   padding: 9px 9px 0;
@@ -153,23 +153,23 @@
 }
 .village-summary-score strong {
   color: #2d704a;
-  font: 700 18px Inter;
+  font: 700 calc(22px * var(--font-scale)) Inter;
 }
 .village-summary-score span {
   color: #708078;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .village-summary-card > div:last-child {
   flex: 1;
 }
 .village-summary-card h3 {
   margin: 0;
-  font-size: 11px;
+  font-size: calc(16px * var(--font-scale));
 }
 .village-summary-card p {
   margin: 3px 0 8px;
   color: #7b877e;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .village-summary-card i {
   display: block;
@@ -190,7 +190,7 @@
 }
 .village-priorities h3 {
   margin: 0 0 9px;
-  font-size: 11px;
+  font-size: calc(16px * var(--font-scale));
 }
 .village-priorities p {
   margin: 7px 0;
@@ -198,7 +198,7 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  font-size: 9px;
+  font-size: calc(14px * var(--font-scale));
 }
 .village-priorities p svg {
   color: var(--ld-green-700);
@@ -235,11 +235,11 @@
 .recommend-department-head strong {
   flex: 1;
   color: var(--ld-text-strong);
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .recommend-department-head small {
   color: #7c8980;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .recommend-department .scheme-list {
   margin: 0;
@@ -276,7 +276,7 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
   font-weight: 600;
 }
 .scheme-extra-details {
@@ -294,11 +294,11 @@
 }
 .scheme-extra-details strong {
   color: #526158;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .scheme-extra-details p {
   margin-top: 2px;
   color: #7b867e;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
   line-height: 1.45;
 }

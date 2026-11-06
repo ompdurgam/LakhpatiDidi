@@ -4,14 +4,18 @@ import { Icon } from "@/components/ui/Icon"
 import { ConvergenceDetails } from "@/features/survey/sections/schemes/ConvergenceDetails"
 import { SaturationSchemeCard } from "@/features/survey/sections/schemes/SaturationSchemeCard"
 import { schemeGroups } from "@/features/survey/sections/schemes/schemeGroups"
+import { useTr } from "@/i18n/tr"
 
 export function SchemeSaturationForm() {
+  const tr = useTr()
   return (
     <div className="section-form scheme-saturation">
       <div className="scheme-rule-note">
         <Icon name="alert" size={16} />
         <span>
-          परिवार-स्तर योजना: <b>1/0</b>; व्यक्ति-स्तर: <b>सदस्य संख्या</b>; लाभ प्राप्त ≤ पात्र
+          {tr("परिवार-स्तर योजना:")} <b>1/0</b>
+          {tr("; व्यक्ति-स्तर:")} <b>{tr("सदस्य संख्या")}</b>
+          {tr("; लाभ प्राप्त ≤ पात्र")}
         </span>
       </div>
       <div className="scheme-groups">
@@ -22,15 +26,15 @@ export function SchemeSaturationForm() {
       <ConvergenceDetails />
       <div className="scheme-summary">
         <div>
-          <span className="status green">प्राप्त</span>
+          <span className="status green">{tr("प्राप्त")}</span>
           <strong>22</strong>
         </div>
         <div>
-          <span className="status amber">लंबित</span>
+          <span className="status amber">{tr("लंबित")}</span>
           <strong>3</strong>
         </div>
         <div>
-          <span className="status red">गैप</span>
+          <span className="status red">{tr("गैप")}</span>
           <strong className="red-number">6</strong>
         </div>
       </div>
@@ -47,6 +51,7 @@ export function SchemeDepartmentGroup({
   schemes: string[]
   initiallyOpen: boolean
 }) {
+  const tr = useTr()
   const [open, setOpen] = useState(initiallyOpen)
   return (
     <section className="scheme-department">
@@ -54,8 +59,10 @@ export function SchemeDepartmentGroup({
         <span>
           <Icon name="building" size={15} />
         </span>
-        <strong>{department}</strong>
-        <small>{schemes.length} योजनाएँ</small>
+        <strong>{tr(department)}</strong>
+        <small>
+          {schemes.length} {tr("योजनाएँ")}
+        </small>
         <b>{open ? "−" : "+"}</b>
       </button>
       {open && (

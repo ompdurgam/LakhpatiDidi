@@ -2,6 +2,7 @@ import { useState } from "react"
 
 import { Icon } from "@/components/ui/Icon"
 import type { IncomeEntry } from "@/features/survey/types"
+import { useTr } from "@/i18n/tr"
 
 export function SurveyReview({
   sections,
@@ -16,6 +17,7 @@ export function SurveyReview({
   incomeEntries: IncomeEntry[]
   onSubmit: (consentMethod: string) => void
 }) {
+  const tr = useTr()
   const [open, setOpen] = useState(0)
   const [photo, setPhoto] = useState(false)
   const [method, setMethod] = useState("OTP")
@@ -39,8 +41,8 @@ export function SurveyReview({
           <Icon name="file" size={19} />
         </span>
         <div>
-          <strong>जमा करने से पहले जाँचें</strong>
-          <p>अधूरे उत्तर और आय अंतर ठीक करें। अंतिम अपडेट: 18 नवंबर 2026</p>
+          <strong>{tr("जमा करने से पहले जाँचें")}</strong>
+          <p>{tr("अधूरे उत्तर और आय अंतर ठीक करें। अंतिम अपडेट: 18 नवंबर 2026")}</p>
         </div>
       </div>
       <div className="review-accordion">
@@ -57,7 +59,7 @@ export function SurveyReview({
                 </span>
                 <strong>{name}</strong>
                 <em className={incomplete ? "warning" : ""}>
-                  {incomplete ? "⚠ 2 अधूरे" : "पूर्ण"}
+                  {incomplete ? tr("⚠ 2 अधूरे") : tr("पूर्ण")}
                 </em>
                 <b>{open === index ? "−" : "+"}</b>
               </button>
@@ -65,11 +67,11 @@ export function SurveyReview({
                 <div className="review-accordion-body">
                   <p>
                     {incomplete
-                      ? "2 उत्तरों पर ध्यान देना आवश्यक है।"
-                      : "सभी अनिवार्य उत्तर पूरे हैं।"}
+                      ? tr("2 उत्तरों पर ध्यान देना आवश्यक है।")
+                      : tr("सभी अनिवार्य उत्तर पूरे हैं।")}
                   </p>
                   <button onClick={() => setStep(index)}>
-                    संपादित करें <Icon name="arrow" size={13} />
+                    {tr("संपादित करें")} <Icon name="arrow" size={13} />
                   </button>
                 </div>
               )}
@@ -79,28 +81,28 @@ export function SurveyReview({
       </div>
       <section className="review-warnings">
         <h4>
-          आय मिलान चेतावनी <span>{warnings.length}</span>
+          {tr("आय मिलान चेतावनी")} <span>{warnings.length}</span>
         </h4>
         {warnings.map((item) => (
           <div key={item.section}>
             <Icon name="alert" size={14} />
             <p>
-              <strong>{item.section}</strong>
-              <span>{item.detail}</span>
+              <strong>{tr(item.section)}</strong>
+              <span>{tr(item.detail)}</span>
             </p>
             <button
               onClick={() =>
                 setStep(item.section.startsWith("F") ? 5 : item.section.startsWith("G") ? 6 : 8)
               }
             >
-              संपादित करें
+              {tr("संपादित करें")}
             </button>
           </div>
         ))}
       </section>
       <div className="review-meter">
         <div>
-          <span>अंतिम लखपति मीटर</span>
+          <span>{tr("अंतिम लखपति मीटर")}</span>
           <strong>₹{net.toLocaleString("en-IN")} / ₹1,00,000</strong>
         </div>
         <div className="meter-scale">
@@ -113,11 +115,13 @@ export function SurveyReview({
           </b>
         </div>
         <p>
-          सक्रिय आय स्रोत: 3 • लक्ष्य तक ₹{Math.max(0, 100000 - net).toLocaleString("en-IN")} बाकी
+          {tr("सक्रिय आय स्रोत: 3 • लक्ष्य तक ₹{{amount}} बाकी", {
+            amount: Math.max(0, 100000 - net).toLocaleString("en-IN"),
+          })}
         </p>
       </div>
       <section className="consent-panel">
-        <h4>दीदी की पहचान और सहमति</h4>
+        <h4>{tr("दीदी की पहचान और सहमति")}</h4>
         <button
           className={`photo-capture ${photo ? "captured" : ""}`}
           onClick={() => setPhoto(true)}
@@ -126,8 +130,8 @@ export function SurveyReview({
             <>
               <span className="didi-photo">SK</span>
               <div>
-                <strong>फोटो कैप्चर हुआ</strong>
-                <small>18 नवंबर 2026 • 11:42 AM</small>
+                <strong>{tr("फोटो कैप्चर हुआ")}</strong>
+                <small>{tr("18 नवंबर 2026 • 11:42 AM")}</small>
               </div>
               <Icon name="check" size={18} />
             </>
@@ -137,21 +141,21 @@ export function SurveyReview({
                 <Icon name="plus" size={18} />
               </span>
               <div>
-                <strong>दीदी फोटो कैप्चर करें</strong>
-                <small>कैमरा खोलने के लिए टैप करें</small>
+                <strong>{tr("दीदी फोटो कैप्चर करें")}</strong>
+                <small>{tr("कैमरा खोलने के लिए टैप करें")}</small>
               </div>
               <Icon name="chevron" size={16} />
             </>
           )}
         </button>
         <div className="consent-method">
-          <span>अंगूठा / OTP से सहमति</span>
+          <span>{tr("अंगूठा / OTP से सहमति")}</span>
           <div>
             <button
               className={method === "अंगूठा" ? "active" : ""}
               onClick={() => setMethod("अंगूठा")}
             >
-              अंगूठा
+              {tr("अंगूठा")}
             </button>
             <button className={method === "OTP" ? "active" : ""} onClick={() => setMethod("OTP")}>
               OTP
@@ -160,7 +164,7 @@ export function SurveyReview({
         </div>
         {method === "OTP" ? (
           <>
-            <p className="otp-note">98••• ••412 पर भेजा गया 6-अंकीय OTP</p>
+            <p className="otp-note">{tr("98••• ••412 पर भेजा गया 6-अंकीय OTP")}</p>
             <div className="otp-boxes">
               {otp.map((digit, index) => (
                 <input
@@ -172,14 +176,14 @@ export function SurveyReview({
                 />
               ))}
             </div>
-            <button className="resend-otp">OTP दोबारा भेजें</button>
+            <button className="resend-otp">{tr("OTP दोबारा भेजें")}</button>
           </>
         ) : (
           <button className="thumb-capture">
-            <span className="thumb-mark">अं</span>
+            <span className="thumb-mark">{tr("अं")}</span>
             <div>
-              <strong>अंगूठे का निशान लें</strong>
-              <small>बायोमेट्रिक डिवाइस जोड़ें</small>
+              <strong>{tr("अंगूठे का निशान लें")}</strong>
+              <small>{tr("बायोमेट्रिक डिवाइस जोड़ें")}</small>
             </div>
           </button>
         )}
@@ -191,8 +195,8 @@ export function SurveyReview({
           onChange={(event) => setDeclaration(event.target.checked)}
         />
         <span>
-          मैं घोषणा करता/करती हूँ कि यह जानकारी परिवार के समक्ष सत्यापित की गई है।
-          <small>गीता नेताम • CRP • 18 नवंबर 2026</small>
+          {tr("मैं घोषणा करता/करती हूँ कि यह जानकारी परिवार के समक्ष सत्यापित की गई है।")}
+          <small>{tr("गीता नेताम • CRP • 18 नवंबर 2026")}</small>
         </span>
       </label>
       <button
@@ -200,7 +204,7 @@ export function SurveyReview({
         disabled={!declaration || !photo || otp.some((digit) => !digit)}
         onClick={() => onSubmit(method === "OTP" ? "OTP" : "thumb")}
       >
-        <Icon name="check" size={17} /> सर्वे जमा करें
+        <Icon name="check" size={17} /> {tr("सर्वे जमा करें")}
       </button>
     </div>
   )

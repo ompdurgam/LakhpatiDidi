@@ -12,6 +12,7 @@ import { SchemeSaturationForm } from "@/features/survey/sections/schemes/SchemeS
 import { SurveyReview } from "@/features/survey/SurveyReview"
 import { SurveySuccess } from "@/features/survey/SurveySuccess"
 import type { IncomeEntry, SurveyResult } from "@/features/survey/types"
+import { useTr } from "@/i18n/tr"
 
 export function SurveyForm({
   step,
@@ -19,7 +20,6 @@ export function SurveyForm({
   sections,
   selectedLivelihoods,
   setSelectedLivelihoods,
-  english,
   onNotify,
   onSeeRecommendations,
   onNextFamily,
@@ -29,11 +29,11 @@ export function SurveyForm({
   sections: string[]
   selectedLivelihoods: string[]
   setSelectedLivelihoods: (items: string[]) => void
-  english: boolean
   onNotify: (message: string) => void
   onSeeRecommendations: () => void
   onNextFamily: () => void
 }) {
+  const tr = useTr()
   const [submitted, setSubmitted] = useState<SurveyResult | null>(null)
   const [submitError, setSubmitError] = useState("")
   // Every TextControl / SelectControl in the form writes its value here (keyed by label).
@@ -53,8 +53,8 @@ export function SurveyForm({
       setSubmitted(result)
       onNotify(
         result.created
-          ? `सर्वे जमा • नया परिवार ${result.hhCode}`
-          : `सर्वे जमा • ${result.hhCode} अपडेट हुआ`,
+          ? tr("सर्वे जमा • नया परिवार {{code}}", { code: result.hhCode })
+          : tr("सर्वे जमा • {{code}} अपडेट हुआ", { code: result.hhCode }),
       )
       refresh()
     } catch (e) {
@@ -133,25 +133,15 @@ export function SurveyForm({
             ]
   const heading =
     step === 0
-      ? english
-        ? "A. Identification & household"
-        : "A. पहचान और परिवार"
+      ? tr("A. पहचान और परिवार")
       : step === 1
-        ? english
-          ? "B. Income baseline"
-          : "B. आय बेसलाइन"
+        ? tr("B. आय बेसलाइन")
         : step === 2
-          ? english
-            ? "C. Loans & financial risk"
-            : "C. ऋण और वित्तीय जोखिम"
+          ? tr("C. ऋण और वित्तीय जोखिम")
           : step === 3
-            ? english
-              ? "D. Scheme saturation"
-              : "D. योजना संतृप्ति"
+            ? tr("D. योजना संतृप्ति")
             : step === 11
-              ? english
-                ? "Review & consent"
-                : "समीक्षा और सहमति"
+              ? tr("समीक्षा और सहमति")
               : sections[step]
   if (submitted)
     return (
@@ -167,8 +157,8 @@ export function SurveyForm({
         <div className="form-top">
           <button onClick={previousStep}>‹</button>
           <div>
-            <strong>{english ? "Household survey" : "परिवार सर्वे"}</strong>
-            <span>{english ? "Draft auto-saved" : "ड्राफ्ट स्वतः सुरक्षित"}</span>
+            <strong>{tr("परिवार सर्वे")}</strong>
+            <span>{tr("ड्राफ्ट स्वतः सुरक्षित")}</span>
           </div>
           <b>
             {step + 1}/{sections.length}
@@ -185,7 +175,7 @@ export function SurveyForm({
             >
               <i>{index < step ? "✓" : index + 1}</i>
               <span>{section}</span>
-              {!isApplicable(index) && <small>{english ? "N/A" : "लागू नहीं"}</small>}
+              {!isApplicable(index) && <small>{tr("लागू नहीं")}</small>}
             </button>
           ))}
         </div>
@@ -208,9 +198,9 @@ export function SurveyForm({
           <div className="mobile-form-fields">
             {fields.map(([label, value]) => (
               <label key={label}>
-                <span>{label}</span>
+                <span>{tr(label)}</span>
                 <div>
-                  {value}
+                  {tr(value)}
                   <Icon name="chevron" size={15} />
                 </div>
               </label>
@@ -232,11 +222,11 @@ export function SurveyForm({
         )}
         {step < 11 && (
           <div className="mobile-form-actions">
-            <button className="secondary" onClick={() => onNotify("ड्राफ्ट सुरक्षित किया गया")}>
-              ड्राफ्ट
+            <button className="secondary" onClick={() => onNotify(tr("ड्राफ्ट सुरक्षित किया गया"))}>
+              {tr("ड्राफ्ट")}
             </button>
             <button className="primary" onClick={nextStep}>
-              सहेजें और आगे <Icon name="arrow" size={16} />
+              {tr("सहेजें और आगे")} <Icon name="arrow" size={16} />
             </button>
           </div>
         )}

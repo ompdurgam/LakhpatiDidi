@@ -6,6 +6,7 @@ import { Icon } from "@/components/ui/Icon"
 import { NumberControl } from "@/components/ui/NumberStepper"
 import { SelectControl } from "@/components/ui/Select"
 import { TextControl } from "@/components/ui/TextControl"
+import { useTr } from "@/i18n/tr"
 
 export function IdentificationForm({
   selectedLivelihoods,
@@ -16,6 +17,7 @@ export function IdentificationForm({
   setSelectedLivelihoods: (items: string[]) => void
   onNotify: (message: string) => void
 }) {
+  const tr = useTr()
   const [organizations, setOrganizations] = useState(["CLF", "VO", "SHG"])
   const [shgMember, setShgMember] = useState("हाँ")
   const [pld, setPld] = useState("हाँ")
@@ -49,14 +51,16 @@ export function IdentificationForm({
   ]
   return (
     <div className="identification-form">
-      <FormGroup title="स्थान">
+      <FormGroup title={tr("स्थान")}>
         <div className="gps-control">
           <Icon name="map" size={18} />
           <div>
-            <strong>GPS स्वतः कैप्चर हुआ</strong>
+            <strong>{tr("GPS स्वतः कैप्चर हुआ")}</strong>
             <span>19.0748, 82.0080 • ±8m</span>
           </div>
-          <button onClick={() => onNotify("GPS स्थान दोबारा लिया गया")}>पुनः लें</button>
+          <button onClick={() => onNotify(tr("GPS स्थान दोबारा लिया गया"))}>
+            {tr("पुनः लें")}
+          </button>
         </div>
         <div className="control-grid">
           <SelectControl label="जिला" value="बस्तर" options={["बस्तर"]} />
@@ -69,7 +73,7 @@ export function IdentificationForm({
           />
         </div>
       </FormGroup>
-      <FormGroup title="संगठन">
+      <FormGroup title={tr("संगठन")}>
         <ChipField label="क्या महिला SHG सदस्य है?">
           <ChipGroup
             options={["हाँ", "नहीं"]}
@@ -105,17 +109,19 @@ export function IdentificationForm({
           )}
         </div>
         <label className="verified-input">
-          <span>सदस्य ID / LokOS ID</span>
+          <span>{tr("सदस्य ID / LokOS ID")}</span>
           <div>
             <input defaultValue="LK-BST-440921" />
-            <button onClick={() => onNotify("LokOS ID सत्यापित है")}>सत्यापित करें</button>
+            <button onClick={() => onNotify(tr("LokOS ID सत्यापित है"))}>
+              {tr("सत्यापित करें")}
+            </button>
           </div>
         </label>
         <ChipField label="क्या संभावित लखपति दीदी (PLD) हैं?">
           <ChipGroup options={["हाँ", "नहीं"]} selected={[pld]} onToggle={setPld} single />
         </ChipField>
       </FormGroup>
-      <FormGroup title="व्यक्तिगत">
+      <FormGroup title={tr("व्यक्तिगत")}>
         <div className="control-grid">
           <TextControl label="SHG सदस्य का नाम" value="सुनीता कश्यप" />
           <TextControl label="माता-पिता/पति का नाम" value="राम कश्यप" />
@@ -151,7 +157,9 @@ export function IdentificationForm({
             single
           />
         </ChipField>
-        {disability === "हाँ" && <TextControl label="दिव्यांगता विवरण" value="चलने में कठिनाई" />}
+        {disability === "हाँ" && (
+          <TextControl label="दिव्यांगता विवरण" value={tr("चलने में कठिनाई")} />
+        )}
         <ChipField label="सामाजिक वर्ग">
           <ChipGroup options={["सामान्य", "ST", "SC", "OBC"]} selected={["ST"]} single />
         </ChipField>
@@ -162,7 +170,7 @@ export function IdentificationForm({
           />
         </ChipField>
       </FormGroup>
-      <FormGroup title="नेतृत्व">
+      <FormGroup title={tr("नेतृत्व")}>
         <ChipField label="CI भूमिका (एक से अधिक)">
           <ChipGroup
             options={["अध्यक्ष", "सचिव", "कोषाध्यक्ष", "कोई नहीं"]}
@@ -188,7 +196,7 @@ export function IdentificationForm({
           <ChipGroup options={["CRP", "CLF स्टाफ", "अन्य"]} selected={["CRP"]} single />
         </ChipField>
       </FormGroup>
-      <FormGroup title="परिवार">
+      <FormGroup title={tr("परिवार")}>
         <ChipField label="परिवार प्रकार (एक से अधिक)">
           <ChipGroup
             options={[
@@ -225,12 +233,15 @@ export function IdentificationForm({
         </div>
         {familyMismatch && (
           <div className="validation-error">
-            <Icon name="alert" size={14} /> पुरुष + महिला ({counts.male + counts.female}) कुल
-            सदस्यों ({counts.total}) के बराबर होना चाहिए।
+            <Icon name="alert" size={14} />{" "}
+            {tr("पुरुष + महिला ({{sum}}) कुल सदस्यों ({{total}}) के बराबर होना चाहिए।", {
+              sum: counts.male + counts.female,
+              total: counts.total,
+            })}
           </div>
         )}
       </FormGroup>
-      <FormGroup title="भूमि">
+      <FormGroup title={tr("भूमि")}>
         <ChipField label="भूमि स्थिति">
           <ChipGroup
             options={["भूमिहीन", "स्वामित्व", "पट्टे पर", "बटाई", "FRA पट्टा"]}
@@ -247,7 +258,7 @@ export function IdentificationForm({
               <TextControl label="बटाई एकड़" value="0.5" type="number" />
               <TextControl label="FRA एकड़" value="1" type="number" />
               <label className="auto-control">
-                <span>कुल एकड़ (स्वतः)</span>
+                <span>{tr("कुल एकड़ (स्वतः)")}</span>
                 <div>3.0</div>
               </label>
               <TextControl label="सिंचित एकड़" value="1" type="number" />
@@ -256,7 +267,7 @@ export function IdentificationForm({
           </>
         )}
       </FormGroup>
-      <FormGroup title="आजीविका श्रेणियाँ">
+      <FormGroup title={tr("आजीविका श्रेणियाँ")}>
         <div className="livelihood-tiles">
           {livelihoodOptions.map(([code, icon, label]) => (
             <button
@@ -265,13 +276,13 @@ export function IdentificationForm({
               onClick={() => toggle(selectedLivelihoods, code, setSelectedLivelihoods)}
             >
               <b>{icon}</b>
-              <span>{label}</span>
-              <small>खंड {code}</small>
+              <span>{tr(label)}</span>
+              <small>{tr("खंड {{code}}", { code })}</small>
             </button>
           ))}
         </div>
         <div className="included-sections">
-          आपके सर्वे में खंड: <strong>A B C D {selectedLivelihoods.join(" ")}</strong>
+          {tr("आपके सर्वे में खंड:")} <strong>A B C D {selectedLivelihoods.join(" ")}</strong>
         </div>
       </FormGroup>
     </div>

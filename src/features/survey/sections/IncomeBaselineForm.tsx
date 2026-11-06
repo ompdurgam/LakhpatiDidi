@@ -1,6 +1,7 @@
 import { useState } from "react"
 
 import type { IncomeEntry } from "@/features/survey/types"
+import { useTr } from "@/i18n/tr"
 
 export function IncomeBaselineForm({
   entries,
@@ -9,6 +10,7 @@ export function IncomeBaselineForm({
   entries: IncomeEntry[]
   setEntries: (entries: IncomeEntry[]) => void
 }) {
+  const tr = useTr()
   const monthLabels = [
     "Jan",
     "Feb",
@@ -45,7 +47,7 @@ export function IncomeBaselineForm({
   return (
     <div className="section-form income-section">
       <p className="section-help">
-        प्रत्येक आय स्रोत खोलकर महीने और वार्षिक राशि भरें। शुद्ध आय स्वतः निकलेगी।
+        {tr("प्रत्येक आय स्रोत खोलकर महीने और वार्षिक राशि भरें। शुद्ध आय स्वतः निकलेगी।")}
       </p>
       <div className="expandable-list">
         {entries.map((entry, index) => (
@@ -55,17 +57,19 @@ export function IncomeBaselineForm({
               onClick={() => setExpanded(expanded === index ? -1 : index)}
             >
               <span className={`source-dot ${entry.gross > 0 ? "active" : ""}`} />
-              <strong>{entry.name}</strong>
+              <strong>{tr(entry.name)}</strong>
               <span>
                 {entry.gross > 0
-                  ? `शुद्ध ₹${(entry.gross - entry.cost).toLocaleString("en-IN")}`
-                  : "आय नहीं"}
+                  ? tr("शुद्ध ₹{{amount}}", {
+                      amount: (entry.gross - entry.cost).toLocaleString("en-IN"),
+                    })
+                  : tr("आय नहीं")}
               </span>
               <b>{expanded === index ? "−" : "+"}</b>
             </button>
             {expanded === index && (
               <div className="expandable-body">
-                <span className="field-caption">आय वाले महीने</span>
+                <span className="field-caption">{tr("आय वाले महीने")}</span>
                 <div className="month-chips">
                   {monthLabels.map((month) => (
                     <button
@@ -79,7 +83,7 @@ export function IncomeBaselineForm({
                 </div>
                 <div className="money-grid">
                   <label>
-                    <span>सकल आय ₹</span>
+                    <span>{tr("सकल आय ₹")}</span>
                     <input
                       type="number"
                       value={entry.gross}
@@ -91,7 +95,7 @@ export function IncomeBaselineForm({
                     />
                   </label>
                   <label>
-                    <span>लागत ₹</span>
+                    <span>{tr("लागत ₹")}</span>
                     <input
                       type="number"
                       value={entry.cost}
@@ -99,7 +103,7 @@ export function IncomeBaselineForm({
                     />
                   </label>
                   <label className="auto-money">
-                    <span>शुद्ध आय ₹</span>
+                    <span>{tr("शुद्ध आय ₹")}</span>
                     <input readOnly value={(entry.gross - entry.cost).toLocaleString("en-IN")} />
                   </label>
                 </div>
@@ -110,25 +114,25 @@ export function IncomeBaselineForm({
       </div>
       <div className="income-totals">
         <div>
-          <span>कुल सकल</span>
+          <span>{tr("कुल सकल")}</span>
           <strong>₹{gross.toLocaleString("en-IN")}</strong>
         </div>
         <div>
-          <span>कुल लागत</span>
+          <span>{tr("कुल लागत")}</span>
           <strong>₹{cost.toLocaleString("en-IN")}</strong>
         </div>
         <div className="net-total">
-          <span>कुल वार्षिक शुद्ध आय</span>
+          <span>{tr("कुल वार्षिक शुद्ध आय")}</span>
           <strong>₹{net.toLocaleString("en-IN")}</strong>
         </div>
         <div>
-          <span>₹5000+ आय वाले महीने</span>
+          <span>{tr("₹5000+ आय वाले महीने")}</span>
           <strong>{incomeMonths}/12</strong>
         </div>
       </div>
       <div className="income-meter detailed">
         <div>
-          <span>लखपति मीटर</span>
+          <span>{tr("लखपति मीटर")}</span>
           <strong>₹{net.toLocaleString("en-IN")} / ₹1,00,000</strong>
         </div>
         <div className="meter-scale">
@@ -142,13 +146,15 @@ export function IncomeBaselineForm({
         </div>
         <div className="meter-labels">
           <span>₹0</span>
-          <span>थ्रेशोल्ड</span>
-          <span>लखपति</span>
+          <span>{tr("थ्रेशोल्ड")}</span>
+          <span>{tr("लखपति")}</span>
         </div>
         <div className="source-count">
-          <strong>सक्रिय आय स्रोत: {activeSources}</strong>
+          <strong>
+            {tr("सक्रिय आय स्रोत:")} {activeSources}
+          </strong>
           {activeSources < 2 && (
-            <span className="status amber">एकल आय स्रोत – दूसरा स्रोत जोड़ें</span>
+            <span className="status amber">{tr("एकल आय स्रोत – दूसरा स्रोत जोड़ें")}</span>
           )}
         </div>
       </div>

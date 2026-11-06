@@ -3,14 +3,16 @@ import { useState } from "react"
 import { ChipField, ChipGroup } from "@/components/ui/ChipGroup"
 import { FormGroup } from "@/components/ui/FormGroup"
 import { IncomeMismatch, NeedsBlock } from "@/features/survey/sections/livelihood/shared"
+import { useTr } from "@/i18n/tr"
 
 export function TourismSection({ baseline }: { baseline: number }) {
+  const tr = useTr()
   const [engaged, setEngaged] = useState("हाँ")
   const [income, setIncome] = useState(8000)
   return (
     <div className="section-form livelihood-form">
       <IncomeMismatch income={engaged === "हाँ" ? income : 0} baseline={baseline} />
-      <FormGroup title="पर्यटन गतिविधि">
+      <FormGroup title={tr("पर्यटन गतिविधि")}>
         <ChipField label="आस-पास स्थल">
           <ChipGroup options={["जल", "वन", "ऐतिहासिक", "धार्मिक"]} selected={["वन", "ऐतिहासिक"]} />
         </ChipField>
@@ -26,7 +28,7 @@ export function TourismSection({ baseline }: { baseline: number }) {
               />
             </ChipField>
             <label className="section-total">
-              <span>वार्षिक पर्यटन आय ₹</span>
+              <span>{tr("वार्षिक पर्यटन आय ₹")}</span>
               <input
                 type="number"
                 value={income}

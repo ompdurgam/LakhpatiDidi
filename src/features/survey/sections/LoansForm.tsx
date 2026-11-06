@@ -3,8 +3,10 @@ import { useState } from "react"
 import { ChipField, ChipGroup } from "@/components/ui/ChipGroup"
 import { Icon } from "@/components/ui/Icon"
 import type { LoanEntry } from "@/features/survey/types"
+import { useTr } from "@/i18n/tr"
 
 export function LoansForm() {
+  const tr = useTr()
   const [expanded, setExpanded] = useState(0)
   const [loans, setLoans] = useState<LoanEntry[]>([
     {
@@ -53,7 +55,7 @@ export function LoansForm() {
   return (
     <div className="section-form loan-section">
       <p className="section-help">
-        सभी औपचारिक और अनौपचारिक ऋण दर्ज करें। बकाया राशि स्वतः जोड़ी जाएगी।
+        {tr("सभी औपचारिक और अनौपचारिक ऋण दर्ज करें। बकाया राशि स्वतः जोड़ी जाएगी।")}
       </p>
       <div className="expandable-list">
         {loans.map((loan, index) => (
@@ -63,11 +65,11 @@ export function LoansForm() {
               onClick={() => setExpanded(expanded === index ? -1 : index)}
             >
               <span className={`source-dot ${loan.taken === "हाँ" ? "active" : ""}`} />
-              <strong>{loan.source}</strong>
+              <strong>{tr(loan.source)}</strong>
               <span>
                 {loan.taken === "हाँ"
-                  ? `बकाया ₹${loan.outstanding.toLocaleString("en-IN")}`
-                  : "ऋण नहीं"}
+                  ? tr("बकाया ₹{{amount}}", { amount: loan.outstanding.toLocaleString("en-IN") })
+                  : tr("ऋण नहीं")}
               </span>
               <b>{expanded === index ? "−" : "+"}</b>
             </button>
@@ -84,9 +86,9 @@ export function LoansForm() {
                 {loan.taken === "हाँ" && (
                   <>
                     <label className="loan-purpose">
-                      <span>उद्देश्य</span>
+                      <span>{tr("उद्देश्य")}</span>
                       <input
-                        value={loan.purpose}
+                        value={tr(loan.purpose)}
                         onChange={(event) => updateLoan(index, { purpose: event.target.value })}
                       />
                     </label>
@@ -98,7 +100,7 @@ export function LoansForm() {
                         ["वर्ष", "year"],
                       ].map(([label, key]) => (
                         <label key={key}>
-                          <span>{label}</span>
+                          <span>{tr(label)}</span>
                           <input
                             type="number"
                             value={loan[key as keyof LoanEntry] as number}
@@ -119,15 +121,17 @@ export function LoansForm() {
         ))}
       </div>
       <div className="loan-footer">
-        <span>कुल बकाया (स्वतः)</span>
+        <span>{tr("कुल बकाया (स्वतः)")}</span>
         <strong>₹{total.toLocaleString("en-IN")}</strong>
       </div>
       {highRisk && (
         <div className="risk-warning">
           <Icon name="alert" size={16} />
           <div>
-            <strong>उच्च-ब्याज ऋण जोखिम</strong>
-            <span>साहूकार की वार्षिक ब्याज दर 24% से अधिक है। बैंक/SHG पुनर्वित्त देखें।</span>
+            <strong>{tr("उच्च-ब्याज ऋण जोखिम")}</strong>
+            <span>
+              {tr("साहूकार की वार्षिक ब्याज दर 24% से अधिक है। बैंक/SHG पुनर्वित्त देखें।")}
+            </span>
           </div>
         </div>
       )}

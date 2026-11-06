@@ -4,8 +4,10 @@ import { ChipField, ChipGroup } from "@/components/ui/ChipGroup"
 import { FormGroup } from "@/components/ui/FormGroup"
 import { NumberControl } from "@/components/ui/NumberStepper"
 import { IncomeMismatch, NeedsBlock } from "@/features/survey/sections/livelihood/shared"
+import { useTr } from "@/i18n/tr"
 
 export function LivestockSection({ baseline }: { baseline: number }) {
+  const tr = useTr()
   const animals = [
     ["cattle", "🐄", "गाय/भैंस"],
     ["goat", "🐐", "बकरी/भेड़"],
@@ -31,13 +33,13 @@ export function LivestockSection({ baseline }: { baseline: number }) {
   return (
     <div className="section-form livelihood-form">
       <IncomeMismatch income={total} baseline={baseline} />
-      <FormGroup title="पशु संख्या, नस्ल और आय">
+      <FormGroup title={tr("पशु संख्या, नस्ल और आय")}>
         <div className="animal-grid">
           {animals.map(([key, icon, label]) => (
             <div className="animal-card" key={key}>
               <div className="animal-title">
                 <b>{icon}</b>
-                <span>{label}</span>
+                <span>{tr(label)}</span>
               </div>
               <NumberControl
                 label="संख्या"
@@ -50,7 +52,7 @@ export function LivestockSection({ baseline }: { baseline: number }) {
                     <ChipGroup options={["स्थानीय", "संकर"]} selected={["स्थानीय"]} single />
                   </ChipField>
                   <label className="animal-income">
-                    <span>वार्षिक आय ₹</span>
+                    <span>{tr("वार्षिक आय ₹")}</span>
                     <input
                       type="number"
                       value={incomes[key]}
@@ -68,11 +70,11 @@ export function LivestockSection({ baseline }: { baseline: number }) {
           ))}
         </div>
         <div className="auto-total">
-          <span>पशुधन कुल आय</span>
+          <span>{tr("पशुधन कुल आय")}</span>
           <strong>₹{total.toLocaleString("en-IN")}</strong>
         </div>
       </FormGroup>
-      <FormGroup title="पालन प्रबंधन">
+      <FormGroup title={tr("पालन प्रबंधन")}>
         <ChipField label="पोल्ट्री प्रकार">
           <ChipGroup options={["ब्रॉयलर", "लेयर", "बैकयार्ड"]} selected={["बैकयार्ड"]} />
         </ChipField>

@@ -6,8 +6,10 @@ import { Icon } from "@/components/ui/Icon"
 import { TextControl } from "@/components/ui/TextControl"
 import { IncomeMismatch } from "@/features/survey/sections/livelihood/shared"
 import type { WageRow } from "@/features/survey/types"
+import { useTr } from "@/i18n/tr"
 
 export function WageSection({ baseline }: { baseline: number }) {
+  const tr = useTr()
   const [rows, setRows] = useState<WageRow[]>([
     { member: "राम कश्यप", skill: "राजमिस्त्री", months: 6 },
     { member: "सुनीता कश्यप", skill: "मनरेगा श्रमिक", months: 4 },
@@ -18,27 +20,27 @@ export function WageSection({ baseline }: { baseline: number }) {
   return (
     <div className="section-form livelihood-form">
       <IncomeMismatch income={income} baseline={baseline} />
-      <FormGroup title="सदस्य, कार्य और कौशल">
+      <FormGroup title={tr("सदस्य, कार्य और कौशल")}>
         <div className="simple-rows">
           {rows.map((row, index) => (
             <div className="simple-row" key={index}>
               <div className="control-grid">
                 <label className="text-control">
-                  <span>सदस्य</span>
+                  <span>{tr("सदस्य")}</span>
                   <input
-                    value={row.member}
+                    value={tr(row.member)}
                     onChange={(event) => update(index, { member: event.target.value })}
                   />
                 </label>
                 <label className="text-control">
-                  <span>कार्य/कौशल</span>
+                  <span>{tr("कार्य/कौशल")}</span>
                   <input
-                    value={row.skill}
+                    value={tr(row.skill)}
                     onChange={(event) => update(index, { skill: event.target.value })}
                   />
                 </label>
                 <label className="text-control">
-                  <span>महीने</span>
+                  <span>{tr("महीने")}</span>
                   <input
                     type="number"
                     value={row.months}
@@ -53,10 +55,10 @@ export function WageSection({ baseline }: { baseline: number }) {
           className="add-row-button"
           onClick={() => setRows([...rows, { member: "नया सदस्य", skill: "", months: 0 }])}
         >
-          <Icon name="plus" size={14} /> सदस्य जोड़ें
+          <Icon name="plus" size={14} /> {tr("सदस्य जोड़ें")}
         </button>
       </FormGroup>
-      <FormGroup title="रोजगार विवरण">
+      <FormGroup title={tr("रोजगार विवरण")}>
         <ChipField label="रोजगार प्राथमिकता">
           <ChipGroup
             options={["गाँव", "ब्लॉक-जिला", "राज्य", "राज्य के बाहर", "स्वरोजगार"]}
@@ -68,23 +70,23 @@ export function WageSection({ baseline }: { baseline: number }) {
         </ChipField>
         <div className="mgnrega-linked">
           <span>
-            मनरेगा जॉब कार्ड <b>खंड D से स्वतः</b>
+            {tr("मनरेगा जॉब कार्ड")} <b>{tr("खंड D से स्वतः")}</b>
           </span>
           <strong>CG-04-006-021-00123</strong>
         </div>
         <div className="control-grid">
           <TextControl label="कार्य दिवस" value="68" type="number" />
           <label className="text-control">
-            <span>मजदूरी स्थिति</span>
+            <span>{tr("मजदूरी स्थिति")}</span>
             <select defaultValue="समय पर">
-              <option>समय पर</option>
-              <option>विलंब</option>
-              <option>बकाया</option>
+              <option value="समय पर">{tr("समय पर")}</option>
+              <option value="विलंब">{tr("विलंब")}</option>
+              <option value="बकाया">{tr("बकाया")}</option>
             </select>
           </label>
         </div>
         <label className="section-total">
-          <span>वार्षिक मजदूरी आय ₹</span>
+          <span>{tr("वार्षिक मजदूरी आय ₹")}</span>
           <input
             type="number"
             value={income}

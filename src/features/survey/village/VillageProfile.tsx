@@ -3,8 +3,10 @@ import { NumberControl } from "@/components/ui/NumberStepper"
 import { TextControl } from "@/components/ui/TextControl"
 import { FacilityGroup } from "@/features/survey/village/FacilityGroup"
 import { InstitutionRow } from "@/features/survey/village/InstitutionRow"
+import { useTr } from "@/i18n/tr"
 
 export function VillageProfile({ setScreen }: { setScreen: (screen: string) => void }) {
+  const tr = useTr()
   const community = [
     "आंगनवाड़ी भवन",
     "स्वास्थ्य केंद्र 3 किमी में",
@@ -59,9 +61,9 @@ export function VillageProfile({ setScreen }: { setScreen: (screen: string) => v
       <div className="village-header">
         <button onClick={() => setScreen("home")}>‹</button>
         <div>
-          <small>ग्राम प्रोफ़ाइल</small>
-          <strong>बड़ांजी</strong>
-          <span>बड़ांजी GP • जगदलपुर</span>
+          <small>{tr("ग्राम प्रोफ़ाइल")}</small>
+          <strong>{tr("बड़ांजी")}</strong>
+          <span>{tr("बड़ांजी GP • जगदलपुर")}</span>
         </div>
         <b>70%</b>
       </div>
@@ -69,12 +71,12 @@ export function VillageProfile({ setScreen }: { setScreen: (screen: string) => v
         <i>
           <b />
         </i>
-        <span>70% पूर्ण • अंतिम अपडेट 12 नवंबर 2026</span>
+        <span>{tr("70% पूर्ण • अंतिम अपडेट 12 नवंबर 2026")}</span>
       </div>
-      <FacilityGroup title="D3 सामुदायिक सुविधाएँ" items={community} more={14} />
-      <FacilityGroup title="D4 आजीविका अवसंरचना" items={livelihood} more={22} />
+      <FacilityGroup title={tr("D3 सामुदायिक सुविधाएँ")} items={community} more={14} />
+      <FacilityGroup title={tr("D4 आजीविका अवसंरचना")} items={livelihood} more={22} />
       <section className="ranked-needs">
-        <h3>सबसे आवश्यक 3 आजीविका अवसंरचनाएँ</h3>
+        <h3>{tr("सबसे आवश्यक 3 आजीविका अवसंरचनाएँ")}</h3>
         {[
           ["1", "कोल्ड स्टोरेज"],
           ["2", "SHG कार्यशेड"],
@@ -84,7 +86,9 @@ export function VillageProfile({ setScreen }: { setScreen: (screen: string) => v
             <b>{rank}</b>
             <select defaultValue={value}>
               {livelihood.map((item) => (
-                <option key={item}>{item}</option>
+                <option key={item} value={item}>
+                  {tr(item)}
+                </option>
               ))}
             </select>
           </label>
@@ -94,9 +98,9 @@ export function VillageProfile({ setScreen }: { setScreen: (screen: string) => v
         <div className="village-section-title">
           <div>
             <span>D5</span>
-            <h3>ग्राम संस्थाएँ</h3>
+            <h3>{tr("ग्राम संस्थाएँ")}</h3>
           </div>
-          <small>15 मद</small>
+          <small>{tr("15 मद")}</small>
         </div>
         <div className="institution-list">
           {institutions.map((item, index) => (
@@ -107,8 +111,8 @@ export function VillageProfile({ setScreen }: { setScreen: (screen: string) => v
       <section className="village-section village-resources">
         <div className="village-section-title">
           <div>
-            <span>संसाधन</span>
-            <h3>ग्राम संसाधन</h3>
+            <span>{tr("संसाधन")}</span>
+            <h3>{tr("ग्राम संसाधन")}</h3>
           </div>
         </div>
         <div className="resource-pond">
@@ -116,14 +120,14 @@ export function VillageProfile({ setScreen }: { setScreen: (screen: string) => v
           <TextControl label="कुल क्षेत्रफल (एकड़)" value="7.5" type="number" />
         </div>
         {["वन क्षेत्र", "CFR पट्टा", "नदी/नहर", "पर्यटन स्थल"].map((item, index) => (
-          <ChipField key={item} label={`${item} उपलब्ध?`}>
+          <ChipField key={item} label={tr("{{item}} उपलब्ध?", { item: tr(item) })}>
             <ChipGroup options={["हाँ", "नहीं"]} selected={[index === 2 ? "नहीं" : "हाँ"]} single />
           </ChipField>
         ))}
       </section>
       <div className="village-save">
-        <button className="secondary">ड्राफ्ट</button>
-        <button className="primary">ग्राम प्रोफ़ाइल सहेजें</button>
+        <button className="secondary">{tr("ड्राफ्ट")}</button>
+        <button className="primary">{tr("ग्राम प्रोफ़ाइल सहेजें")}</button>
       </div>
     </div>
   )

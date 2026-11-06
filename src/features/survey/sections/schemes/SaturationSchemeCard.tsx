@@ -3,6 +3,7 @@ import { useState } from "react"
 import { ChipGroup } from "@/components/ui/ChipGroup"
 import { NumberControl } from "@/components/ui/NumberStepper"
 import { TextControl } from "@/components/ui/TextControl"
+import { useTr } from "@/i18n/tr"
 
 export function SaturationSchemeCard({
   scheme,
@@ -13,6 +14,7 @@ export function SaturationSchemeCard({
   department: string
   initialStatus: string
 }) {
+  const tr = useTr()
   const [eligible, setEligible] = useState(
     scheme.includes("पेंशन") ? 1 : scheme === "मनरेगा जॉब कार्ड" ? 1 : 2,
   )
@@ -28,15 +30,15 @@ export function SaturationSchemeCard({
     <article className="saturation-card">
       <div className="saturation-title">
         <div>
-          <strong>{scheme}</strong>
-          <span>{department}</span>
+          <strong>{tr(scheme)}</strong>
+          <span>{tr(department)}</span>
         </div>
         <span
           className={`status ${
             status === "प्राप्त" ? "green" : status === "आवेदन लंबित" ? "amber" : "red"
           }`}
         >
-          {status === "प्राप्त" ? "प्राप्त ✓" : status}
+          {status === "प्राप्त" ? `${tr("प्राप्त")} ✓` : tr(status)}
         </span>
       </div>
       <div className="scheme-steppers">
@@ -48,7 +50,7 @@ export function SaturationSchemeCard({
         />
       </div>
       <div className="scheme-status-control">
-        <span>स्थिति</span>
+        <span>{tr("स्थिति")}</span>
         {["प्राप्त", "आवेदन लंबित", "आवेदन नहीं"].map((option) => (
           <button
             key={option}
@@ -57,13 +59,13 @@ export function SaturationSchemeCard({
             }`}
             onClick={() => setStatus(option)}
           >
-            {option}
+            {tr(option)}
             {option === "प्राप्त" && " ✓"}
           </button>
         ))}
       </div>
       <div className="awareness-control">
-        <span>जानकारी है?</span>
+        <span>{tr("जानकारी है?")}</span>
         <ChipGroup options={["हाँ", "नहीं"]} selected={[aware]} onToggle={setAware} single />
       </div>
       {scheme === "मनरेगा जॉब कार्ड" && (

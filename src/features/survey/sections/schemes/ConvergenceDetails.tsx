@@ -2,13 +2,15 @@ import { useState } from "react"
 
 import { ChipField, ChipGroup } from "@/components/ui/ChipGroup"
 import { TextControl } from "@/components/ui/TextControl"
+import { useTr } from "@/i18n/tr"
 
 export function ConvergenceDetails() {
+  const tr = useTr()
   const [bankLoan, setBankLoan] = useState("हाँ")
   const [nrlmLoan, setNrlmLoan] = useState("हाँ")
   return (
     <section className="convergence-details">
-      <h4>अभिसरण विवरण</h4>
+      <h4>{tr("अभिसरण विवरण")}</h4>
       <div className="convergence-row">
         <ChipField label="बैंक ऋण">
           <ChipGroup
@@ -48,19 +50,19 @@ export function ConvergenceDetails() {
         ["RSETI/DDU-GKY प्रशिक्षण स्थिति", "प्रशिक्षण पूर्ण"],
       ].map(([label, value]) => (
         <div className="convergence-select" key={label}>
-          <span>{label}</span>
+          <span>{tr(label)}</span>
           <select defaultValue={value}>
             {label.includes("स्थिति") ? (
               <>
-                <option>प्राप्त</option>
-                <option>आवेदन लंबित</option>
-                <option>प्रशिक्षण पूर्ण</option>
-                <option>आवेदन नहीं</option>
+                <option value="प्राप्त">{tr("प्राप्त")}</option>
+                <option value="आवेदन लंबित">{tr("आवेदन लंबित")}</option>
+                <option value="प्रशिक्षण पूर्ण">{tr("प्रशिक्षण पूर्ण")}</option>
+                <option value="आवेदन नहीं">{tr("आवेदन नहीं")}</option>
               </>
             ) : (
               <>
-                <option>हाँ</option>
-                <option>नहीं</option>
+                <option value="हाँ">{tr("हाँ")}</option>
+                <option value="नहीं">{tr("नहीं")}</option>
               </>
             )}
           </select>

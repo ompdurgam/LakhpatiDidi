@@ -5,8 +5,10 @@ import { FormGroup } from "@/components/ui/FormGroup"
 import { Icon } from "@/components/ui/Icon"
 import { IncomeMismatch, NeedsBlock } from "@/features/survey/sections/livelihood/shared"
 import type { NtfpRow } from "@/features/survey/types"
+import { useTr } from "@/i18n/tr"
 
 export function ForestProduceSection({ baseline }: { baseline: number }) {
+  const tr = useTr()
   const [rows, setRows] = useState<NtfpRow[]>([
     { produce: "महुआ", months: "मार्च–मई", days: 45, gap: "भंडारण" },
   ])
@@ -16,27 +18,27 @@ export function ForestProduceSection({ baseline }: { baseline: number }) {
   return (
     <div className="section-form livelihood-form">
       <IncomeMismatch income={income} baseline={baseline} />
-      <FormGroup title="संग्रह विवरण">
+      <FormGroup title={tr("संग्रह विवरण")}>
         <div className="simple-rows">
           {rows.map((row, index) => (
             <div className="simple-row" key={index}>
               <div className="control-grid">
                 <label className="text-control">
-                  <span>उपज</span>
+                  <span>{tr("उपज")}</span>
                   <input
-                    value={row.produce}
+                    value={tr(row.produce)}
                     onChange={(event) => update(index, { produce: event.target.value })}
                   />
                 </label>
                 <label className="text-control">
-                  <span>महीने</span>
+                  <span>{tr("महीने")}</span>
                   <input
-                    value={row.months}
+                    value={tr(row.months)}
                     onChange={(event) => update(index, { months: event.target.value })}
                   />
                 </label>
                 <label className="text-control">
-                  <span>संग्रह दिन (0–365)</span>
+                  <span>{tr("संग्रह दिन (0–365)")}</span>
                   <input
                     type="number"
                     value={row.days}
@@ -44,9 +46,9 @@ export function ForestProduceSection({ baseline }: { baseline: number }) {
                   />
                 </label>
                 <label className="text-control">
-                  <span>मुख्य कमी</span>
+                  <span>{tr("मुख्य कमी")}</span>
                   <input
-                    value={row.gap}
+                    value={tr(row.gap)}
                     onChange={(event) => update(index, { gap: event.target.value })}
                   />
                 </label>
@@ -58,7 +60,7 @@ export function ForestProduceSection({ baseline }: { baseline: number }) {
           className="add-row-button"
           onClick={() => setRows([...rows, { produce: "नई उपज", months: "", days: 0, gap: "" }])}
         >
-          <Icon name="plus" size={14} /> उपज जोड़ें
+          <Icon name="plus" size={14} /> {tr("उपज जोड़ें")}
         </button>
         <ChipField label="अधिकार और क्षमता">
           <ChipGroup
@@ -67,7 +69,7 @@ export function ForestProduceSection({ baseline }: { baseline: number }) {
           />
         </ChipField>
       </FormGroup>
-      <FormGroup title="उपज-वार आय">
+      <FormGroup title={tr("उपज-वार आय")}>
         <div className="income-chip-grid">
           {[
             "महुआ",
@@ -87,13 +89,13 @@ export function ForestProduceSection({ baseline }: { baseline: number }) {
             "सीताफल",
           ].map((item, index) => (
             <label key={item}>
-              <span>{item}</span>
+              <span>{tr(item)}</span>
               <input type="number" defaultValue={index === 0 ? 18500 : 0} />
             </label>
           ))}
         </div>
         <label className="section-total">
-          <span>कुल वन उपज आय ₹</span>
+          <span>{tr("कुल वन उपज आय ₹")}</span>
           <input
             type="number"
             value={income}
