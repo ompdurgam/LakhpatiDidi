@@ -1,15 +1,12 @@
+import { Link } from "react-router"
+
 import { Icon } from "@/components/ui/Icon"
 import { useTr } from "@/i18n/tr"
 
-export function DprSuccess({
-  compact,
-  onTrack,
-  onNext,
-}: {
-  compact: boolean
-  onTrack: () => void
-  onNext: () => void
-}) {
+import type { SentDpr } from "./types"
+
+/** Shown after a DPR is sent (or when opening one that was already sent). */
+export function DprSuccess({ compact, sent }: { compact: boolean; sent: SentDpr }) {
   const tr = useTr()
   return (
     <div className={compact ? "phone-content dpr-success" : "dpr-workspace dpr-success"}>
@@ -20,31 +17,33 @@ export function DprSuccess({
       <h2>{tr("आवेदन विभाग तक पहुँच गया")}</h2>
       <div className="dpr-success-id">
         <span>Application ID</span>
-        <strong>APP-260142</strong>
+        <strong>{sent.applicationCode}</strong>
       </div>
       <div className="routing-success">
         <span>
           <Icon name="building" size={18} />
         </span>
         <div>
-          <strong>{tr("मत्स्य विभाग, जगदलपुर को भेजा गया")}</strong>
-          <p>{tr("प्रतिलिपि BMMU")}</p>
+          <strong>{sent.office}</strong>
+          <p>{sent.officer ? tr("अधिकारी: {{name}}", { name: sent.officer }) : sent.department}</p>
         </div>
       </div>
-      <div className="sla-success">
-        <Icon name="clock" size={17} />
-        <div>
-          <span>{tr("स्वीकृति अपेक्षित")}</span>
-          <strong>{tr("15 दिन में (20 नवंबर 2026)")}</strong>
+      {sent.slaDue && (
+        <div className="sla-success">
+          <Icon name="clock" size={17} />
+          <div>
+            <span>{tr("स्वीकृति अपेक्षित")}</span>
+            <strong>{sent.slaDue}</strong>
+          </div>
         </div>
-      </div>
+      )}
       <div className="dpr-success-actions">
-        <button className="primary" onClick={onTrack}>
+        <Link className="primary" to="/field/households">
           {tr("ट्रैक करें")} <Icon name="arrow" size={16} />
-        </button>
-        <button className="secondary" onClick={onNext}>
-          {tr("अगली योजना का DPR")}
-        </button>
+        </Link>
+        <Link className="secondary" to="/field/dpr">
+          {tr("अगली दीदी का DPR")}
+        </Link>
       </div>
     </div>
   )

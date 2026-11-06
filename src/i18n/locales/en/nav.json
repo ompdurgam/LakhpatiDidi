@@ -50,6 +50,8 @@
   },
   "didi": {
     "profile": "My profile",
-    "applications": "My applications"
+    "applications": "My applications",
+    "tasks": "My tasks",
+    "menu": "Didi menu"
   }
 }

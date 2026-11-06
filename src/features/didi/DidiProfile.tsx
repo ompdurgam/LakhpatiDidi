@@ -7,6 +7,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge"
 import { useTr } from "@/i18n/tr"
 
 import { LakhpatiMeter } from "./LakhpatiMeter"
+import { TasksCard } from "./TasksCard"
 import { useDidi } from "./useDidi"
 
 const rupees = (n: number) => `₹${n.toLocaleString("en-IN")}`
@@ -17,7 +18,7 @@ export function DidiProfile() {
   const { data, isLoading, error } = useDidi()
   if (error) return <EmptyState>{(error as Error).message}</EmptyState>
   if (isLoading || !data) return <EmptyState>{tr("लोड हो रहा है…")}</EmptyState>
-  const { profile: p, meter, incomeSources, gaps, applications } = data
+  const { profile: p, meter, incomeSources, gaps, applications, tasks } = data
   const facts: [string, string | null][] = [
     ["पिता / पति", p.guardian],
     ["आयु", p.age === null ? null : String(p.age)],
@@ -43,6 +44,8 @@ export function DidiProfile() {
         </div>
         {p.pld && <span className="status green">{tr("संभावित लखपति दीदी (PLD)")}</span>}
       </div>
+
+      <TasksCard tasks={tasks} />
 
       <div className="didi-grid">
         <LakhpatiMeter meter={meter} />

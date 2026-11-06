@@ -297,6 +297,10 @@ test.describe("didi (PLD) profile", () => {
     expect(data.profile.mobile).toBe(SUNITA)
     expect(data.meter.target).toBe(100000)
     expect(data.meter.income).toBeGreaterThan(0)
+    // Her to-do list is worked out from her data, with a consistent progress count.
+    expect(data.tasks.total).toBe(data.tasks.items.length)
+    expect(data.tasks.done).toBe(data.tasks.items.filter((t: { done: boolean }) => t.done).length)
+    expect(data.tasks.items.map((t: { kind: string }) => t.kind)).toContain("lakhpati")
     // Every application listed belongs to her household.
     for (const app of data.applications) expect(app.hhCode).toBe("HH-BST-JGD-000123")
   })
@@ -340,5 +344,96 @@ test.describe("didi (PLD) profile", () => {
     const me = await (await request.get("/api/didi/me", { headers: didi })).json()
     expect(me.profile.mobile).toBe(mobile)
     expect(me.meter.income).toBe(80000)
+  })
+})
+
+test.describe("user scope", () => {
+  test("login returns the user's own district and block", async ({ request }) => {
+    const mobile = BLOCK_MANAGER
+    const otp = await (await request.post("/api/auth/otp", { data: { mobile } })).json()
+    const verified = await (
+      await request.post("/api/auth/verify", { data: { mobile, otp: otp.devOtp } })
+    ).json()
+    expect(verified.user.scope.blockEn).toBe("Jagdalpur")
+    expect(verified.user.scope.districtEn).toBe("Bastar")
+    // State-level accounts are not bound to a district.
+    const state = "9993000101"
+    const stateOtp = await (await request.post("/api/auth/otp", { data: { mobile: state } })).json()
+    const stateUser = await (
+      await request.post("/api/auth/verify", { data: { mobile: state, otp: stateOtp.devOtp } })
+    ).json()
+    expect(stateUser.user.scope.districtEn).toBeNull()
+  })
+})
+
+test.describe("recommendations and DPR", () => {
+  const FILLED = "HH-BST-JGD-000089" // demo DPR already filled (PMMSY_POND)
+
+  test("lists surveyed Didis and gives each personalised schemes", async ({ request }) => {
+    const list = await (await request.get("/api/recommendations", { headers })).json()
+    expect(list.total).toBeGreaterThan(5)
+    const first = await (
+      await request.get(`/api/recommendations/${list.items[0].code}`, { headers })
+    ).json()
+    expect(first.recommendations.length).toBeGreaterThan(0)
+    expect(first.leverage.projected).toBeGreaterThanOrEqual(first.leverage.current)
+    // Different Didis get different lists.
+    const other = list.items.find(
+      (i: { topScheme: string }) => i.topScheme !== list.items[0].topScheme,
+    )
+    expect(other).toBeTruthy()
+    expect((await request.get("/api/recommendations/HH-NOPE", { headers })).status()).toBe(404)
+  })
+
+  test("English mode returns English scheme text", async ({ request }) => {
+    const res = await request.get(`/api/recommendations/${FILLED}`, {
+      headers: { ...headers, "Accept-Language": "en" },
+    })
+    const body = await res.json()
+    expect(JSON.stringify(body.recommendations)).not.toMatch(/[ऀ-ॿ]/)
+  })
+
+  test("DPR board shows KPIs; save → send creates one application", async ({ request }) => {
+    const before = (await (await request.get("/api/dpr", { headers })).json()).kpis
+    expect(before.filled).toBeGreaterThan(0)
+
+    const dpr = await (await request.get(`/api/dpr/${FILLED}/PMMSY_POND`, { headers })).json()
+    expect(dpr.draft.status).toBe("filled")
+    expect(dpr.money.total).toBe(
+      dpr.draft.items.reduce((s: number, i: { amount: number }) => s + i.amount, 0),
+    )
+
+    const bad = await request.put(`/api/dpr/${FILLED}/PMMSY_POND`, {
+      headers,
+      data: { step: 7, items: [], remarks: "", documents: [] },
+    })
+    expect(bad.status()).toBe(400)
+
+    const saved = await request.put(`/api/dpr/${FILLED}/PMMSY_POND`, {
+      headers,
+      data: { step: 7, items: dpr.draft.items, remarks: "ok", documents: dpr.draft.documents },
+    })
+    expect(saved.ok()).toBe(true)
+
+    const sent = await post(request, `/api/dpr/${FILLED}/PMMSY_POND/send`, {})
+    expect(sent.status()).toBe(201)
+    expect((await sent.json()).applicationCode).toMatch(/^APP-\d+$/)
+
+    // Sending twice, or editing after sending, is refused.
+    expect((await post(request, `/api/dpr/${FILLED}/PMMSY_POND/send`, {})).status()).toBe(409)
+    const edit = await request.put(`/api/dpr/${FILLED}/PMMSY_POND`, {
+      headers,
+      data: { step: 7, items: dpr.draft.items, remarks: "", documents: [] },
+    })
+    expect(edit.status()).toBe(409)
+
+    const after = (await (await request.get("/api/dpr", { headers })).json()).kpis
+    expect(after.filled).toBe(before.filled - 1)
+    expect(after.sent).toBe(before.sent + 1)
+  })
+
+  test("a draft that is not finished cannot be sent", async ({ request }) => {
+    const res = await post(request, "/api/dpr/HH-BST-JGD-000108/AH_GOAT/send", {})
+    expect(res.status()).toBe(400)
   })
 })

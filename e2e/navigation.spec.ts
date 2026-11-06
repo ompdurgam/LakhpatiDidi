@@ -13,6 +13,8 @@ async function login(page: Page, roleLabel: string, mobile: string) {
   const otp = (await page.locator(".dev-otp-hint b").textContent())!.trim()
   const boxes = page.locator(".otp-boxes input")
   for (let i = 0; i < 6; i++) await boxes.nth(i).fill(otp[i])
+  // Wait for the sign-in to finish (session saved) before the test navigates away.
+  await page.waitForURL((url) => url.pathname !== "/login")
 }
 
 async function switchRole(page: Page, role: string) {
@@ -32,7 +34,7 @@ test("every role's screens are reachable by URL", async ({ page }) => {
     ["block", "/block/households", ".household-register-table"],
     ["block", "/block/applications", ".applications-card"],
     ["field", "/field/survey", ".survey-form"],
-    ["field", "/field/recommendations", ".recommend-desktop"],
+    ["field", "/field/recommendations", ".field-list-page"],
     ["department", "/dept/AH", ".department-inbox"],
     ["district", "/district", ".page"],
     ["state", "/state/certification", ".page"],

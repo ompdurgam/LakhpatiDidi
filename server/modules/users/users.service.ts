@@ -40,9 +40,8 @@ export type NewUser = {
 export async function createUser(input: NewUser) {
   const designation = input.designation || roleLabels[input.role]
   const block = input.block
-    ? await one<Row>("SELECT id FROM master_blocks WHERE code = ?", [input.block])
+    ? await one<Row>("SELECT id, district_id FROM master_blocks WHERE code = ?", [input.block])
     : undefined
-  const district = await one<Row>("SELECT id FROM master_districts WHERE code = 'BST'")
   const statewide = input.role === "state" || input.role === "admin"
   try {
     await exec(
@@ -52,7 +51,8 @@ export async function createUser(input: NewUser) {
         input.mobile,
         input.role,
         designation,
-        statewide ? null : (district?.id ?? null),
+        // A user's district follows the block they work in (no block → not district-bound).
+        statewide ? null : (block?.district_id ?? null),
         block?.id ?? null,
       ],
     )

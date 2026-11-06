@@ -27,14 +27,14 @@ publicAuthRouter.post("/verify", async (req, res) => {
     entityType: "user",
     entityId: String(user.id),
   })
-  res.json({ token, user: toPublicUser(user) })
+  res.json({ token, user: await toPublicUser(user) })
 })
 
 /** Endpoints for a signed-in user. */
 export const authRouter = Router()
 
-authRouter.get("/me", (_req, res) => {
-  res.json({ user: toPublicUser(currentUser(res)) })
+authRouter.get("/me", async (_req, res) => {
+  res.json({ user: await toPublicUser(currentUser(res)) })
 })
 
 authRouter.post("/logout", async (req, res) => {

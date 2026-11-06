@@ -35,6 +35,13 @@ export function msg(hindi: string, vars?: Record<string, string | number>) {
   )
 }
 
+/** A master-table name: `name_hi`, or `name_en` in English (falling back to Hindi when empty). */
+export function localizedName(row: Record<string, unknown>, prefix = "name"): string {
+  const hindi = (row[`${prefix}_hi`] as string | null) ?? ""
+  if (requestLang() !== "en") return hindi
+  return (row[`${prefix}_en`] as string | null) || hindi
+}
+
 /** `row[column]` in Hindi, or `row[column + "_en"]` in English when it is set. */
 export function localized(row: Record<string, unknown>, column: string): string {
   const hindi = (row[column] as string | null) ?? ""

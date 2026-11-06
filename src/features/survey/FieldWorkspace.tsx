@@ -45,7 +45,6 @@ export function FieldWorkspace({ onNotify }: { onNotify: (message: string) => vo
   const { screen, setScreen } = useFieldScreen()
   const [surveyStep, setSurveyStep] = useState(0)
   const [selectedLivelihoods, setSelectedLivelihoods] = useState(["E", "H", "K"])
-  const [selectedSchemes, setSelectedSchemes] = useState<string[]>(["PMMSY"])
 
   const state: FieldState = {
     onNotify,
@@ -56,8 +55,6 @@ export function FieldWorkspace({ onNotify }: { onNotify: (message: string) => vo
     sections: sections.map((name) => tr(name)),
     selectedLivelihoods,
     setSelectedLivelihoods,
-    selectedSchemes,
-    setSelectedSchemes,
   }
 
   if (isMobile) return <FieldMobile {...state} />

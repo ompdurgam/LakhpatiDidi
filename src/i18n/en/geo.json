@@ -27,5 +27,11 @@
   "{{n}} ब्लॉक": "{{n}} blocks",
   "{{n}} ग्राम पंचायतें": "{{n}} gram panchayats",
   "{{n}} गाँव": "{{n}} villages",
-  "{{level}} की सीमाएँ अभी मानचित्र में उपलब्ध नहीं हैं। सूची से क्षेत्र चुनें।": "Map outlines for {{level}} aren't available yet. Pick an area from the list."
+  "{{level}} की सीमाएँ अभी मानचित्र में उपलब्ध नहीं हैं। सूची से क्षेत्र चुनें।": "Map outlines for {{level}} aren't available yet. Pick an area from the list.",
+  "{{name}} ब्लॉक": "{{name}} Block",
+  "{{name}} जिला": "{{name}} District",
+  "{{name}} जिला, छत्तीसगढ़": "{{name}} District, Chhattisgarh",
+  "छत्तीसगढ़": "Chhattisgarh",
+  "छत्तीसगढ़ राज्य": "Chhattisgarh State",
+  "सभी 33 जिले": "All 33 districts"
 }

@@ -29,6 +29,7 @@ const screens: [Role, string][] = [
   ["field", "/field/households"],
   ["field", "/field/recommendations"],
   ["field", "/field/dpr"],
+  ["field", "/field/recommendations/HH-BST-JGD-000123"],
   ["department", "/dept/FISH"],
   ["department", "/dept/AH"],
   ["district", "/district"],
@@ -37,6 +38,7 @@ const screens: [Role, string][] = [
   ["state", "/state/certification"],
   ["state", "/state/map"],
   ["didi", "/didi"],
+  ["didi", "/didi/tasks"],
   ["didi", "/didi/applications"],
   ["district", "/district/map/district/374"],
   ["admin", "/admin/schemes"],
@@ -113,7 +115,7 @@ describe("English mode", () => {
   })
 
   it("every DPR step shows no Hindi", async () => {
-    await renderScreen("field", "/field/dpr")
+    await renderScreen("field", "/field/dpr/HH-BST-JGD-000123/PMMSY_POND")
     expect(await hindiAcrossSteps(".dpr-steps button")).toEqual([])
   })
 })

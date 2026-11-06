@@ -1,4 +1,4 @@
-import { DprBuilder } from "@/features/dpr/DprBuilder"
+import { DprWorkspace } from "@/features/dpr/DprWorkspace"
 import { HouseholdTracker } from "@/features/households/HouseholdTracker"
 import { SchemeRecommendations } from "@/features/recommendations/SchemeRecommendations"
 import { SurveyForm } from "@/features/survey/SurveyForm"
@@ -32,15 +32,9 @@ export function FieldScreen(s: FieldState) {
         />
       )
     case "recommend":
-      return (
-        <SchemeRecommendations
-          selected={s.selectedSchemes}
-          setSelected={s.setSelectedSchemes}
-          setScreen={s.setScreen}
-        />
-      )
+      return <SchemeRecommendations compact />
     case "dpr":
-      return <DprBuilder compact onNotify={s.onNotify} onTrack={() => s.setScreen("tracker")} />
+      return <DprWorkspace compact />
     case "tracker":
       return <HouseholdTracker />
     default:

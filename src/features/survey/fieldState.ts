@@ -8,6 +8,4 @@ export type FieldState = {
   sections: string[]
   selectedLivelihoods: string[]
   setSelectedLivelihoods: (ids: string[]) => void
-  selectedSchemes: string[]
-  setSelectedSchemes: (ids: string[]) => void
 }

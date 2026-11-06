@@ -7,9 +7,11 @@ import { surveySectionsRouter } from "./modules/admin/surveySections.routes.ts"
 import { applicationsRouter } from "./modules/applications/applications.routes.ts"
 import { authRouter, publicAuthRouter } from "./modules/auth/auth.routes.ts"
 import { didiRouter } from "./modules/didi/didi.routes.ts"
+import { dprRouter } from "./modules/dpr/dpr.routes.ts"
 import { geoRouter } from "./modules/geo/geo.routes.ts"
 import { householdsRouter } from "./modules/households/households.routes.ts"
 import { metaRouter } from "./modules/meta/meta.routes.ts"
+import { recommendationsRouter } from "./modules/recommendations/recommendations.routes.ts"
 import { surveysRouter } from "./modules/surveys/surveys.routes.ts"
 import { usersRouter } from "./modules/users/users.routes.ts"
 import { HttpError } from "./shared/errors.ts"
@@ -39,6 +41,8 @@ export function apiRouter() {
   )
   api.use("/meta", metaRouter)
   api.use("/geo", geoRouter)
+  api.use("/recommendations", recommendationsRouter)
+  api.use("/dpr", dprRouter)
   api.use("/applications", applicationsRouter)
   api.use("/households", householdsRouter)
   api.use("/surveys", surveysRouter)

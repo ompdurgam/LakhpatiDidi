@@ -3,6 +3,10 @@ import { useEffect, useState } from "react"
 import { api } from "@/api/client"
 import type { User } from "@/api/types"
 
+/** The i-th OTP input box, if it exists. */
+const otpBox = (index: number) =>
+  document.querySelectorAll<HTMLInputElement>(".otp-boxes input")[index]
+
 const EMPTY_OTP = ["", "", "", "", "", ""]
 
 /** OTP request / verify flow against /api/auth. */
@@ -51,11 +55,30 @@ export function useOtpLogin(initialMobile = "") {
     )
     setOtp(next)
     setError("")
-    if (value && index < 5) {
-      document.querySelectorAll<HTMLInputElement>(".otp-boxes input")[index + 1]?.focus()
-    }
+    if (value && index < 5) otpBox(index + 1)?.focus()
     // All six digits typed: verify straight away (the Login button does the same).
     if (next.every(Boolean)) await verify(next)
+  }
+
+  /** Backspace on an empty box steps back and clears the previous digit; arrows move. */
+  const otpKeyDown = (index: number, key: string) => {
+    if (key === "Backspace" && !otp[index] && index > 0) {
+      setOtp(otp.map((digit, i) => (i === index - 1 ? "" : digit)))
+      setError("")
+      otpBox(index - 1)?.focus()
+    } else if (key === "ArrowLeft") otpBox(index - 1)?.focus()
+    else if (key === "ArrowRight") otpBox(index + 1)?.focus()
+  }
+
+  /** Pasting a code (e.g. copied from an SMS) fills the boxes from the first one. */
+  const pasteOtp = (text: string) => {
+    const digits = text.replace(/\D/g, "").slice(0, 6)
+    if (!digits) return
+    const next = EMPTY_OTP.map((_, i) => digits[i] ?? "")
+    setOtp(next)
+    setError("")
+    otpBox(Math.min(digits.length, 5))?.focus()
+    if (next.every(Boolean)) void verify(next)
   }
 
   const verify = async (digits = otp) => {
@@ -70,6 +93,8 @@ export function useOtpLogin(initialMobile = "") {
     } catch (e) {
       setError((e as Error).message)
       setOtp(EMPTY_OTP)
+      // The boxes are disabled while verifying; start again from the first one.
+      window.setTimeout(() => otpBox(0)?.focus(), 50)
     } finally {
       setBusy(false)
     }
@@ -96,6 +121,8 @@ export function useOtpLogin(initialMobile = "") {
     auth,
     sendOtp,
     updateOtp,
+    otpKeyDown,
+    pasteOtp,
     verify,
     reset,
   }

@@ -36,6 +36,15 @@ export type DidiProfileData = {
   incomeSources: { name: string; months: string[]; gross: number; cost: number; net: number }[]
   gaps: { code: string; name: string; department: string; open: boolean; identifiedOn: string }[]
   applications: ApplicationRow[]
+  tasks: { items: DidiTask[]; done: number; total: number; percent: number }
+}
+
+export type DidiTask = {
+  id: string
+  kind: "second_source" | "scheme_gap" | "info_requested" | "delivery" | "lakhpati"
+  done: boolean
+  application?: string
+  scheme?: string
 }
 
 /** The signed-in Didi's own profile (the API finds it from her verified mobile). */

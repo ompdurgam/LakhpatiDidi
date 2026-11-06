@@ -16,5 +16,21 @@
   "थ्रेशोल्ड {{amount}}": "Threshold {{amount}}",
   "बधाई हो! आप लखपति दीदी बन चुकी हैं।": "Congratulations! You are a Lakhpati Didi.",
   "लखपति बनने के लिए ₹{{amount}} और चाहिए ({{n}}% पूरा)।": "₹{{amount}} more to become Lakhpati ({{n}}% there).",
-  "सुझाव: आय का एक और स्रोत जोड़ने से लखपति बनना आसान होगा।": "Tip: adding one more source of income will make it easier to become Lakhpati."
+  "सुझाव: आय का एक और स्रोत जोड़ने से लखपति बनना आसान होगा।": "Tip: adding one more source of income will make it easier to become Lakhpati.",
+  "मेरे कार्य": "My tasks",
+  "{{done}} में से {{total}} पूरे": "{{done}} of {{total}} done",
+  "सभी देखें": "View all",
+  "सभी कार्य पूरे हो गए। शाबाश!": "All tasks are done. Well done!",
+  "लखपति बनने के लिए आपके अगले कदम": "Your next steps to become Lakhpati",
+  "करने के लिए": "To do",
+  "पूरे हुए": "Done",
+  "आय के कम से कम 2 स्रोत हैं": "You have at least 2 sources of income",
+  "आय का दूसरा स्रोत जुड़वाएँ (अपनी CRP से बात करें)": "Add a second income source (talk to your CRP)",
+  "{{scheme}} का लाभ मिल गया": "You received the benefit of {{scheme}}",
+  "{{scheme}} के लिए CRP के साथ आवेदन करें": "Apply for {{scheme}} with your CRP",
+  "आवेदन {{id}} ({{scheme}}): विभाग ने जानकारी माँगी है — CRP को दस्तावेज़ दें": "Application {{id}} ({{scheme}}): the department asked for information — give the documents to your CRP",
+  "{{scheme}} ({{id}}): डिलीवरी हो गई": "{{scheme}} ({{id}}): delivered",
+  "{{scheme}} ({{id}}): स्वीकृति मिल गई — संपत्ति की डिलीवरी लें": "{{scheme}} ({{id}}): sanctioned — collect the asset delivery",
+  "आप लखपति दीदी बन गई हैं!": "You have become a Lakhpati Didi!",
+  "सालाना आय ₹1,00,000 तक पहुँचें": "Reach an annual income of ₹1,00,000"
 }

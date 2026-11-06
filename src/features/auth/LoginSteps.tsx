@@ -99,6 +99,12 @@ export function OtpStep({ login }: { login: Login }) {
             disabled={login.busy}
             aria-label={t("otpDigit", { n: index + 1 })}
             onChange={(event) => void login.updateOtp(index, event.target.value)}
+            onKeyDown={(event) => login.otpKeyDown(index, event.key)}
+            onPaste={(event) => {
+              event.preventDefault()
+              login.pasteOtp(event.clipboardData.getData("text"))
+            }}
+            onFocus={(event) => event.target.select()}
           />
         ))}
       </div>

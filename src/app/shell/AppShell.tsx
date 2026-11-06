@@ -10,6 +10,7 @@ import { ApplicationDrawer } from "@/features/applications/ApplicationDrawer"
 import { useSession } from "@/stores/session"
 import { useUi } from "@/stores/ui"
 
+import { BottomTabs } from "./BottomTabs"
 import { Header } from "./Header"
 import { Sidebar } from "./Sidebar"
 
@@ -48,6 +49,7 @@ export function AppShell() {
       {selected && (
         <ApplicationDrawer item={selected} role={role} onClose={closeDrawer} onNotify={notify} />
       )}
+      <BottomTabs />
       {menuOpen && <div className="scrim" onClick={() => setMenuOpen(false)} />}
       <Toast />
     </div>

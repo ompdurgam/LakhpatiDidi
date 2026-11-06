@@ -1,60 +1,128 @@
 import { useState } from "react"
+import { Link } from "react-router"
 
+import { EmptyState } from "@/components/ui/EmptyState"
 import { Icon } from "@/components/ui/Icon"
-import { CostTable } from "@/features/dpr/CostTable"
-import { DprEconomics } from "@/features/dpr/DprEconomics"
-import { DprPdfPreview } from "@/features/dpr/DprPdfPreview"
-import { DprSuccess } from "@/features/dpr/DprSuccess"
-import { DprVerification } from "@/features/dpr/DprVerification"
 import { useTr } from "@/i18n/tr"
 
+import { CostStep } from "./CostStep"
+import { BeneficiaryStep, DocumentsStep, ProjectStep, VerifyStep } from "./DprSteps"
+import { DprSuccess } from "./DprSuccess"
+import { EconomicsStep } from "./EconomicsStep"
+import { financing, totalOf } from "./finance"
+import { PreviewStep } from "./PreviewStep"
+import type { CostItem, DprData, SentDpr } from "./types"
+import { useDprActions, useDprData } from "./useDpr"
+
+const STEPS = ["लाभार्थी", "परियोजना", "लागत", "अर्थशास्त्र", "दस्तावेज़", "सत्यापन", "पूर्वावलोकन"]
+
+/** Loads one Didi's DPR for a scheme and shows the step-by-step builder. */
 export function DprBuilder({
-  compact = false,
-  onNotify,
-  onTrack,
+  code,
+  scheme,
+  compact,
 }: {
-  compact?: boolean
-  onNotify: (message: string) => void
-  onTrack?: () => void
+  code: string
+  scheme: string
+  compact: boolean
 }) {
   const tr = useTr()
-  const [step, setStep] = useState(1)
-  const [sent, setSent] = useState(false)
-  const steps = [
-    "लाभार्थी",
-    "परियोजना",
-    "लागत",
-    "अर्थशास्त्र",
-    "दस्तावेज़",
-    "सत्यापन",
-    "पूर्वावलोकन",
-  ]
-  if (sent)
+  const { data, error, loading } = useDprData(code, scheme)
+  if (error || !data) {
+    return (
+      <div className={compact ? "phone-content" : "dpr-workspace"}>
+        <Link to="/field/dpr" className="back-link">
+          <Icon name="arrow" size={14} className="flip" /> DPR
+        </Link>
+        <EmptyState>{error || (loading ? tr("लोड हो रहा है…") : "")}</EmptyState>
+      </div>
+    )
+  }
+  return <DprForm key={`${code}/${scheme}`} data={data} compact={compact} />
+}
+
+function DprForm({ data, compact }: { data: DprData; compact: boolean }) {
+  const tr = useTr()
+  const { save, send } = useDprActions(data.household.code, data.scheme.code)
+  const [step, setStep] = useState(Math.min(7, Math.max(1, data.draft.step)))
+  const [items, setItems] = useState<CostItem[]>(data.draft.items)
+  const [remarks, setRemarks] = useState(data.draft.remarks)
+  const [documents, setDocuments] = useState(data.draft.documents)
+  const [sent, setSent] = useState<SentDpr | null>(null)
+  const [problem, setProblem] = useState("")
+
+  const money = financing(totalOf(items), data.scheme.subsidyPercent, data.scheme.maxCost)
+  const busy = save.isPending || send.isPending
+
+  if (data.application || sent) {
     return (
       <DprSuccess
         compact={compact}
-        onTrack={() => (onTrack ? onTrack() : onNotify(tr("ट्रैकिंग पेज खोला गया")))}
-        onNext={() => {
-          setSent(false)
-          setStep(1)
-          onNotify(tr("अगली चयनित योजना का DPR खोला गया"))
-        }}
+        sent={
+          sent ?? {
+            applicationCode: data.application?.code ?? "",
+            department: data.scheme.department,
+            office: data.scheme.office,
+            officer: null,
+            slaDue: "",
+            scheme: data.scheme.name,
+            didi: data.household.name,
+          }
+        }
       />
     )
+  }
+
+  const persist = (to: number) => save.mutateAsync({ step: to, items, remarks, documents })
+  const fail = (e: unknown) => setProblem(e instanceof Error ? e.message : tr("अनुरोध विफल रहा"))
+
+  const next = async () => {
+    setProblem("")
+    if (step === 3 && money.total <= 0) return setProblem(tr("परियोजना लागत शून्य नहीं हो सकती"))
+    try {
+      if (step < 7) {
+        await persist(step + 1)
+        setStep(step + 1)
+      } else {
+        await persist(7)
+        setSent(await send.mutateAsync())
+      }
+    } catch (e) {
+      fail(e)
+    }
+  }
+  const saveDraft = async () => {
+    setProblem("")
+    try {
+      await persist(step)
+    } catch (e) {
+      fail(e)
+    }
+  }
+  const toggleDoc = (doc: string) =>
+    setDocuments(documents.includes(doc) ? documents.filter((d) => d !== doc) : [...documents, doc])
+
+  const statusLabel = data.draft.status === "filled" ? tr("भरा हुआ") : tr("ड्राफ्ट")
   return (
     <div className={compact ? "phone-content compact-dpr" : "dpr-workspace"}>
+      <Link to="/field/dpr" className="back-link">
+        <Icon name="arrow" size={14} className="flip" /> {tr("DPR सूची")}
+      </Link>
       <div className="dpr-title">
         <div>
-          <span className="eyebrow">DPR-2026-00142</span>
-          <h2>{tr("PMMSY तालाब मत्स्य इकाई")}</h2>
-          <p>{tr("सुनीता कश्यप • आवेदन स्वतः भरा गया")}</p>
+          <span className="eyebrow">{data.household.code}</span>
+          <h2>{data.scheme.name}</h2>
+          <p>
+            {data.household.name} • {data.scheme.department}
+          </p>
         </div>
-        {!compact && <span className="status amber">{tr("ड्राफ्ट")}</span>}
+        {!compact && <span className="status amber">{statusLabel}</span>}
       </div>
       <div className="dpr-steps">
-        {steps.map((name, index) => (
+        {STEPS.map((name, index) => (
           <button
             key={name}
+            type="button"
             className={index + 1 === step ? "active" : index + 1 < step ? "done" : ""}
             onClick={() => setStep(index + 1)}
           >
@@ -65,112 +133,51 @@ export function DprBuilder({
       </div>
       <div className="dpr-panel">
         <h3>
-          {step}. {tr(steps[step - 1])}
+          {step}. {tr(STEPS[step - 1])}
         </h3>
-        {step === 1 && (
-          <div className="dpr-fields">
-            {[
-              ["लाभार्थी नाम", "सुनीता कश्यप"],
-              ["पिता / पति", "राम कश्यप"],
-              ["आधार", "XXXX-XXXX-4831"],
-              ["मोबाइल", "98••• ••412"],
-              ["LokOS ID", "LK-BST-440921"],
-              ["बैंक खाता", "•••• 4831"],
-              ["बैंक नाम", "SBI जगदलपुर"],
-              ["IFSC", "SBIN0001234"],
-              ["SHG / VO", "माँ दंतेश्वरी / शक्ति VO"],
-              ["सामाजिक वर्ग", "ST"],
-              ["विशेष समुदाय", "FRA अधिकारधारी"],
-              ["GPS", "19.0748, 82.0080"],
-              ["पूरा पता", "बड़ांजी, GP बड़ांजी, जगदलपुर, बस्तर"],
-            ].map(([a, b]) => (
-              <label key={a} className={a === "पूरा पता" ? "full-field" : ""}>
-                <span>
-                  {tr(a)} <small>{tr("सर्वे से")}</small>
-                </span>
-                <div className="dpr-locked">
-                  <span>{tr(b)}</span>
-                  <button
-                    onClick={() =>
-                      onNotify(tr("{{item}} के लिए सुधार अनुरोध भेजा गया", { item: tr(a) }))
-                    }
-                  >
-                    {tr("सुधार अनुरोध")}
-                  </button>
-                </div>
-              </label>
-            ))}
-          </div>
+        {step === 1 && <BeneficiaryStep data={data} />}
+        {step === 2 && <ProjectStep data={data} />}
+        {step === 3 && (
+          <CostStep
+            items={items}
+            setItems={setItems}
+            money={money}
+            subsidyPercent={data.scheme.subsidyPercent}
+          />
         )}
-        {step === 2 && (
-          <div className="dpr-fields">
-            {[
-              ["योजना", "PMMSY"],
-              ["गतिविधि / इकाई", "0.5 एकड़ मत्स्य तालाब"],
-              ["मांग क्लस्टर", "मत्स्य"],
-              ["उप-घटक", "तालाब निर्माण/उन्नयन"],
-              ["स्थान", "बड़ांजी, जगदलपुर"],
-              ["मौजूदा संपत्ति", "निजी तालाब"],
-              ["VPRP संदर्भ", "VPRP/2026/184"],
-              ["BLCC कार्रवाई संदर्भ", "BLCC/JGD/11-2026/07"],
-              ["GPDP संदर्भ", "GPDP प्रविष्टि आवश्यक – SOP चरण 3"],
-            ].map(([a, b]) => (
-              <label key={a}>
-                <span>{tr(a)}</span>
-                <div className={a === "GPDP संदर्भ" ? "field-warning" : ""}>{tr(b)}</div>
-              </label>
-            ))}
-          </div>
+        {step === 4 && <EconomicsStep data={data} money={money} />}
+        {step === 5 && <DocumentsStep docs={data.fit.docs} have={documents} onToggle={toggleDoc} />}
+        {step === 6 && (
+          <VerifyStep checks={data.fit.checks} remarks={remarks} onRemarks={setRemarks} />
         )}
-        {step === 3 && <CostTable />}
-        {step === 4 && <DprEconomics />}
-        {step === 5 && (
-          <div className="document-grid">
-            {[
-              "आधार कार्ड",
-              "बैंक पासबुक",
-              "लाभार्थी फोटो",
-              "भूमि रिकॉर्ड B1-P2",
-              "जाति प्रमाण पत्र",
-              "SHG प्रस्ताव",
-              "कोटेशन",
-              "तालाब पट्टा/स्वामित्व प्रमाण",
-            ].map((x, index) => (
-              <button key={x} className={index >= 6 ? "missing" : ""}>
-                <span className="document-status">
-                  <Icon name={index >= 6 ? "alert" : "check"} size={15} />
-                </span>
-                <span>{tr(x)}</span>
-                <span className="document-actions">
-                  <i>
-                    <Icon name="camera" size={14} />
-                  </i>
-                  <i>
-                    <Icon name="upload" size={14} />
-                  </i>
-                </span>
-                <small>{index >= 6 ? tr("दस्तावेज़ जोड़ें") : tr("सत्यापित")}</small>
-              </button>
-            ))}
-          </div>
+        {step === 7 && (
+          <PreviewStep
+            data={data}
+            items={items}
+            money={money}
+            documents={documents}
+            remarks={remarks}
+          />
         )}
-        {step === 6 && <DprVerification />}
-        {step === 7 && <DprPdfPreview />}
       </div>
+      {problem && (
+        <p className="dpr-problem" role="alert">
+          {problem}
+        </p>
+      )}
       <div className="dpr-actions">
-        <button className="secondary" disabled={step === 1} onClick={() => setStep(step - 1)}>
+        <button
+          type="button"
+          className="secondary"
+          disabled={step === 1 || busy}
+          onClick={() => setStep(step - 1)}
+        >
           {tr("पीछे")}
         </button>
-        <button
-          className="primary"
-          onClick={() => {
-            if (step < 7) setStep(step + 1)
-            else {
-              setSent(true)
-              onNotify(tr("आवेदन APP-260142 मत्स्य विभाग को भेजा गया"))
-            }
-          }}
-        >
+        <button type="button" className="secondary" disabled={busy} onClick={saveDraft}>
+          {tr("ड्राफ्ट सहेजें")}
+        </button>
+        <button type="button" className="primary" disabled={busy} onClick={next}>
           {step < 7 ? tr("सहेजें और आगे") : tr("विभाग को भेजें")} <Icon name="arrow" size={16} />
         </button>
       </div>

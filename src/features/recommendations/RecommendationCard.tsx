@@ -1,76 +1,73 @@
-import { useState } from "react"
+import { Link } from "react-router"
 
 import { Icon } from "@/components/ui/Icon"
-import type { RecommendationScheme } from "@/features/recommendations/types"
 import { useTr } from "@/i18n/tr"
+import { rupees } from "@/lib/money"
 
+import type { SchemeFit } from "./types"
+
+/** One scheme that fits the Didi: why, eligibility checks, papers, where to apply, and the DPR link. */
 export function RecommendationCard({
-  scheme,
-  interested,
-  onToggle,
-  onLater,
-  onDecline,
+  fit,
+  rank,
+  didi,
 }: {
-  scheme: RecommendationScheme
-  interested: boolean
-  onToggle: () => void
-  onLater: () => void
-  onDecline: () => void
+  fit: SchemeFit
+  rank: number
+  didi: string
 }) {
   const tr = useTr()
-  const [details, setDetails] = useState(true)
+  const action =
+    fit.dpr === "filled"
+      ? tr("DPR भेजने के लिए तैयार")
+      : fit.dpr === "draft"
+        ? tr("DPR जारी रखें")
+        : tr("DPR बनाएँ")
   return (
-    <article className={`scheme-match expanded ${interested ? "selected" : ""}`}>
-      <div className="scheme-score">
-        {tr(scheme.score)}
-        <small>{tr("मैच")}</small>
-      </div>
-      <div className="scheme-main">
-        <span>{tr(scheme.dept)}</span>
-        <h3>{tr(scheme.name)}</h3>
-        <p>
-          <b>{tr("क्यों सुझाया:")}</b> {tr(scheme.why)}
-        </p>
-        <div className="scheme-benefit">
-          <strong>{tr(scheme.benefit)}</strong>
-          <span>{tr("लाभ / सब्सिडी")}</span>
+    <article className="rec-card">
+      <header>
+        <span className="rec-rank">{rank}</span>
+        <div>
+          <h3>{fit.name}</h3>
+          <small>{fit.department}</small>
         </div>
-        <div className="eligibility rule-list">
-          {scheme.eligibility.map(([ok, rule]) => (
-            <span className={ok ? "eligible" : "ineligible"} key={rule}>
-              {ok ? "✔" : "✖"} {tr(rule)}
-            </span>
-          ))}
+        <span className="rec-score" title={tr("उपयुक्तता")}>
+          {fit.score}%
+        </span>
+      </header>
+      <p className="rec-why">{fit.why}</p>
+      <div className="rec-figures">
+        <div>
+          <span>{tr("अनुमानित अतिरिक्त आय")}</span>
+          <strong className="positive">+{rupees(fit.gain)}</strong>
         </div>
-        <button className="scheme-detail-toggle" onClick={() => setDetails(!details)}>
-          {details ? tr("विवरण छिपाएँ") : tr("दस्तावेज़ और आवेदन स्थान")}{" "}
-          <Icon name="chevron" size={13} />
-        </button>
-        {details && (
-          <div className="scheme-extra-details">
-            <div>
-              <strong>{tr("आवश्यक दस्तावेज़")}</strong>
-              <p>{scheme.docs.map((doc) => tr(doc)).join(" • ")}</p>
-            </div>
-            <div>
-              <strong>{tr("कहाँ आवेदन करें")}</strong>
-              <p>{tr(scheme.apply)}</p>
-            </div>
-          </div>
-        )}
-        <div className="expected-income">
-          <Icon name="trend" size={14} />
-          <span>{tr("अपेक्षित अतिरिक्त आय")}</span>
-          <strong>{tr("+₹37,500/वर्ष")}</strong>
-        </div>
-        <div className="consent-actions">
-          <button className={interested ? "interested" : ""} onClick={onToggle}>
-            {tr("✔ रुचि है")}
-          </button>
-          <button onClick={onLater}>{tr("बाद में")}</button>
-          <button onClick={onDecline}>{tr("रुचि नहीं")}</button>
+        <div>
+          <span>{tr("अनुदान")}</span>
+          <strong>
+            {fit.subsidyPercent}%
+            {fit.maxSubsidy ? ` • ${tr("अधिकतम")} ${rupees(fit.maxSubsidy)}` : ""}
+          </strong>
         </div>
       </div>
+      <ul className="rec-checks">
+        {fit.checks.map(([ok, text]) => (
+          <li key={text} className={ok ? "ok" : "todo"}>
+            <Icon name={ok ? "check" : "alert"} size={13} /> {text}
+          </li>
+        ))}
+      </ul>
+      <p className="rec-docs">
+        <b>{tr("दस्तावेज़:")}</b> {fit.docs.join(" • ")}
+      </p>
+      <p className="rec-office">
+        <Icon name="building" size={13} /> {fit.office}
+      </p>
+      <Link
+        className={`rec-action ${fit.dpr ? "continue" : ""}`}
+        to={`/field/dpr/${didi}/${fit.code}`}
+      >
+        {action} <Icon name="arrow" size={15} />
+      </Link>
     </article>
   )
 }

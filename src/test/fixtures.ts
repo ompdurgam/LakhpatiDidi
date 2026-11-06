@@ -1,5 +1,12 @@
 import type { ApplicationRow, HouseholdRow, Meta } from "@/api/types"
 
+import {
+  dprBoardFixture,
+  dprFixture,
+  recommendationsFixture,
+  surveyedFixture,
+} from "./fieldFixtures"
+
 export const applicationFixture: ApplicationRow = {
   id: "APP-260142",
   name: "सुनीता कश्यप",
@@ -130,6 +137,16 @@ export const didiFixture = {
     },
   ],
   applications: [applicationFixture],
+  tasks: {
+    items: [
+      { id: "second_source", kind: "second_source", done: true },
+      { id: "gap-PMMSY", kind: "scheme_gap", done: false, scheme: "PMMSY – तालाब" },
+      { id: "lakhpati", kind: "lakhpati", done: false },
+    ],
+    done: 1,
+    total: 3,
+    percent: 33,
+  },
 }
 
 /** Minimal fake of the REST API for component and route tests. */
@@ -141,6 +158,10 @@ export function fakeApi(url: string): unknown {
   if (path === "/survey-sections") return [{ code: "A", name: "पहचान", enabled: true }]
   if (path.startsWith("/applications/")) return null
   if (path === "/didi/me") return didiFixture
+  if (path === "/recommendations") return surveyedFixture
+  if (path.startsWith("/recommendations/")) return recommendationsFixture
+  if (path === "/dpr") return dprBoardFixture
+  if (path.startsWith("/dpr/")) return dprFixture
   if (path.startsWith("/geo/areas/")) return geoAreaFixture
   if (path.startsWith("/geo/villages/")) return geoVillageFixture
   return []
@@ -169,6 +190,20 @@ const englishData: Record<string, string> = {
   बस्तर: "Bastar",
   बकावंड: "Bakawand",
   धुरगुड़ा: "Dhurguda",
+  "सहायक संचालक मत्स्य, जगदलपुर": "Assistant Director Fisheries, Jagdalpur",
+  "PMMSY से तालाब बनाकर मत्स्य पालन शुरू कर सकती हैं":
+    "Can start fish farming by building a pond under PMMSY",
+  "SHG सदस्य": "SHG member",
+  "स्थल सत्यापन बाकी": "Site verification pending",
+  आधार: "Aadhaar",
+  पासबुक: "Passbook",
+  सक: "SK",
+  "तालाब तैयारी": "Pond preparation",
+  "फिंगरलिंग बीज": "Fingerling seed",
+  "मछली आहार": "Fish feed",
+  "12 माह": "12 months",
+  "जाल और उपकरण": "Nets and equipment",
+  "1 सेट": "1 set",
 }
 
 const inEnglish = (value: unknown): unknown =>

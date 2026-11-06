@@ -1,0 +1,38 @@
+-- Demo income sources for the households seeded with only a cached annual income, so
+-- recommendations can differ per Didi. Each Didi's sources add up (net of cost) to her
+-- current_annual_income and match her active_income_sources. (Household 1, Sunita,
+-- already has hers in 001.) Loaded after 001_demo_data.sql.
+
+INSERT INTO tbl_household_income_sources (household_id, source_name, months_active, gross_income, cost, financial_year) VALUES
+  (2, 'वन उपज', 'Mar,Apr,May', 42000, 4000, '2026-27'),
+  (2, 'पशुपालन', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec', 39500, 3500, '2026-27'),
+  (2, 'स्थानीय मजदूरी', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct', 33000, 3000, '2026-27'),
+  (3, 'फसल/खेती', 'Jun,Jul,Aug,Sep,Oct,Nov', 68000, 6000, '2026-27'),
+  (4, 'फसल/खेती', 'Jun,Jul,Aug,Sep,Oct,Nov', 55000, 5000, '2026-27'),
+  (4, 'स्थानीय मजदूरी', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct', 42000, 4000, '2026-27'),
+  (5, 'वन उपज', 'Mar,Apr,May', 31500, 3000, '2026-27'),
+  (5, 'स्थानीय मजदूरी', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct', 18500, 1500, '2026-27'),
+  (6, 'फसल/खेती', 'Jun,Jul,Aug,Sep,Oct,Nov', 44000, 4000, '2026-27'),
+  (6, 'मत्स्य पालन', 'Jul,Aug,Sep,Oct,Nov,Dec', 31000, 3000, '2026-27'),
+  (6, 'वन उपज', 'Mar,Apr,May', 27000, 2500, '2026-27'),
+  (6, 'पशुपालन', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec', 22000, 2000, '2026-27'),
+  (7, 'मत्स्य पालन', 'Jul,Aug,Sep,Oct,Nov,Dec', 44000, 4000, '2026-27'),
+  (7, 'फसल/खेती', 'Jun,Jul,Aug,Sep,Oct,Nov', 35000, 3000, '2026-27'),
+  (8, 'गैर-कृषि उद्यम', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec', 105500, 9500, '2026-27'),
+  (9, 'फसल/खेती', 'Jun,Jul,Aug,Sep,Oct,Nov', 42000, 4000, '2026-27'),
+  (9, 'स्थानीय मजदूरी', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct', 22000, 2000, '2026-27'),
+  (10, 'वन उपज', 'Mar,Apr,May', 45000, 4000, '2026-27'),
+  (11, 'गैर-कृषि उद्यम', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec', 59500, 5500, '2026-27'),
+  (11, 'पशुपालन', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec', 33000, 3000, '2026-27'),
+  (12, 'वन उपज', 'Mar,Apr,May', 39500, 3500, '2026-27'),
+  (12, 'फसल/खेती', 'Jun,Jul,Aug,Sep,Oct,Nov', 33000, 3000, '2026-27'),
+  (13, 'गैर-कृषि उद्यम', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec', 44500, 4000, '2026-27'),
+  (13, 'स्थानीय मजदूरी', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct', 33000, 3000, '2026-27'),
+  (14, 'पर्यटन', 'Oct,Nov,Dec,Jan,Feb', 42000, 4000, '2026-27'),
+  (14, 'फसल/खेती', 'Jun,Jul,Aug,Sep,Oct,Nov', 37500, 3500, '2026-27'),
+  (14, 'वन उपज', 'Mar,Apr,May', 22000, 2000, '2026-27'),
+  (15, 'फसल/खेती', 'Jun,Jul,Aug,Sep,Oct,Nov', 59500, 5500, '2026-27'),
+  (16, 'वन उपज', 'Mar,Apr,May', 32500, 3000, '2026-27'),
+  (16, 'स्थानीय मजदूरी', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct', 22000, 2000, '2026-27'),
+  (17, 'फसल/खेती', 'Jun,Jul,Aug,Sep,Oct,Nov', 39500, 3500, '2026-27'),
+  (17, 'वन उपज', 'Mar,Apr,May', 27500, 2500, '2026-27');

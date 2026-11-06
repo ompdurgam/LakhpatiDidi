@@ -1,4 +1,4 @@
-import { DprBuilder } from "@/features/dpr/DprBuilder"
+import { DprWorkspace } from "@/features/dpr/DprWorkspace"
 import { HouseholdTracker } from "@/features/households/HouseholdTracker"
 import { SchemeRecommendations } from "@/features/recommendations/SchemeRecommendations"
 import { SurveyCompanion } from "@/features/survey/SurveyCompanion"
@@ -16,18 +16,13 @@ export function FieldDesktop(s: FieldState) {
   if (s.screen === "recommend")
     return (
       <div className="field-detail">
-        <SchemeRecommendations
-          selected={s.selectedSchemes}
-          setSelected={s.setSelectedSchemes}
-          setScreen={s.setScreen}
-          desktop
-        />
+        <SchemeRecommendations />
       </div>
     )
   if (s.screen === "dpr")
     return (
       <div className="field-detail">
-        <DprBuilder onNotify={s.onNotify} onTrack={() => s.setScreen("tracker")} />
+        <DprWorkspace />
       </div>
     )
   if (s.screen === "tracker")

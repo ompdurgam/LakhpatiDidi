@@ -9,6 +9,7 @@ import { useUi } from "@/stores/ui"
 
 import { navForRole, roleHome } from "../navigation"
 import { NotificationMenu } from "./NotificationMenu"
+import { useScope } from "./useScope"
 
 const overviewTitle: Record<
   string,
@@ -43,6 +44,7 @@ export function Header() {
   const setQuery = useUi((s) => s.setQuery)
   const setMenuOpen = useUi((s) => s.setMenuOpen)
   const title = usePageTitle()
+  const scope = useScope()
   // A Didi sees only her own profile: no role switcher and no staff search.
   const isDidi = useSession((s) => s.user?.role === "didi")
 
@@ -56,7 +58,7 @@ export function Header() {
         <Icon name="menu" />
       </button>
       <div className="header-title">
-        <small>{t("scope.breadcrumb")}</small>
+        <small>{scope.breadcrumb}</small>
         <h1>{title}</h1>
       </div>
       <div className="header-actions">

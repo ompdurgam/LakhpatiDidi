@@ -1,11 +1,58 @@
-export type RecommendationScheme = {
-  key: string
+export type SurveyedDidi = {
+  code: string
   name: string
-  dept: string
-  benefit: string
-  score: string
+  initials: string
+  village: string
+  income: number
+  status: string
+  statusLabel: string
+  recommended: number
+  topScheme: string | null
+  extraIncome: number
+  reachesTarget: boolean
+  applied: number
+}
+
+export type DprState = "draft" | "filled" | "sent" | null
+
+export type SchemeFit = {
+  code: string
+  name: string
+  department: string
+  gain: number
+  score: number
   why: string
-  eligibility: [boolean, string][]
+  checks: [boolean, string][]
   docs: string[]
-  apply: string
+  office: string
+  subsidyPercent: number
+  maxCost: number
+  maxSubsidy: number
+  dpr: DprState
+}
+
+export type DidiRecommendations = {
+  household: {
+    code: string
+    name: string
+    initials: string
+    village: string
+    income: number
+    status: string
+    statusLabel: string
+    category: string
+    special: string | null
+    sources: { name: string; net: number }[]
+  }
+  leverage: {
+    current: number
+    target: number
+    extra: number
+    projected: number
+    reachesTarget: boolean
+    steps: { code: string; gain: number; name: string }[]
+  }
+  recommendations: SchemeFit[]
+  entitlements: { code: string; name: string; department: string; since: string }[]
+  applied: { id: string; status: string; scheme: string }[]
 }

@@ -9,6 +9,7 @@ import { useSession } from "@/stores/session"
 import { useUi } from "@/stores/ui"
 
 import { navForRole } from "../navigation"
+import { useScope } from "./useScope"
 
 const OPEN = ["submitted", "under_review", "info_requested"]
 
@@ -17,6 +18,7 @@ export function Sidebar() {
   const { t } = useTranslation()
   const { t: tn } = useTranslation("nav")
   const role = useSession((s) => s.role)
+  const scope = useScope()
   const user = useSession((s) => s.user)
   const signOut = useSession((s) => s.signOut)
   const menuOpen = useUi((s) => s.menuOpen)
@@ -46,9 +48,9 @@ export function Sidebar() {
         <small>{t("scope.title")}</small>
         <div>
           <Icon name="map" size={17} />
-          <strong>{t("scope.block")}</strong>
+          <strong>{scope.title}</strong>
         </div>
-        <span>{t("scope.region")}</span>
+        <span>{scope.region}</span>
       </div>
       <nav>
         <p>{t("nav.main")}</p>

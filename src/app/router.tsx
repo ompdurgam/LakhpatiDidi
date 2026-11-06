@@ -74,7 +74,7 @@ export const routes: RouteObject[] = [
         { path: "field/village/:villageId?", ...fieldPage },
         { path: "field/households/:id?", ...fieldPage },
         { path: "field/recommendations/:householdId?", ...fieldPage },
-        { path: "field/dpr/:applicationId?", ...fieldPage },
+        { path: "field/dpr/:householdId?/:schemeCode?", ...fieldPage },
         { path: "field/income", ...fieldPage },
       ]),
       guarded("department", [
@@ -107,6 +107,7 @@ export const routes: RouteObject[] = [
       ]),
       guarded("didi", [
         { path: "didi", ...page(didi, (m) => m.DidiProfilePage) },
+        { path: "didi/tasks", ...page(didi, (m) => m.DidiTasksPage) },
         { path: "didi/applications", ...page(didi, (m) => m.DidiApplicationsPage) },
       ]),
       guarded("admin", [

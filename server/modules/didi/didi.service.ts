@@ -8,6 +8,7 @@ import {
   lifecycleHi,
   type LifecycleStatus,
 } from "../households/households.labels.ts"
+import { buildTasks, progress } from "./didi.tasks.ts"
 
 /** Income at which a Didi is "on the threshold" of Lakhpati. */
 const THRESHOLD_INCOME = 80_000
@@ -65,6 +66,21 @@ export async function getDidiProfile(mobile: string) {
   ])
 
   const income = Number(h.current_annual_income)
+  const appRows = applications.map(toApplicationRow)
+  const gapRows = gaps.map((r) => ({
+    code: r.code as string,
+    name: localized(r, "name"),
+    department: localized(r, "department"),
+    open: r.status === "open",
+    identifiedOn: String(r.identified_on).slice(0, 10),
+  }))
+  const tasks = buildTasks({
+    income,
+    target: LAKHPATI_INCOME,
+    activeSources: Number(h.active_income_sources),
+    gaps: gapRows,
+    applications: appRows,
+  })
   return {
     profile: {
       code: h.hh_code as string,
@@ -104,13 +120,8 @@ export async function getDidiProfile(mobile: string) {
       net: Number(r.net_income),
       netLabel: inr(r.net_income),
     })),
-    gaps: gaps.map((r) => ({
-      code: r.code as string,
-      name: localized(r, "name"),
-      department: localized(r, "department"),
-      open: r.status === "open",
-      identifiedOn: String(r.identified_on).slice(0, 10),
-    })),
-    applications: applications.map(toApplicationRow),
+    gaps: gapRows,
+    applications: appRows,
+    tasks: { items: tasks, ...progress(tasks) },
   }
 }

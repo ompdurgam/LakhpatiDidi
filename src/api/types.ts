@@ -73,4 +73,22 @@ export type Meta = {
   schemes: { code: string; name: string; department: string }[]
 }
 
-export type User = { id: number; name: string; role: string; designation: string; initials: string }
+/** The district / block a user works in; empty for state and admin accounts. */
+export type UserScope = {
+  districtLgd: string | null
+  districtHi: string | null
+  districtEn: string | null
+  blockLgd: string | null
+  blockHi: string | null
+  blockEn: string | null
+}
+
+export type User = {
+  id: number
+  name: string
+  role: string
+  designation: string
+  initials: string
+  /** Missing for sessions saved before scopes existed (they fall back to the whole state). */
+  scope?: UserScope
+}

@@ -222,3 +222,133 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Tasks */
+.didi-tasks-card,
+.didi-tasks-section {
+  margin-bottom: 16px;
+}
+.didi-link {
+  font-size: calc(13px * var(--font-scale));
+  font-weight: 600;
+  color: var(--ld-green-650);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.didi-tasks-card .meter {
+  height: 10px;
+  border-radius: 99px;
+  margin-bottom: 6px;
+}
+.didi-tasks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.didi-tasks li {
+  border-bottom: 1px solid #eef1ee;
+}
+.didi-tasks li:last-child {
+  border-bottom: 0;
+}
+.didi-tasks li > a,
+.didi-tasks li > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 2px;
+  color: inherit;
+  text-decoration: none;
+}
+.didi-tasks li > a:hover {
+  background: #f4f8f4;
+}
+.didi-task-check {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: 2px solid #b9c7bd;
+  border-radius: 50%;
+  color: white;
+}
+.didi-task-check.done {
+  background: var(--ld-green-650);
+  border-color: var(--ld-green-650);
+}
+.didi-task-text {
+  flex: 1;
+  font-size: calc(14px * var(--font-scale));
+  line-height: 1.45;
+}
+.didi-tasks li.done .didi-task-text {
+  color: #7a847c;
+  text-decoration: line-through;
+}
+
+/* Bottom tab bar (a Didi on a phone) */
+.bottom-tabs {
+  display: none;
+}
+@media (max-width: 760px) {
+  .bottom-tabs {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 20;
+    display: flex;
+    background: white;
+    border-top: 1px solid #e3e8e2;
+    padding-bottom: env(safe-area-inset-bottom);
+    box-shadow: 0 -6px 20px #1931210f;
+  }
+  .bottom-tabs a {
+    flex: 1;
+    min-height: 62px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    color: #7a847c;
+    text-decoration: none;
+    font-size: calc(12px * var(--font-scale));
+    font-weight: 600;
+  }
+  .bottom-tabs a.active {
+    color: var(--ld-green-900);
+    background: #f1f6f2;
+  }
+  .bottom-tab-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+  }
+  .bottom-tab-icon b {
+    position: absolute;
+    top: -6px;
+    right: -12px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    display: grid;
+    place-items: center;
+    border-radius: 99px;
+    background: #cc583d;
+    color: white;
+    font: 700 11px Inter;
+  }
+  /* Room for the bar so it never covers the end of a page. */
+  .app-shell:has(.bottom-tabs) main {
+    padding-bottom: 72px;
+  }
+}
+
+/* Progress bars: a visible track behind the fill; cards on a page are spaced. */
+.didi-page .meter {
+  background: #e4ebe5;
+  overflow: hidden;
+}
+.didi-page > .card {
+  margin-bottom: 16px;
+}
