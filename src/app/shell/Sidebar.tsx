@@ -29,7 +29,7 @@ export function Sidebar() {
   return (
     <aside className={`sidebar ${menuOpen ? "open" : ""}`}>
       <div className="brand">
-        <BrandMark />
+        <BrandMark size={56} />
         <div>
           <strong>{t("brand.name")}</strong>
           <small>{t("brand.tagline")}</small>
@@ -65,15 +65,19 @@ export function Sidebar() {
             {item.badge && openCount > 0 && <b>{openCount}</b>}
           </NavLink>
         ))}
-        <p>{t("nav.system")}</p>
-        <NavLink
-          to="/settings"
-          className={({ isActive }) => (isActive ? "active" : "")}
-          onClick={() => setMenuOpen(false)}
-        >
-          <Icon name="settings" size={19} />
-          <span>{t("nav.settings")}</span>
-        </NavLink>
+        {role !== "didi" && (
+          <>
+            <p>{t("nav.system")}</p>
+            <NavLink
+              to="/settings"
+              className={({ isActive }) => (isActive ? "active" : "")}
+              onClick={() => setMenuOpen(false)}
+            >
+              <Icon name="settings" size={19} />
+              <span>{t("nav.settings")}</span>
+            </NavLink>
+          </>
+        )}
       </nav>
       <div className="help-card">
         <div className="help-icon">?</div>

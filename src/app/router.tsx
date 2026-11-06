@@ -16,6 +16,7 @@ const dept = () => import("@/features/department/pages")
 const monitoring = () => import("@/features/monitoring/pages")
 const admin = () => import("@/features/admin/pages")
 const geo = () => import("@/features/geo/pages")
+const didi = () => import("@/features/didi/pages")
 
 const page = <M,>(load: () => Promise<M>, pick: (m: M) => ComponentType) => ({
   lazy: async () => ({ Component: pick(await load()) }),
@@ -103,6 +104,10 @@ export const routes: RouteObject[] = [
         { path: "state/escalations", ...statePage },
         { path: "state/reports", ...statePage },
         { path: "state/map/:level?/:code?", ...page(geo, (m) => m.StateMapPage) },
+      ]),
+      guarded("didi", [
+        { path: "didi", ...page(didi, (m) => m.DidiProfilePage) },
+        { path: "didi/applications", ...page(didi, (m) => m.DidiApplicationsPage) },
       ]),
       guarded("admin", [
         { path: "admin", element: <Navigate to="/admin/schemes" replace /> },

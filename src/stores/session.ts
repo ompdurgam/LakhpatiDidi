@@ -3,9 +3,13 @@ import { createJSONStorage, persist } from "zustand/middleware"
 
 import type { User } from "@/api/types"
 
-export type Role = "field" | "block" | "department" | "district" | "state" | "admin"
+export type Role = "field" | "block" | "department" | "district" | "state" | "admin" | "didi"
 
-export const ROLES: Role[] = ["field", "block", "department", "district", "state", "admin"]
+/** Every login role, in the order the login screen lists them. */
+export const ROLES: Role[] = ["field", "block", "department", "district", "state", "admin", "didi"]
+
+/** Roles a signed-in staff member can switch between (a Didi only ever sees her own profile). */
+export const STAFF_ROLES: Role[] = ROLES.filter((role) => role !== "didi")
 
 type SessionState = {
   token: string | null

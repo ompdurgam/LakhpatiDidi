@@ -341,3 +341,10 @@ FROM (SELECT '9993000001' mobile, 'योजना अपडेट' action, 'sch
       UNION ALL SELECT '9993000001', 'फॉर्म सेटिंग',    'survey',    'J',         'पर्यटन सेक्शन विकल्प बदले',       '10.24.18.6', 33
       UNION ALL SELECT '9425118881', 'अधिकारी मैपिंग', 'mapping',   'JGD-FISH',  'मत्स्य बैकअप अधिकारी बदला',       '10.24.42.8', 52) l
 JOIN master_users u ON u.mobile = l.mobile;
+
+-- ── Didi (PLD) logins ────────────────────────────────────────────────────
+-- Each surveyed Didi can sign in with her own mobile (staff numbers win on conflict).
+INSERT IGNORE INTO master_users (name, mobile, role, designation, village_id)
+SELECT h.didi_name, h.mobile, 'didi', 'Didi (PLD)', h.village_id
+FROM tbl_households h
+WHERE h.mobile REGEXP '^[6-9][0-9]{9}$';

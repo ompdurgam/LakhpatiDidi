@@ -6,6 +6,7 @@ import { auditLogsRouter } from "./modules/admin/auditLogs.routes.ts"
 import { surveySectionsRouter } from "./modules/admin/surveySections.routes.ts"
 import { applicationsRouter } from "./modules/applications/applications.routes.ts"
 import { authRouter, publicAuthRouter } from "./modules/auth/auth.routes.ts"
+import { didiRouter } from "./modules/didi/didi.routes.ts"
 import { geoRouter } from "./modules/geo/geo.routes.ts"
 import { householdsRouter } from "./modules/households/households.routes.ts"
 import { metaRouter } from "./modules/meta/meta.routes.ts"
@@ -28,6 +29,14 @@ export function apiRouter() {
   // Signed-in
   api.use(requireAuth)
   api.use("/auth", authRouter)
+  api.use("/didi", didiRouter)
+
+  // A Didi account reaches only her own profile (above), never staff data below.
+  api.use((_req, res, next) =>
+    res.locals.user?.role === "didi"
+      ? next(new HttpError(403, msg("यह जानकारी आपकी भूमिका के लिए उपलब्ध नहीं है")))
+      : next(),
+  )
   api.use("/meta", metaRouter)
   api.use("/geo", geoRouter)
   api.use("/applications", applicationsRouter)

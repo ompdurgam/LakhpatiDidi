@@ -36,8 +36,10 @@ export function LoginScreen() {
   // OTP verified: sign in with the chosen role and go to its home.
   useEffect(() => {
     if (!login.auth || !role) return
-    signIn(login.auth.token, login.auth.user, role)
-    navigate(roleHome(role), { replace: true })
+    // A Didi account is always a Didi, whichever card was picked.
+    const effective: Role = login.auth.user.role === "didi" ? "didi" : role
+    signIn(login.auth.token, login.auth.user, effective)
+    navigate(roleHome(effective), { replace: true })
   }, [login.auth, role, signIn, navigate])
 
   if (token) return <Navigate to={roleHome(currentRole)} replace />
@@ -59,15 +61,13 @@ export function LoginScreen() {
       {showHero && <LoginHero onContinue={() => setIntroDone(true)} />}
       {(!isMobile || introDone) && (
         <main className="login-card">
-          <div className="login-card-top">
-            <div className="login-logo">
-              <BrandMark />
-              <span>{t("emblem")}</span>
-            </div>
-            <div className="login-tools">
-              <TextSizeControl />
-              <LanguageMenu />
-            </div>
+          <div className="login-tools">
+            <TextSizeControl />
+            <LanguageMenu />
+          </div>
+          <div className="login-logo">
+            <BrandMark size={104} />
+            <span>{t("emblem")}</span>
           </div>
           <h2 className="login-greeting">
             <span>{t("greeting")}</span>

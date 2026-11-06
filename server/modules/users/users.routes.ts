@@ -7,7 +7,7 @@ import { mobile, parse, text } from "../../shared/validation.ts"
 import { audit } from "../audit/audit.service.ts"
 import { createUser, listUsers, resetUserOtp, setUserStatus } from "./users.service.ts"
 
-const ROLES = ["field", "block", "department", "district", "state", "admin"] as const
+const ROLES = ["field", "block", "department", "district", "state", "admin", "didi"] as const
 
 const createBody = z.object({
   name: text("नाम", 120),

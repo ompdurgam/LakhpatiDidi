@@ -25,6 +25,7 @@ export type IconName =
   | "menu"
   | "close"
   | "globe"
+  | "user"
 
 export function Icon({
   name,
@@ -108,6 +109,12 @@ export function Icon({
       </>
     ),
     check: <path d="m5 12 4 4L19 6" />,
+    user: (
+      <>
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1" />
+      </>
+    ),
     globe: (
       <>
         <circle cx="12" cy="12" r="9" />

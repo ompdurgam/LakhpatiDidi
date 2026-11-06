@@ -1,0 +1,20 @@
+{
+  "मेरे आवेदन": "My applications",
+  "योजनाओं के लिए भेजे गए आवेदन और उनकी स्थिति": "Applications sent for schemes and where each one stands",
+  "अभी तक कोई आवेदन नहीं भेजा गया है।": "No applications have been sent yet.",
+  "मेरी प्रोफ़ाइल": "My profile",
+  "संभावित लखपति दीदी (PLD)": "Potential Lakhpati Didi (PLD)",
+  "मेरी जानकारी": "My details",
+  "आय के स्रोत": "Income sources",
+  "{{n}} सक्रिय स्रोत": "{{n}} active sources",
+  "{{n}} महीने": "{{n}} months",
+  "अभी कोई आय स्रोत दर्ज नहीं है।": "No income source has been recorded yet.",
+  "योजनाएँ जिनका लाभ मिल सकता है": "Schemes you may be able to benefit from",
+  "सर्वे में पात्र पाई गईं": "Found eligible in the survey",
+  "लाभ बाकी": "Benefit pending",
+  "अभी कोई लंबित योजना नहीं है।": "No scheme is pending right now.",
+  "थ्रेशोल्ड {{amount}}": "Threshold {{amount}}",
+  "बधाई हो! आप लखपति दीदी बन चुकी हैं।": "Congratulations! You are a Lakhpati Didi.",
+  "लखपति बनने के लिए ₹{{amount}} और चाहिए ({{n}}% पूरा)।": "₹{{amount}} more to become Lakhpati ({{n}}% there).",
+  "सुझाव: आय का एक और स्रोत जोड़ने से लखपति बनना आसान होगा।": "Tip: adding one more source of income will make it easier to become Lakhpati."
+}

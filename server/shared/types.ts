@@ -4,7 +4,7 @@ import type { RowDataPacket } from "mysql2/promise"
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Row = RowDataPacket & Record<string, any>
 
-export type Role = "field" | "block" | "department" | "district" | "state" | "admin"
+export type Role = "field" | "block" | "department" | "district" | "state" | "admin" | "didi"
 
 /** The signed-in user, attached to res.locals.user by requireAuth. */
 export type SessionUser = {
@@ -23,4 +23,5 @@ export const roleLabels: Record<Role, string> = {
   district: "DPM",
   state: "SMMU",
   admin: "Admin",
+  didi: "Didi (PLD)",
 }

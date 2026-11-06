@@ -239,3 +239,106 @@ test.describe("admin", () => {
     expect((await res.json()).error).toBeTruthy()
   })
 })
+
+test.describe("language", () => {
+  test("answers in English when asked", async ({ request }) => {
+    const english = { ...headers, "Accept-Language": "en" }
+    const res = await request.get("/api/applications/APP-NOPE", { headers: english })
+    expect(res.status()).toBe(404)
+    expect((await res.json()).error).toBe("Application not found")
+    const hindi = await request.get("/api/applications/APP-NOPE", { headers })
+    expect((await hindi.json()).error).toBe("आवेदन नहीं मिला")
+  })
+})
+
+test.describe("meta", () => {
+  test("lists only places with data (not the whole LGD directory)", async ({ request }) => {
+    const meta = await (await request.get("/api/meta", { headers })).json()
+    expect(meta.villages.length).toBeLessThan(100)
+    const households = await (await request.get("/api/households", { headers })).json()
+    const surveyed = new Set(households.map((h: { village: string }) => h.village))
+    for (const village of meta.villages) expect(surveyed).toContain(village.name)
+    // Admins can still assign users to any block; filters use the active ones.
+    expect(meta.blocks.some((b: { active: boolean }) => b.active)).toBe(true)
+    expect(meta.blocks.every((b: { active: unknown }) => typeof b.active === "boolean")).toBe(true)
+  })
+})
+
+test.describe("geography", () => {
+  test("walks state → district with a breadcrumb and rolled-up counts", async ({ request }) => {
+    const state = await (await request.get("/api/geo/areas/state/CG", { headers })).json()
+    expect(state.path).toHaveLength(1)
+    expect(state.childLevel).toBe("district")
+    expect(state.children.length).toBeGreaterThan(0)
+    const total = state.children.reduce(
+      (n: number, c: { households: number }) => n + c.households,
+      0,
+    )
+    expect(total).toBeGreaterThan(0)
+    expect(state.boundaries.type).toBe("FeatureCollection")
+  })
+
+  test("rejects bad levels and unknown codes", async ({ request }) => {
+    expect((await request.get("/api/geo/areas/planet/1", { headers })).status()).toBe(400)
+    expect((await request.get("/api/geo/areas/district/000000", { headers })).status()).toBe(404)
+    expect((await request.get("/api/geo/areas/state/CG", {})).status()).toBe(401)
+  })
+})
+
+test.describe("didi (PLD) profile", () => {
+  const SUNITA = "9826100123" // HH-BST-JGD-000123, seeded household
+
+  test("a Didi sees only her own household", async ({ request }) => {
+    const didi = await signIn(request, SUNITA)
+    const me = await request.get("/api/didi/me", { headers: didi })
+    expect(me.status()).toBe(200)
+    const data = await me.json()
+    expect(data.profile.code).toBe("HH-BST-JGD-000123")
+    expect(data.profile.mobile).toBe(SUNITA)
+    expect(data.meter.target).toBe(100000)
+    expect(data.meter.income).toBeGreaterThan(0)
+    // Every application listed belongs to her household.
+    for (const app of data.applications) expect(app.hhCode).toBe("HH-BST-JGD-000123")
+  })
+
+  test("a Didi cannot read staff data", async ({ request }) => {
+    const didi = await signIn(request, SUNITA)
+    for (const url of [
+      "/api/applications",
+      "/api/households",
+      "/api/meta",
+      "/api/users",
+      "/api/geo/areas/state/CG",
+    ]) {
+      expect((await request.get(url, { headers: didi })).status(), url).toBe(403)
+    }
+    // …but can still check her session.
+    expect((await request.get("/api/auth/me", { headers: didi })).status()).toBe(200)
+  })
+
+  test("staff numbers have no Didi profile", async ({ request }) => {
+    const res = await request.get("/api/didi/me", { headers })
+    expect(res.status()).toBe(404)
+  })
+
+  test("surveying a new Didi gives her a login", async ({ request }) => {
+    const mobile = "9988776655"
+    const survey = await request.post("/api/surveys", {
+      headers,
+      data: {
+        responses: {
+          "SHG सदस्य का नाम": "नयी दीदी",
+          "मोबाइल (10 अंक)": mobile,
+          गाँव: "बड़ांजी",
+        },
+        incomeEntries: [{ name: "फसल/खेती", months: ["Jun"], gross: 90000, cost: 10000 }],
+        sections: ["A"],
+      },
+    })
+    expect(survey.status()).toBe(201)
+    const didi = await signIn(request, mobile)
+    const me = await (await request.get("/api/didi/me", { headers: didi })).json()
+    expect(me.profile.mobile).toBe(mobile)
+    expect(me.meter.income).toBe(80000)
+  })
+})

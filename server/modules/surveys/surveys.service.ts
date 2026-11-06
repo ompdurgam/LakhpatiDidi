@@ -95,6 +95,16 @@ export async function submitSurvey(body: unknown, surveyorId: number) {
       householdId = insert.insertId
     }
 
+    // A surveyed Didi can sign in with her own number (never overrides a staff number).
+    if (mobile) {
+      await exec(
+        `INSERT IGNORE INTO master_users (name, mobile, role, designation, village_id)
+         VALUES (?, ?, 'didi', 'Didi (PLD)', ?)`,
+        [name, mobile, village.id],
+        db,
+      )
+    }
+
     const survey = await exec(
       `INSERT INTO tbl_surveys (household_id, surveyor_id, status, enabled_sections, responses, consent_method, submitted_at)
        VALUES (?, ?, 'submitted', ?, ?, ?, NOW())`,

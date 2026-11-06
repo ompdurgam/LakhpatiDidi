@@ -4,7 +4,7 @@ import { useLocation, useMatch, useNavigate } from "react-router"
 import { Icon } from "@/components/ui/Icon"
 import { LanguageMenu } from "@/components/ui/LanguageMenu"
 import { TextSizeControl } from "@/components/ui/TextSizeControl"
-import { isRole, ROLES, useSession } from "@/stores/session"
+import { isRole, STAFF_ROLES, useSession } from "@/stores/session"
 import { useUi } from "@/stores/ui"
 
 import { navForRole, roleHome } from "../navigation"
@@ -43,6 +43,8 @@ export function Header() {
   const setQuery = useUi((s) => s.setQuery)
   const setMenuOpen = useUi((s) => s.setMenuOpen)
   const title = usePageTitle()
+  // A Didi sees only her own profile: no role switcher and no staff search.
+  const isDidi = useSession((s) => s.user?.role === "didi")
 
   return (
     <header>
@@ -58,34 +60,38 @@ export function Header() {
         <h1>{title}</h1>
       </div>
       <div className="header-actions">
-        <label className="role-switcher">
-          <span>{t("header.role")}</span>
-          <select
-            value={role}
-            onChange={(event) => {
-              const next = event.target.value
-              if (!isRole(next)) return
-              setRole(next)
-              navigate(roleHome(next))
-            }}
-            aria-label={t("header.changeRole")}
-          >
-            {ROLES.map((value) => (
-              <option key={value} value={value}>
-                {t(`roles.${value}`)}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="global-search">
-          <Icon name="search" size={18} />
-          <input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder={t("header.search")}
-            aria-label={t("header.search")}
-          />
-        </label>
+        {!isDidi && (
+          <label className="role-switcher">
+            <span>{t("header.role")}</span>
+            <select
+              value={role}
+              onChange={(event) => {
+                const next = event.target.value
+                if (!isRole(next)) return
+                setRole(next)
+                navigate(roleHome(next))
+              }}
+              aria-label={t("header.changeRole")}
+            >
+              {STAFF_ROLES.map((value) => (
+                <option key={value} value={value}>
+                  {t(`roles.${value}`)}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+        {!isDidi && (
+          <label className="global-search">
+            <Icon name="search" size={18} />
+            <input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder={t("header.search")}
+              aria-label={t("header.search")}
+            />
+          </label>
+        )}
         <TextSizeControl />
         <LanguageMenu />
         <NotificationMenu />

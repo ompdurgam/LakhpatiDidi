@@ -9,4 +9,5 @@ export const roleIcon: Record<Role, IconName> = {
   district: "map",
   state: "chart",
   admin: "settings",
+  didi: "user",
 }

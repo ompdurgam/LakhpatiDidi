@@ -1,0 +1,224 @@
+/* "Didi (PLD)" self-service profile (src/features/didi). */
+
+.didi-hero {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.didi-hero > div {
+  flex: 1;
+  min-width: 0;
+}
+.didi-hero h2 {
+  margin: 2px 0;
+  font-size: calc(26px * var(--font-scale));
+}
+.didi-hero p {
+  margin: 0;
+  font-size: calc(13px * var(--font-scale));
+  color: #6f7e73;
+}
+.didi-avatar {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #e1a13e;
+  color: #194b31;
+  font: 700 calc(24px * var(--font-scale)) Inter;
+}
+
+.didi-page .card {
+  padding: 18px 20px;
+}
+.didi-page .card-head {
+  margin-bottom: 12px;
+}
+.didi-page .card-head h3 {
+  margin: 0;
+  font-size: calc(16px * var(--font-scale));
+}
+.didi-page .card-head p {
+  margin: 2px 0 0;
+  font-size: calc(12.5px * var(--font-scale));
+  color: #6f7e73;
+}
+.didi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+/* Lakhpati meter */
+.didi-meter-figure {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 6px 0 14px;
+}
+.didi-meter-figure strong {
+  font: 700 calc(34px * var(--font-scale)) Inter;
+  color: var(--ld-green-900);
+}
+.didi-meter-figure span {
+  font-size: calc(15px * var(--font-scale));
+  color: #6f7e73;
+}
+.didi-meter-bar {
+  position: relative;
+}
+.didi-meter-bar .meter {
+  height: 14px;
+  border-radius: 99px;
+}
+.didi-meter-mark {
+  position: absolute;
+  top: -4px;
+  width: 2px;
+  height: 22px;
+  background: #e7a72c;
+  transform: translateX(-1px);
+}
+.didi-meter-note {
+  margin: 14px 0 0;
+  font-size: calc(14px * var(--font-scale));
+  color: var(--ld-heading, #1d2b22);
+}
+.didi-meter-tip {
+  margin: 10px 0 0;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: #fff8e8;
+  border: 1px solid #f0d9a6;
+  font-size: calc(12.5px * var(--font-scale));
+  color: #7a5a1a;
+}
+
+/* Facts */
+.didi-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 16px;
+  margin: 0;
+}
+.didi-facts dt {
+  font-size: calc(11.5px * var(--font-scale));
+  color: #6f7e73;
+}
+.didi-facts dd {
+  margin: 2px 0 0;
+  font-size: calc(14px * var(--font-scale));
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* Income sources and scheme gaps */
+.didi-sources,
+.didi-gaps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.didi-sources li,
+.didi-gaps li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eef1ee;
+}
+.didi-sources li:last-child,
+.didi-gaps li:last-child {
+  border-bottom: 0;
+}
+.didi-sources li > div,
+.didi-gaps li > div {
+  flex: 1;
+  min-width: 0;
+}
+.didi-sources strong,
+.didi-sources small,
+.didi-gaps strong,
+.didi-gaps small {
+  display: block;
+}
+.didi-sources strong,
+.didi-gaps strong {
+  font-size: calc(14px * var(--font-scale));
+}
+.didi-sources small,
+.didi-gaps small {
+  font-size: calc(12px * var(--font-scale));
+  color: #6f7e73;
+}
+.didi-sources b {
+  font: 700 calc(15px * var(--font-scale)) Inter;
+  color: var(--ld-green-900);
+}
+.didi-gaps svg {
+  color: #9a6a12;
+}
+.didi-empty {
+  margin: 0;
+  font-size: calc(13px * var(--font-scale));
+  color: #6f7e73;
+}
+
+.didi-apps-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--ld-green-900);
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: calc(15px * var(--font-scale));
+}
+.didi-apps-link span {
+  flex: 1;
+}
+.didi-apps-link b {
+  margin-left: 6px;
+  padding: 1px 9px;
+  border-radius: 99px;
+  background: #ffffff26;
+}
+
+@media (max-width: 900px) {
+  .didi-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 760px) {
+  .didi-hero {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .didi-avatar {
+    width: 52px;
+    height: 52px;
+  }
+  .didi-hero > div {
+    flex: 1 1 0;
+  }
+  .didi-hero > .status {
+    flex: 0 0 100%;
+    text-align: center;
+  }
+  .didi-page .card {
+    padding: 16px;
+  }
+  .didi-hero h2 {
+    font-size: calc(21px * var(--font-scale));
+  }
+  .didi-facts {
+    grid-template-columns: 1fr;
+  }
+}

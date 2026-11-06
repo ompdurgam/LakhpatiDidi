@@ -12,8 +12,8 @@ import { routes } from "./router"
 
 const user = { id: 1, name: "अनिल कश्यप", role: "block", designation: "BMMU", initials: "AK" }
 const DEVANAGARI = /[ऀ-ॿ]/
-// The "स्व" logo glyph stays in Hindi.
-const ALLOWED = new Set(["स्व"])
+// Nothing on screen may stay in Hindi in English mode.
+const ALLOWED = new Set<string>()
 
 const screens: [Role, string][] = [
   ["block", "/block"],
@@ -35,6 +35,10 @@ const screens: [Role, string][] = [
   ["district", "/district/lakhpati-gram"],
   ["state", "/state"],
   ["state", "/state/certification"],
+  ["state", "/state/map"],
+  ["didi", "/didi"],
+  ["didi", "/didi/applications"],
+  ["district", "/district/map/district/374"],
   ["admin", "/admin/schemes"],
   ["admin", "/admin/mapping"],
   ["admin", "/admin/users"],

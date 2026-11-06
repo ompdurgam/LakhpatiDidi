@@ -11,4 +11,5 @@ export const demoMobile: Record<Role, string> = {
   district: "9301245176",
   state: "9993000101",
   admin: "9993000001",
+  didi: "9826100123", // Sunita Kashyap, HH-BST-JGD-000123
 }

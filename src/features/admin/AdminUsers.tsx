@@ -95,6 +95,7 @@ export function AdminUsers({ onNotify }: { onNotify: (message: string) => void }
               <option value="district">DPM</option>
               <option value="state">SMMU</option>
               <option value="admin">Admin</option>
+              <option value="didi">Didi (PLD)</option>
             </select>
           </label>
           <label className="text-control">

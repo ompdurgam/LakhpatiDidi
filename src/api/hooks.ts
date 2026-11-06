@@ -7,7 +7,8 @@ import { api } from "./client"
 import { queryKeys } from "./queryKeys"
 import type { ApplicationRow, HouseholdRow, Meta } from "./types"
 
-const useSignedIn = () => useSession((s) => Boolean(s.token))
+/** Staff data is only fetched for staff: a Didi account is refused it by the API (403). */
+const useSignedIn = () => useSession((s) => Boolean(s.token) && s.user?.role !== "didi")
 
 export function useApplications() {
   const signedIn = useSignedIn()
