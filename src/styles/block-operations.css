@@ -9,7 +9,7 @@
   display: grid;
   align-items: center;
   gap: 6px;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .pendency-table > div {
   grid-template-columns: 1.4fr repeat(3, 0.6fr);
@@ -22,7 +22,7 @@
   min-height: 28px;
   background: #f5f7f4;
   color: #7a867d;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .pendency-table span,
 .surveyor-table span {
@@ -33,7 +33,7 @@
 .pendency-table b,
 .surveyor-table b {
   text-align: center;
-  font: 600 7px Inter;
+  font: 600 calc(12px * var(--font-scale)) Inter;
 }
 .pendency-table b.pending {
   color: #a46d1a;
@@ -53,7 +53,7 @@
   background: #e5f1e8;
   color: var(--ld-green-650);
   text-align: center;
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
   font-style: normal;
 }
 .surveyor-table .warning {
@@ -73,12 +73,12 @@
 .blcc-card.enhanced .register-head > div span {
   margin-top: 2px;
   color: var(--ld-text-muted);
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .blcc-card.enhanced .register-head .primary {
   height: 32px;
   padding: 0 9px;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .blcc-table-scroll {
   overflow-x: auto;
@@ -89,7 +89,7 @@
 .blcc-register-table th,
 .blcc-register-table td {
   padding: 9px 10px;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .blcc-meeting-mode {
   padding-bottom: 20px;
@@ -103,12 +103,12 @@
 .meeting-mode-head h2 {
   margin: 3px 0;
   color: #304438;
-  font-size: 20px;
+  font-size: calc(24px * var(--font-scale));
 }
 .meeting-mode-head p {
   margin: 0;
   color: #7d8980;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .meeting-progress {
   height: 6px;
@@ -140,17 +140,17 @@
 }
 .demand-id > span:first-child {
   color: var(--ld-green-700);
-  font: 700 8px Inter;
+  font: 700 calc(13px * var(--font-scale)) Inter;
 }
 .current-demand h3 {
   margin: 12px 0 2px;
   color: #304438;
-  font-size: 18px;
+  font-size: calc(22px * var(--font-scale));
 }
 .current-demand > p {
   margin: 0;
   color: #7a867d;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .current-demand dl {
   margin: 16px 0;
@@ -165,12 +165,12 @@
 }
 .current-demand dt {
   color: var(--ld-text-muted);
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .current-demand dd {
   margin: 3px 0 0;
   color: #3f5044;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
   font-weight: 600;
 }
 .delay-reason {
@@ -184,7 +184,7 @@
   display: block;
   margin-bottom: 5px;
   color: #836523;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .delay-reason select,
 .delay-reason textarea {
@@ -194,7 +194,7 @@
   border-radius: 6px;
   background: white;
   padding: 0 7px;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .delay-reason textarea {
   min-height: 55px;
@@ -215,7 +215,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  font-size: 7.5px;
+  font-size: calc(12.5px * var(--font-scale));
   font-weight: 600;
 }
 .meeting-decision-buttons .complete {
@@ -245,7 +245,7 @@
 .attendance-card h3,
 .previous-decisions h3 {
   margin: 0 0 9px;
-  font-size: 10px;
+  font-size: calc(15px * var(--font-scale));
 }
 .attendance-card label {
   min-height: 38px;
@@ -260,11 +260,11 @@
 }
 .attendance-card span {
   color: #46564b;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .attendance-card small {
   color: var(--ld-text-muted);
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .previous-decisions > div {
   padding: 8px 0;
@@ -275,13 +275,13 @@
 }
 .previous-decisions strong {
   color: var(--ld-text-strong);
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .previous-decisions p {
   grid-column: 1 / -1;
   margin: 0;
   color: #78837b;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .scheme-convergence-page,
 .block-reports {
@@ -318,12 +318,12 @@
 }
 .block-awareness-chart strong {
   color: #46564b;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .block-awareness-chart span,
 .block-awareness-chart small {
   color: #7d8980;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .block-awareness-chart > div > i {
   height: 10px;
@@ -368,20 +368,20 @@
 }
 .cluster-demand strong {
   color: #405045;
-  font-size: 7.5px;
+  font-size: calc(12.5px * var(--font-scale));
 }
 .cluster-demand p {
   margin: 0;
   color: #7d8980;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .cluster-demand p b {
   color: #4a5a4f;
-  font: 600 7px Inter;
+  font: 600 calc(12px * var(--font-scale)) Inter;
 }
 .cluster-demand em {
   color: var(--ld-green-600);
-  font: 700 7px Inter;
+  font: 700 calc(12px * var(--font-scale)) Inter;
   font-style: normal;
 }
 .monthly-report-builder {
@@ -397,12 +397,12 @@
 .report-builder-head h3 {
   margin: 3px 0;
   color: #304438;
-  font-size: 15px;
+  font-size: calc(19.5px * var(--font-scale));
 }
 .report-builder-head p {
   margin: 0;
   color: #7d8980;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .auto-report-sections {
   padding: 0 18px;
@@ -430,15 +430,15 @@
 }
 .auto-report-sections strong {
   color: #405045;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .auto-report-sections small {
   color: var(--ld-text-muted);
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .auto-report-sections em {
   color: var(--ld-green-700);
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
   font-style: normal;
 }
 .auto-report-sections button {
@@ -457,7 +457,7 @@
 .report-submit-row label {
   margin-right: auto;
   color: #59685e;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .report-submit-row input {
   margin-right: 5px;
@@ -466,7 +466,7 @@
 .report-downloads > h3 {
   margin: 0 0 9px;
   color: var(--ld-text-strong);
-  font-size: 12px;
+  font-size: calc(17px * var(--font-scale));
 }
 .report-downloads > div {
   display: grid;
@@ -495,19 +495,19 @@
 }
 .report-downloads strong {
   color: #405045;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .report-downloads small {
   margin-top: 2px;
   color: var(--ld-text-muted);
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .report-downloads em {
   padding: 3px 5px;
   border-radius: 5px;
   background: #f0f3ef;
   color: #66736a;
-  font: 600 6px Inter;
+  font: 600 calc(11px * var(--font-scale)) Inter;
   font-style: normal;
 }
 .report-downloads article > button {

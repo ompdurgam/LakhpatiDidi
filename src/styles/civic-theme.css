@@ -59,7 +59,3 @@ nav a.active {
 .primary:hover {
   background: #edbf5c;
 }
-.phone-top {
-  background: #dcece0;
-  color: var(--ld-heading);
-}

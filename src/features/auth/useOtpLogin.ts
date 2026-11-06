@@ -6,7 +6,7 @@ import type { User } from "@/api/types"
 const EMPTY_OTP = ["", "", "", "", "", ""]
 
 /** OTP request / verify flow against /api/auth. */
-export function useOtpLogin(initialMobile = "9826143412") {
+export function useOtpLogin(initialMobile = "") {
   const [mobile, setMobileValue] = useState(initialMobile)
   const [otpSent, setOtpSent] = useState(false)
   const [otp, setOtp] = useState(EMPTY_OTP)
@@ -54,12 +54,17 @@ export function useOtpLogin(initialMobile = "9826143412") {
     if (value && index < 5) {
       document.querySelectorAll<HTMLInputElement>(".otp-boxes input")[index + 1]?.focus()
     }
-    if (!next.every(Boolean)) return
+    // All six digits typed: verify straight away (the Login button does the same).
+    if (next.every(Boolean)) await verify(next)
+  }
+
+  const verify = async (digits = otp) => {
+    if (!digits.every(Boolean) || busy) return
     setBusy(true)
     try {
       setAuth(
         await api<{ token: string; user: User }>("/auth/verify", {
-          body: { mobile, otp: next.join("") },
+          body: { mobile, otp: digits.join("") },
         }),
       )
     } catch (e) {
@@ -68,6 +73,14 @@ export function useOtpLogin(initialMobile = "9826143412") {
     } finally {
       setBusy(false)
     }
+  }
+
+  /** Back to the mobile step (e.g. to correct the number). */
+  const reset = () => {
+    setOtpSent(false)
+    setOtp(EMPTY_OTP)
+    setError("")
+    setAuth(null)
   }
 
   return {
@@ -83,5 +96,7 @@ export function useOtpLogin(initialMobile = "9826143412") {
     auth,
     sendOtp,
     updateOtp,
+    verify,
+    reset,
   }
 }

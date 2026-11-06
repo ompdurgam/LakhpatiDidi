@@ -4,6 +4,10 @@
 }
 
 :root {
+  --text-scale: 1; /* A− / A / A+ text-size control (src/lib/textSize.ts) */
+  --fit-scale: 1; /* set from the window size by src/lib/screenFit.ts */
+  /* Every font size is calc(<size> * var(--font-scale)). */
+  --font-scale: calc(var(--text-scale) * var(--fit-scale));
   --ld-green-900: #174e31; /* brand / sidebar */
   --ld-green-700: #34704d; /* primary text & accents */
   --ld-green-650: #2d714a;

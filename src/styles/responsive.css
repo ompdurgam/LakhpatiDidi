@@ -1,12 +1,4 @@
 @media (max-width: 1000px) {
-  .login-screen {
-    grid-template-columns: 1fr;
-    padding: 20px;
-  }
-  .login-brand-panel {
-    min-height: 320px;
-    padding: 30px;
-  }
   .district-insights-grid,
   .district-charts-grid,
   .district-report-grid,
@@ -22,37 +14,6 @@
   }
 }
 @media (max-width: 760px) {
-  .login-screen {
-    padding: 0;
-    display: block;
-  }
-  .login-brand-panel {
-    min-height: 235px;
-    border-radius: 0 0 24px 24px;
-    padding: 24px;
-    display: block;
-  }
-  .login-brand-copy {
-    min-height: 187px;
-  }
-  .login-slider {
-    display: none;
-  }
-  .login-brand-panel h1 {
-    font-size: 28px;
-  }
-  .login-flow {
-    display: none;
-  }
-  .login-card {
-    min-height: calc(100vh - 210px);
-    margin-top: -16px;
-    border-radius: 20px 20px 0 0;
-    padding: 25px 18px;
-  }
-  .role-card-grid {
-    grid-template-columns: 1fr;
-  }
   .state-regions {
     grid-template-columns: 1fr;
   }
@@ -92,13 +53,13 @@
 }
 .notification-dropdown > div strong {
   color: var(--ld-text-strong);
-  font-size: 9px;
+  font-size: calc(14px * var(--font-scale));
 }
 .notification-dropdown > div button {
   border: 0;
   background: transparent;
   color: var(--ld-green-700);
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .notification-dropdown > button {
   width: 100%;
@@ -144,12 +105,12 @@
 }
 .notification-dropdown p strong {
   color: #3c4c41;
-  font-size: 7.5px;
+  font-size: calc(12.5px * var(--font-scale));
 }
 .notification-dropdown p small {
   margin-top: 2px;
   color: var(--ld-text-muted);
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .overview-secondary-kpis {
   display: grid;
@@ -183,17 +144,17 @@
 }
 .overview-stat span {
   color: #748078;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .overview-stat strong {
   margin-top: 2px;
   color: var(--ld-text-strong);
-  font: 700 15px Inter;
+  font: 700 calc(19.5px * var(--font-scale)) Inter;
 }
 .overview-stat small {
   margin-top: 2px;
   color: var(--ld-text-muted);
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .overview-stat > div > i {
   display: block;

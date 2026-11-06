@@ -1,5 +1,8 @@
 {
-  "brand": { "name": "स्वावलंबी दीदी", "tagline": "Lakhpati Convergence Portal" },
+  "brand": {
+    "name": "स्वावलंबी दीदी",
+    "tagline": "Lakhpati Convergence Portal"
+  },
   "scope": {
     "title": "आपका कार्यक्षेत्र",
     "block": "जगदलपुर ब्लॉक",
@@ -19,14 +22,18 @@
     "button": "सहायता केंद्र",
     "sent": "सहायता अनुरोध भेजा गया"
   },
-  "profile": { "logout": "लॉग आउट" },
+  "profile": {
+    "logout": "लॉग आउट"
+  },
   "header": {
     "role": "भूमिका",
     "changeRole": "भूमिका बदलें",
     "search": "दीदी, ID खोजें...",
     "notifications": "सूचनाएँ"
   },
-  "lang": { "current": "हिं", "other": "EN", "switch": "भाषा बदलें" },
+  "lang": {
+    "label": "भाषा"
+  },
   "roles": {
     "field": "सर्वेयर / CRP",
     "block": "ब्लॉक / CLF",
@@ -57,6 +64,19 @@
     "error": "कुछ गलत हो गया",
     "retry": "फिर से कोशिश करें"
   },
-  "yesNo": { "yes": "हाँ", "no": "नहीं" },
-  "actions": { "close": "बंद करें", "cancel": "रद्द करें", "save": "सहेजें" }
+  "yesNo": {
+    "yes": "हाँ",
+    "no": "नहीं"
+  },
+  "actions": {
+    "close": "बंद करें",
+    "cancel": "रद्द करें",
+    "save": "सहेजें"
+  },
+  "textSize": {
+    "label": "अक्षर का आकार",
+    "decrease": "अक्षर छोटे करें",
+    "reset": "सामान्य अक्षर आकार",
+    "increase": "अक्षर बड़े करें"
+  }
 }

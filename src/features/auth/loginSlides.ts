@@ -1,17 +1,14 @@
 export const loginSlides = [
   {
     src: "/slide1_lead.jpg",
-    hi: "दीदी — गाँव की नई पहचान",
-    en: "Didi — the new face of the village",
+    caption: "दीदी — गाँव की नई पहचान",
   },
   {
     src: "/slide2_drone.jpg",
-    hi: "ड्रोन दीदी — आधुनिक खेती",
-    en: "Drone Didi — modern farming",
+    caption: "ड्रोन दीदी — आधुनिक खेती",
   },
   {
     src: "/slide3_enterprise.jpg",
-    hi: "अपना उद्यम, स्थायी आय",
-    en: "Own enterprise, sustainable income",
+    caption: "अपना उद्यम, स्थायी आय",
   },
 ]

@@ -1,5 +1,8 @@
 {
-  "brand": { "name": "Swavalambi Didi", "tagline": "Lakhpati Convergence Portal" },
+  "brand": {
+    "name": "Swavalambi Didi",
+    "tagline": "Lakhpati Convergence Portal"
+  },
   "scope": {
     "title": "Your area",
     "block": "Jagdalpur Block",
@@ -19,14 +22,18 @@
     "button": "Help centre",
     "sent": "Help request sent"
   },
-  "profile": { "logout": "Log out" },
+  "profile": {
+    "logout": "Log out"
+  },
   "header": {
     "role": "Role",
     "changeRole": "Change role",
     "search": "Search Didi, ID...",
     "notifications": "Notifications"
   },
-  "lang": { "current": "EN", "other": "हिंदी", "switch": "Change language" },
+  "lang": {
+    "label": "Language"
+  },
   "roles": {
     "field": "Surveyor / CRP",
     "block": "Block / CLF",
@@ -57,6 +64,19 @@
     "error": "Something went wrong",
     "retry": "Try again"
   },
-  "yesNo": { "yes": "Yes", "no": "No" },
-  "actions": { "close": "Close", "cancel": "Cancel", "save": "Save" }
+  "yesNo": {
+    "yes": "Yes",
+    "no": "No"
+  },
+  "actions": {
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "textSize": {
+    "label": "Text size",
+    "decrease": "Decrease text size",
+    "reset": "Normal text size",
+    "increase": "Increase text size"
+  }
 }

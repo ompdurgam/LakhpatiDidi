@@ -21,12 +21,12 @@
   display: block;
 }
 .application-sla strong {
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .application-sla span {
   margin-top: 2px;
   color: #836f50;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .application-meta dl {
   grid-template-columns: 1fr 1fr;
@@ -56,7 +56,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
   font-weight: 600;
 }
 .application-documents > div:not(.drawer-section-title) {
@@ -84,11 +84,11 @@
 }
 .application-documents strong {
   color: #49584e;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .application-documents small {
   color: var(--ld-text-muted);
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .comment-thread {
   padding-bottom: 9px;
@@ -108,7 +108,7 @@
   color: var(--ld-green-700);
   display: grid;
   place-items: center;
-  font: 700 6px Inter;
+  font: 700 calc(11px * var(--font-scale)) Inter;
 }
 .comment.crp {
   margin-left: 24px;
@@ -123,7 +123,7 @@
   border-radius: 7px;
   background: #f5f7f4;
   color: #526158;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
   line-height: 1.45;
 }
 .comment p strong,
@@ -133,12 +133,12 @@
 .comment p strong {
   margin-bottom: 2px;
   color: #3d4d42;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .comment p small {
   margin-top: 3px;
   color: #8b948d;
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .comment-box {
   height: 34px;
@@ -156,7 +156,7 @@
   border: 0;
   outline: 0;
   padding: 0 8px;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .comment-box button {
   width: 33px;
@@ -184,7 +184,7 @@
 .role-actions button {
   min-width: 0;
   padding-inline: 7px;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .role-actions .danger-action {
   border-color: #e0a39a;
@@ -212,7 +212,7 @@
   display: block;
   margin-bottom: 4px;
   color: #647168;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .action-form textarea,
 .action-form select {
@@ -223,7 +223,7 @@
   background: white;
   padding: 7px;
   color: #46554b;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
   resize: vertical;
 }
 .action-form select {
@@ -251,7 +251,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .geo-proof {
   border-style: solid;
@@ -301,30 +301,30 @@
   display: block;
 }
 .mini-application-pdf span {
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .mini-application-pdf strong {
   margin: 3px 0;
   color: #31513c;
-  font-size: 13px;
+  font-size: calc(17.5px * var(--font-scale));
 }
 .mini-application-pdf small,
 .mini-application-pdf p {
   color: #555;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
   line-height: 1.7;
 }
 .mini-application-pdf h4 {
   margin: 18px 0 4px;
   color: #333;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .pdf-sign-line {
   margin-top: 130px;
   padding-top: 8px;
   border-top: 1px solid #aaa;
   text-align: center;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .modal-download {
   width: 100%;
@@ -345,7 +345,7 @@
 .bulk-sanction {
   height: 33px;
   padding: 0 9px;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .bulk-sanction:disabled {
   border-color: #dfe4df;
@@ -371,7 +371,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .department-filter-row > button.active {
   background: #fae6e2;
@@ -384,7 +384,7 @@
   display: block;
   margin-bottom: 3px;
   color: #78837b;
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .department-filter-row select {
   width: 100%;
@@ -394,7 +394,7 @@
   background: white;
   padding: 0 6px;
   color: #4d5b52;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .department-inbox-table table {
   min-width: 1030px;
@@ -412,7 +412,7 @@
   display: block;
   margin-top: 2px;
   color: #a06b19;
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .escalation.enriched > b {
   padding: 3px 5px;
@@ -431,7 +431,7 @@
 }
 .funnel-legend span {
   color: #748078;
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .funnel-legend i {
   display: inline-block;
@@ -459,7 +459,7 @@
   display: block;
   margin-bottom: 4px;
   color: #46564b;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .awareness-row > div {
   margin-top: 3px;
@@ -470,11 +470,11 @@
 }
 .awareness-row span {
   color: #77827a;
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .awareness-row span b {
   float: right;
-  font: 600 5.5px Inter;
+  font: 600 calc(11px * var(--font-scale)) Inter;
 }
 .awareness-row i {
   height: 6px;
@@ -531,7 +531,7 @@
 }
 .achievement-cell span,
 .budget-cell span {
-  font: 600 6.5px Inter;
+  font: 600 calc(11.5px * var(--font-scale)) Inter;
 }
 @media (max-width: 1200px) {
   .department-grid.enhanced,

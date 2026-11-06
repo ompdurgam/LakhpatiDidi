@@ -2,7 +2,8 @@ import { useTranslation } from "react-i18next"
 import { useLocation, useMatch, useNavigate } from "react-router"
 
 import { Icon } from "@/components/ui/Icon"
-import { LanguageToggle } from "@/components/ui/LanguageToggle"
+import { LanguageMenu } from "@/components/ui/LanguageMenu"
+import { TextSizeControl } from "@/components/ui/TextSizeControl"
 import { isRole, ROLES, useSession } from "@/stores/session"
 import { useUi } from "@/stores/ui"
 
@@ -85,7 +86,8 @@ export function Header() {
             aria-label={t("header.search")}
           />
         </label>
-        <LanguageToggle />
+        <TextSizeControl />
+        <LanguageMenu />
         <NotificationMenu />
       </div>
     </header>

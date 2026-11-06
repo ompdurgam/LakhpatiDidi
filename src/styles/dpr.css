@@ -19,12 +19,12 @@
 }
 .consent-modal-head span {
   color: #7f8a82;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .consent-modal-head h3 {
   margin: 2px 0 0;
   color: #304438;
-  font-size: 14px;
+  font-size: calc(18.5px * var(--font-scale));
 }
 .selected-scheme-list {
   margin-top: 12px;
@@ -36,7 +36,7 @@
   display: block;
   margin-bottom: 6px;
   color: #6e7b72;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .selected-scheme-list > div {
   min-height: 31px;
@@ -49,11 +49,11 @@
 }
 .selected-scheme-list strong {
   color: #425247;
-  font-size: 7.5px;
+  font-size: calc(12.5px * var(--font-scale));
 }
 .selected-scheme-list small {
   color: #839087;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .consent-method.modal-method {
   margin-top: 11px;
@@ -74,7 +74,7 @@
 .modal-otp p {
   margin: 0 0 6px;
   color: #6d7a71;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .modal-otp > button {
   margin-top: 6px;
@@ -82,7 +82,7 @@
   background: transparent;
   color: #2f6d48;
   padding: 0;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .consent-thumb {
   width: 100%;
@@ -106,12 +106,12 @@
 }
 .consent-thumb strong {
   color: #514934;
-  font-size: 7.5px;
+  font-size: calc(12.5px * var(--font-scale));
 }
 .consent-thumb small {
   margin-top: 2px;
   color: #8a7a56;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .consent-thumb.captured {
   border-style: solid;
@@ -129,7 +129,7 @@
   display: flex;
   align-items: flex-start;
   gap: 6px;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
   line-height: 1.45;
 }
 .consent-record-note input {
@@ -164,7 +164,7 @@
   background: transparent;
   color: var(--ld-green-700);
   padding: 2px 0;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
   font-weight: 600;
 }
 .cost-finance-layout {
@@ -190,7 +190,7 @@
   background: white;
   padding: 0 5px;
   color: #47564c;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .cost-table.editable .cost-row.head {
   padding-inline: 9px;
@@ -206,7 +206,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
   font-weight: 600;
 }
 .finance-donut-card {
@@ -218,7 +218,7 @@
 .finance-donut-card h4 {
   margin: 0;
   color: #3c4d42;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .finance-donut {
   width: 105px;
@@ -243,12 +243,12 @@
   z-index: 1;
   color: var(--ld-text-strong);
   text-align: center;
-  font: 700 10px Inter;
+  font: 700 calc(15px * var(--font-scale)) Inter;
 }
 .finance-donut small {
   display: block;
   color: #879189;
-  font: 6px "Noto Sans Devanagari";
+  font: calc(11px * var(--font-scale)) "Noto Sans Devanagari";
 }
 .finance-legend {
   display: grid;
@@ -277,11 +277,11 @@
 }
 .finance-legend span {
   color: #6d7a71;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .finance-legend strong {
   color: #425247;
-  font: 600 6.5px Inter;
+  font: 600 calc(11.5px * var(--font-scale)) Inter;
 }
 .dpr-economics {
   display: grid;
@@ -297,7 +297,7 @@
   padding: 9px;
   background: #f3f6f3;
   color: #3d4d42;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .assumptions-table > div {
   min-height: 34px;
@@ -309,11 +309,11 @@
 }
 .assumptions-table span {
   color: #6e7b72;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .assumptions-table strong {
   color: #3d4d42;
-  font: 600 7.5px Inter;
+  font: 600 calc(12.5px * var(--font-scale)) Inter;
 }
 .assumptions-table .net {
   background: #e9f3eb;
@@ -348,15 +348,15 @@
 }
 .emi-line strong {
   color: #3d4d42;
-  font-size: 7.5px;
+  font-size: calc(12.5px * var(--font-scale));
 }
 .emi-line small {
   color: var(--ld-text-muted);
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .emi-line > b {
   color: var(--ld-green-600);
-  font: 700 8px Inter;
+  font: 700 calc(13px * var(--font-scale)) Inter;
 }
 .before-after-income {
   padding: 11px;
@@ -378,18 +378,18 @@
 }
 .before-after-income span {
   color: #7c755f;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .before-after-income strong {
   color: #514a36;
-  font: 700 11px Inter;
+  font: 700 calc(16px * var(--font-scale)) Inter;
 }
 .before-after-income .after strong {
   color: var(--ld-green-600);
 }
 .before-after-income small {
   color: var(--ld-green-700);
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .before-after-income > svg {
   color: #b68731;
@@ -471,17 +471,17 @@
 }
 .verification-card strong {
   color: #31503c;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .verification-card p {
   margin-top: 2px;
   color: #55645b;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .verification-card small {
   margin-top: 2px;
   color: var(--ld-text-muted);
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .verification-remarks {
   display: block;
@@ -491,7 +491,7 @@
   display: block;
   margin-bottom: 4px;
   color: #68756c;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .verification-remarks textarea {
   width: 100%;
@@ -501,7 +501,7 @@
   background: white;
   padding: 8px;
   color: #46554b;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
   line-height: 1.5;
   resize: vertical;
 }
@@ -522,16 +522,16 @@
 }
 .pdf-meta span {
   color: #777;
-  font-size: 5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .pdf-meta strong {
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .pdf-recipient {
   margin-top: 8px;
   padding: 6px;
   border: 1px solid #ddd;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .pdf-cost-table {
   border: 1px solid #ccc;
@@ -543,7 +543,7 @@
   display: grid;
   grid-template-columns: 1fr 70px;
   align-items: center;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .pdf-cost-table > div:first-child,
 .pdf-cost-table > div.total {
@@ -565,15 +565,15 @@
   grid-template-columns: 1fr 15px 1fr auto;
   align-items: center;
   gap: 4px;
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .pdf-income-projection span b {
   display: block;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .pdf-income-projection > strong {
   color: var(--ld-green-600);
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .pdf-checklist {
   margin-top: 8px;
@@ -588,7 +588,7 @@
 .pdf-checklist span {
   padding: 4px;
   background: #f4f6f3;
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .pdf-declaration {
   margin-top: 8px !important;
@@ -615,11 +615,11 @@
   display: block;
 }
 .signature-boxes strong {
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .signature-boxes small {
   color: #777;
-  font-size: 4.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .dpr-success {
   padding: 46px 22px 80px;
@@ -628,7 +628,7 @@
 .dpr-success h2 {
   margin: 5px 0 16px;
   color: #304438;
-  font-size: 17px;
+  font-size: calc(21.5px * var(--font-scale));
 }
 .dpr-success-id {
   padding: 11px;
@@ -642,12 +642,12 @@
 }
 .dpr-success-id span {
   color: #819087;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .dpr-success-id strong {
   margin-top: 3px;
   color: var(--ld-green-600);
-  font: 700 14px Inter;
+  font: 700 calc(18.5px * var(--font-scale)) Inter;
 }
 .routing-success,
 .sla-success {
@@ -681,12 +681,12 @@
 }
 .routing-success strong {
   color: var(--ld-text-strong);
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .routing-success p {
   margin-top: 2px;
   color: #7e8981;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .sla-success {
   border: 1px solid #ead49f;
@@ -695,12 +695,12 @@
 }
 .sla-success span {
   color: #887750;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .sla-success strong {
   margin-top: 2px;
   color: #7d5b1e;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .dpr-success-actions {
   margin-top: 14px;
@@ -734,5 +734,5 @@
   display: block;
   margin-top: 2px;
   color: #6f7c73;
-  font: 600 5.5px Inter;
+  font: 600 calc(11px * var(--font-scale)) Inter;
 }

@@ -4,12 +4,15 @@ import { expect, type Page, test } from "@playwright/test"
 // Each test uses its own demo user: the API allows 5 OTPs per number per 15 min.
 async function login(page: Page, roleLabel: string, mobile: string) {
   await page.goto("/login")
-  await page.locator(".login-mobile input").fill(mobile)
+  // A fresh browser is asked for its language first.
+  await page.locator(".language-chooser button[lang=hi]").click()
+  // Role → mobile → OTP.
+  await page.locator(".role-card-grid button", { hasText: roleLabel }).click()
+  await page.locator(".login-field input").fill(mobile)
   await page.getByRole("button", { name: /OTP भेजें/ }).click()
   const otp = (await page.locator(".dev-otp-hint b").textContent())!.trim()
   const boxes = page.locator(".otp-boxes input")
   for (let i = 0; i < 6; i++) await boxes.nth(i).fill(otp[i])
-  await page.locator(".role-card-grid button", { hasText: roleLabel }).click()
 }
 
 async function switchRole(page: Page, role: string) {
@@ -29,7 +32,7 @@ test("every role's screens are reachable by URL", async ({ page }) => {
     ["block", "/block/households", ".household-register-table"],
     ["block", "/block/applications", ".applications-card"],
     ["field", "/field/survey", ".survey-form"],
-    ["field", "/field/recommendations", ".phone-content"],
+    ["field", "/field/recommendations", ".recommend-desktop"],
     ["department", "/dept/AH", ".department-inbox"],
     ["district", "/district", ".page"],
     ["state", "/state/certification", ".page"],
@@ -53,8 +56,12 @@ test("department inbox opens an application by URL and closes back", async ({ pa
 
 test("language toggle switches the shell to English", async ({ page }) => {
   await login(page, "ब्लॉक", "9993000001")
-  await page.locator("header .lang-toggle").click()
+  await page.locator("header .lang-menu-button").click()
+  await page.getByRole("menuitemradio", { name: "English" }).click()
   await expect(page.locator("header h1")).toHaveText("Block Overview")
+  await expect(page).toHaveTitle(/Lakhpati Convergence Portal/)
   await expect(page.locator("nav a", { hasText: "Households" })).toBeVisible()
-  await page.locator("header .lang-toggle").click()
+  await page.locator("header .lang-menu-button").click()
+  await page.getByRole("menuitemradio", { name: "हिन्दी" }).click()
+  await expect(page.locator("html")).toHaveAttribute("lang", "hi")
 })

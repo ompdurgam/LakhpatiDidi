@@ -19,19 +19,19 @@
 }
 .tracker-section-head h3 {
   color: var(--ld-text-strong);
-  font-size: 10px;
+  font-size: calc(15px * var(--font-scale));
 }
 .tracker-section-head p {
   margin-top: 2px;
   color: var(--ld-text-muted);
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .tracker-section-head > span {
   padding: 3px 7px;
   border-radius: 8px;
   background: #e7f1e9;
   color: var(--ld-green-700);
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .tracker-table-scroll {
   overflow-x: auto;
@@ -42,7 +42,7 @@
 .tracker-table-scroll th,
 .tracker-table-scroll td {
   padding: 8px 10px;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .tracker-entitlements > div:not(.tracker-section-head) {
   min-height: 49px;
@@ -77,12 +77,12 @@
 }
 .tracker-entitlements strong {
   color: #3c4c41;
-  font-size: 7.5px;
+  font-size: calc(12.5px * var(--font-scale));
 }
 .tracker-entitlements small {
   margin-top: 1px;
   color: var(--ld-text-muted);
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .income-chart-legend {
   display: flex;
@@ -92,7 +92,7 @@
 }
 .income-chart-legend span {
   color: #6f7c73;
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .income-chart-legend i {
   display: inline-block;
@@ -135,7 +135,7 @@
 .bar-value {
   margin-bottom: 3px;
   color: #617066;
-  font: 600 6px Inter;
+  font: 600 calc(11px * var(--font-scale)) Inter;
 }
 .stacked-bar {
   width: min(28px, 70%);
@@ -153,7 +153,7 @@
 .income-month-bar > span {
   margin-top: 4px;
   color: #7c877f;
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .income-log-table {
   padding: 8px 12px;
@@ -166,15 +166,15 @@
   align-items: center;
   gap: 5px;
   color: #59675d;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .income-log-table > div.head {
   min-height: 25px;
   color: var(--ld-text-muted);
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .income-log-table strong {
-  font: 600 7px Inter;
+  font: 600 calc(12px * var(--font-scale)) Inter;
 }
 .income-log-table button {
   width: 25px;
@@ -191,7 +191,7 @@
   display: flex;
   align-items: center;
   gap: 2px;
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .add-monthly-income {
   width: calc(100% - 24px);
@@ -205,7 +205,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  font-size: 7.5px;
+  font-size: calc(12.5px * var(--font-scale));
   font-weight: 600;
 }
 .add-income-inline {
@@ -223,7 +223,7 @@
 .add-income-inline .primary {
   height: 35px;
   padding: 0 9px;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .household-filters-panel {
   margin-bottom: 13px;
@@ -238,7 +238,7 @@
   display: block;
   margin-bottom: 4px;
   color: #6f7b72;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .register-filter select {
   width: 100%;
@@ -248,7 +248,7 @@
   background: var(--ld-surface);
   color: #435247;
   padding: 0 7px;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .single-source-filter {
   height: 34px;
@@ -261,7 +261,7 @@
   align-items: center;
   gap: 6px;
   padding: 0 9px;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .single-source-filter input {
   accent-color: #d39a2f;
@@ -278,7 +278,7 @@
 .bulk-actions > span {
   margin-right: auto;
   color: #738078;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .bulk-actions button {
   height: 33px;
@@ -290,7 +290,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 7.5px;
+  font-size: calc(12.5px * var(--font-scale));
 }
 .household-register-card {
   overflow: hidden;
@@ -326,7 +326,7 @@
   color: var(--ld-green-700);
   display: grid;
   place-items: center;
-  font: 700 7px Inter;
+  font: 700 calc(12px * var(--font-scale)) Inter;
 }
 .register-didi strong,
 .register-didi small {
@@ -334,12 +334,12 @@
 }
 .register-didi strong {
   color: var(--ld-text-strong);
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .register-didi small {
   margin-top: 1px;
   color: var(--ld-text-muted);
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .institution-cell {
   min-width: 145px;
@@ -351,12 +351,12 @@
 }
 .institution-cell strong {
   color: #46564b;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .institution-cell span,
 .institution-cell small {
   color: var(--ld-text-muted);
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .single-source-count {
   padding: 3px 7px;
@@ -386,7 +386,7 @@
 }
 .register-meter span {
   color: #6e7b72;
-  font: 600 6.5px Inter;
+  font: 600 calc(11.5px * var(--font-scale)) Inter;
 }
 .number-badge {
   min-width: 24px;
@@ -394,7 +394,7 @@
   border-radius: 11px;
   display: inline-grid;
   place-items: center;
-  font: 700 7px Inter;
+  font: 700 calc(12px * var(--font-scale)) Inter;
 }
 .number-badge.blue {
   background: #e5eef5;
@@ -443,101 +443,5 @@
   }
   .register-filter-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.login-screen {
-  min-height: 100vh;
-  padding: 42px;
-  background: linear-gradient(135deg, #edf5ee 0%, #fff9eb 55%, #f2eee5 100%);
-  display: grid;
-  grid-template-columns: 1.1fr minmax(420px, 0.75fr);
-  gap: 40px;
-  align-items: center;
-}
-.login-brand-panel {
-  min-height: 640px;
-  padding: 54px;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.42);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) clamp(200px, 32%, 300px);
-  gap: 32px;
-  box-shadow: inset 0 0 0 1px rgba(65, 104, 77, 0.06);
-}
-.login-brand-copy {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 24px;
-}
-.login-slider {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-height: 0;
-}
-.login-slider-frame {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  border-radius: 18px;
-  overflow: hidden;
-  background: #fff;
-  border: 1px solid #e3ebe4;
-  box-shadow: 0 18px 40px -22px rgba(23, 78, 49, 0.35);
-}
-.login-slider-frame img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transform: scale(1.03);
-  transition:
-    opacity 0.8s ease,
-    transform 5s ease;
-}
-.login-slider-frame img.active {
-  opacity: 1;
-  transform: scale(1);
-}
-.login-slider figcaption {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  color: #556a5e;
-  font-size: 11px;
-  font-weight: 500;
-}
-.login-slider-dots {
-  display: flex;
-  gap: 6px;
-  flex: none;
-}
-.login-slider-dots button {
-  width: 8px;
-  height: 8px;
-  padding: 0;
-  border: 0;
-  border-radius: 8px;
-  background: #c8d9cc;
-  transition:
-    width 0.3s,
-    background 0.3s;
-}
-.login-slider-dots button.active {
-  width: 22px;
-  background: var(--ld-green-900);
-}
-@media (prefers-reduced-motion: reduce) {
-  .login-slider-frame img {
-    transition: none;
-    transform: none;
   }
 }

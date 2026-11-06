@@ -33,29 +33,29 @@
   display: block;
 }
 .certificate-sheet > span {
-  font-size: 10px;
+  font-size: calc(15px * var(--font-scale));
   font-weight: 700;
 }
 .certificate-sheet > small {
   margin-top: 3px;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .certificate-sheet h2 {
   margin: 24px 0 0;
   color: #8b671f;
   font-family: serif;
-  font-size: 34px;
+  font-size: calc(36.5px * var(--font-scale));
 }
 .certificate-sheet > strong {
   display: block;
   margin: 16px 0;
   color: #2f5d3d;
-  font-size: 22px;
+  font-size: calc(26px * var(--font-scale));
 }
 .certificate-sheet p,
 .certificate-sheet > div,
 .certificate-sheet em {
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
   line-height: 1.7;
   font-style: normal;
 }
@@ -63,7 +63,7 @@
   margin-top: 34px;
   display: flex;
   justify-content: space-between;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .certificate-modal > .primary {
   width: 100%;
@@ -73,7 +73,7 @@
   display: block;
   margin-bottom: 5px;
   color: #738078;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .editor-chip-field > div {
   display: flex;
@@ -90,7 +90,7 @@
   display: flex;
   align-items: center;
   gap: 3px;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .editor-chip-field button.selected {
   border-color: #92b09a;
@@ -108,7 +108,7 @@
   border-radius: 7px;
   background: var(--ld-surface);
   color: #66736a;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .subsidy-by-class input {
   float: right;
@@ -117,11 +117,11 @@
   background: transparent;
   color: var(--ld-green-600);
   text-align: right;
-  font: 700 8px Inter;
+  font: 700 calc(13px * var(--font-scale)) Inter;
 }
 .rule-builder > div:first-child > span {
   color: #748078;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .test-rule-button {
   width: 100%;
@@ -159,16 +159,16 @@
   display: block;
 }
 .rule-test-result strong {
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .rule-test-result span {
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .rule-test-result button {
   border: 0;
   background: transparent;
   color: inherit;
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .admin-data-table {
   overflow: hidden;
@@ -189,7 +189,7 @@
   background: white;
   color: var(--ld-green-700);
   padding: 5px 7px;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .geo-tree {
   padding: 10px 16px 16px;
@@ -217,11 +217,11 @@
 }
 .geo-tree .level strong {
   color: #46564b;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .geo-tree .level span {
   color: var(--ld-text-muted);
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .geo-tree .district {
   background: var(--ld-green-50);
@@ -260,7 +260,7 @@
 }
 .section-toggles label span {
   color: #536158;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .section-toggles label button {
   width: 30px;
@@ -294,11 +294,11 @@
 }
 .option-list-editor strong {
   color: #46564b;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .option-list-editor span {
   color: #7d8980;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .option-list-editor > div > button {
   width: 27px;
@@ -322,15 +322,15 @@
   border-radius: 5px;
   background: #f1f3f0;
   color: #4b5c50;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .conditional-logic span {
   color: #657269;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .conditional-logic button {
   border: 0;
   background: transparent;
   color: var(--ld-green-700);
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }

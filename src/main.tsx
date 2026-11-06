@@ -1,4 +1,6 @@
 import "./i18n"
+import "./lib/screenFit"
+import "./lib/textSize"
 import "./styles/index.css"
 
 import React from "react"

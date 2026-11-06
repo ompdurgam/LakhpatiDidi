@@ -8,7 +8,7 @@
 }
 .district-map button small {
   margin-top: 2px;
-  font: 5px "Noto Sans Devanagari";
+  font: calc(11px * var(--font-scale)) "Noto Sans Devanagari";
 }
 .district-map-card > .map-legend {
   justify-content: center;
@@ -23,7 +23,7 @@
 }
 .matrix-triple-legend span {
   color: #758078;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .matrix-triple-legend i {
   display: inline-block;
@@ -57,7 +57,7 @@
   padding: 7px;
   background: #f3f6f3;
   color: #748078;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .district-matrix-row {
   min-height: 42px;
@@ -66,7 +66,7 @@
 }
 .district-matrix-row > strong {
   color: #46564b;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .district-matrix-row > div {
   padding: 6px;
@@ -78,16 +78,16 @@
 }
 .district-matrix-row b {
   color: var(--ld-green-650);
-  font: 700 7px Inter;
+  font: 700 calc(12px * var(--font-scale)) Inter;
 }
 .district-matrix-row em {
   color: #a36d1a;
-  font: 700 7px Inter;
+  font: 700 calc(12px * var(--font-scale)) Inter;
   font-style: normal;
 }
 .district-matrix-row small {
   color: #66746b;
-  font: 700 7px Inter;
+  font: 700 calc(12px * var(--font-scale)) Inter;
 }
 .district-matrix-row small.red {
   border-radius: 3px;
@@ -121,7 +121,7 @@
   grid-template-columns: 1fr 0.5fr 0.7fr auto;
   align-items: center;
   gap: 6px;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .candidate-table .head {
   min-height: 28px;
@@ -132,7 +132,7 @@
   color: #405045;
 }
 .candidate-table b {
-  font: 600 7px Inter;
+  font: 600 calc(12px * var(--font-scale)) Inter;
 }
 .candidate-table button {
   height: 27px;
@@ -141,7 +141,7 @@
   background: var(--ld-green-50);
   color: #2f6d48;
   padding: 0 7px;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .collector-escalations > div:not(.card-head) {
   min-height: 49px;
@@ -160,15 +160,15 @@
 }
 .collector-escalations strong {
   color: #46564b;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .collector-escalations small {
   color: #8a7b73;
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .collector-escalations > div > b {
   color: #b24e41;
-  font: 600 6px Inter;
+  font: 600 calc(11px * var(--font-scale)) Inter;
 }
 .district-donut-wrap {
   margin-top: 14px;
@@ -208,12 +208,12 @@
   z-index: 1;
   color: var(--ld-text-strong);
   text-align: center;
-  font: 700 14px Inter;
+  font: 700 calc(18.5px * var(--font-scale)) Inter;
 }
 .sector-donut small {
   display: block;
   color: var(--ld-text-muted);
-  font: 6px "Noto Sans Devanagari";
+  font: calc(11px * var(--font-scale)) "Noto Sans Devanagari";
 }
 .sector-legend {
   display: grid;
@@ -222,7 +222,7 @@
 }
 .sector-legend span {
   color: #657269;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .sector-legend i {
   display: inline-block;
@@ -240,7 +240,7 @@
 }
 .income-band-chart span {
   color: #657269;
-  font: 600 7px Inter;
+  font: 600 calc(12px * var(--font-scale)) Inter;
 }
 .income-band-chart i {
   height: 14px;
@@ -261,7 +261,7 @@
 }
 .income-band-chart strong {
   text-align: right;
-  font: 600 7px Inter;
+  font: 600 calc(12px * var(--font-scale)) Inter;
 }
 .block-report-status > div:not(.card-head) {
   min-height: 36px;
@@ -273,11 +273,11 @@
 }
 .block-report-status strong {
   color: #46564b;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .block-report-status div > span {
   color: var(--ld-text-muted);
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .district-due-card {
   display: grid;
@@ -302,15 +302,15 @@
 }
 .district-due-card small {
   color: #7d8980;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .district-due-card strong {
   color: var(--ld-text-strong);
-  font-size: 13px;
+  font-size: calc(17.5px * var(--font-scale));
 }
 .district-due-card p {
   color: var(--ld-text-muted);
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .district-due-card .primary {
   grid-column: 1 / -1;
@@ -351,7 +351,7 @@
   margin: 0 0 7px;
   color: #53645a;
   text-align: center;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .state-regions > div > div {
   display: flex;
@@ -365,7 +365,7 @@
   border: 2px solid white;
   border-radius: 7px 10px 8px 11px;
   color: #3e654a;
-  font: 600 6px "Noto Sans Devanagari";
+  font: 600 calc(11px * var(--font-scale)) "Noto Sans Devanagari";
 }
 .state-regions button.low {
   background: #dcebdd;
@@ -388,7 +388,7 @@
 .statewide-funnel span,
 .statewide-funnel small {
   color: #77837a;
-  font-size: 6px;
+  font-size: calc(11px * var(--font-scale));
 }
 .statewide-funnel i {
   height: 20px;
@@ -403,7 +403,7 @@
   background: var(--ld-green-500);
   color: white;
   padding-right: 6px;
-  font: 600 6px Inter;
+  font: 600 calc(11px * var(--font-scale)) Inter;
 }
 .department-leaderboard,
 .certification-kanban {
@@ -428,7 +428,7 @@
 .heatmap-grid strong {
   color: #647168;
   text-align: center;
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .heatmap-grid strong {
   text-align: left;
@@ -438,7 +438,7 @@
   border-radius: 4px;
   display: grid;
   place-items: center;
-  font: 600 6px Inter;
+  font: 600 calc(11px * var(--font-scale)) Inter;
 }
 .heatmap-grid span.low {
   background: #e4f0e6;
@@ -471,17 +471,17 @@
 }
 .financial-support strong {
   color: #46564b;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .financial-support b {
   color: var(--ld-green-600);
-  font: 700 8px Inter;
+  font: 700 calc(13px * var(--font-scale)) Inter;
 }
 .financial-support small {
   grid-column: 2 / -1;
   margin-top: -15px;
   color: var(--ld-text-muted);
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .crp-big-stats {
   margin-top: 15px;
@@ -500,11 +500,11 @@
 }
 .crp-big-stats strong {
   color: var(--ld-green-600);
-  font: 700 19px Inter;
+  font: 700 calc(23px * var(--font-scale)) Inter;
 }
 .crp-big-stats span {
   color: #768179;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .crp-mapping > i {
   display: block;
@@ -521,7 +521,7 @@
 }
 .crp-mapping > p {
   color: #7d8980;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .reporting-compliance {
   display: grid;
@@ -553,19 +553,19 @@
   z-index: 1;
   text-align: center;
   color: var(--ld-text-strong);
-  font: 700 16px Inter;
+  font: 700 calc(20.5px * var(--font-scale)) Inter;
 }
 .compliance-donut small {
   display: block;
   color: var(--ld-text-muted);
-  font: 6px "Noto Sans Devanagari";
+  font: calc(11px * var(--font-scale)) "Noto Sans Devanagari";
 }
 .reporting-compliance > div:last-child p {
   display: flex;
   align-items: center;
   gap: 5px;
   color: #69766d;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .reporting-compliance p i {
   width: 7px;
@@ -580,7 +580,7 @@
 }
 .reporting-compliance p strong {
   margin-left: auto;
-  font: 700 9px Inter;
+  font: 700 calc(14px * var(--font-scale)) Inter;
 }
 .kanban-columns {
   padding: 0 14px 16px;
@@ -598,7 +598,7 @@
 .kanban-columns h4 {
   margin: 0 0 8px;
   color: #526158;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .kanban-columns h4 span {
   float: right;
@@ -608,7 +608,7 @@
   background: white;
   display: grid;
   place-items: center;
-  font: 600 6px Inter;
+  font: 600 calc(11px * var(--font-scale)) Inter;
 }
 .kanban-columns button {
   width: 100%;
@@ -625,10 +625,10 @@
 }
 .kanban-columns button strong {
   color: #3f5044;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .kanban-columns button small {
   margin: 2px 0 5px;
   color: var(--ld-text-muted);
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }

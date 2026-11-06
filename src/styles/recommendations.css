@@ -11,11 +11,11 @@
 .expected-income span {
   flex: 1;
   color: #607166;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .expected-income strong {
   color: var(--ld-green-600);
-  font: 700 7.5px Inter;
+  font: 700 calc(12.5px * var(--font-scale)) Inter;
 }
 .entitlement-gaps {
   padding-top: 10px;
@@ -40,12 +40,12 @@
 }
 .gap-card-head strong {
   color: var(--ld-text-strong);
-  font-size: 9px;
+  font-size: calc(14px * var(--font-scale));
 }
 .gap-card-head div > span {
   margin-top: 1px;
   color: #829087;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .gap-card dl {
   margin: 8px 0;
@@ -59,12 +59,12 @@
 }
 .gap-card dt {
   color: #829087;
-  font-size: 5.5px;
+  font-size: calc(11px * var(--font-scale));
 }
 .gap-card dd {
   margin: 1px 0 0;
   color: #4e5c53;
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .gap-card > button {
   width: 100%;
@@ -77,7 +77,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
   font-weight: 600;
 }
 .gap-card > button:disabled {
@@ -125,12 +125,12 @@
 }
 .sheet-title span {
   color: #7b877e;
-  font-size: 7px;
+  font-size: calc(12px * var(--font-scale));
 }
 .sheet-title h3 {
   margin: 2px 0 0;
   color: var(--ld-text-strong);
-  font-size: 12px;
+  font-size: calc(17px * var(--font-scale));
 }
 .sheet-title > button,
 .consent-modal-head > button {
@@ -159,7 +159,7 @@
   align-items: center;
   gap: 8px;
   text-align: left;
-  font-size: 8px;
+  font-size: calc(13px * var(--font-scale));
 }
 .reason-options button > i {
   width: 16px;
@@ -193,7 +193,7 @@
 .reminder-date > span {
   margin-bottom: 5px;
   color: #5e6d63;
-  font-size: 7.5px;
+  font-size: calc(12.5px * var(--font-scale));
 }
 .reminder-date input {
   width: 100%;
@@ -203,12 +203,12 @@
   background: var(--ld-surface);
   padding: 0 9px;
   color: var(--ld-text-strong);
-  font: 500 9px Inter;
+  font: 500 calc(14px * var(--font-scale)) Inter;
 }
 .reminder-date > small {
   margin-top: 5px;
   color: var(--ld-text-muted);
-  font-size: 6.5px;
+  font-size: calc(11.5px * var(--font-scale));
 }
 .sheet-confirm {
   width: 100%;

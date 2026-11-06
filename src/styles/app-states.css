@@ -6,7 +6,7 @@
   gap: 12px;
   background: var(--ld-page);
   color: #61766a;
-  font-size: 13px;
+  font-size: calc(17.5px * var(--font-scale));
 }
 .form-error {
   margin: 10px 0 0;
@@ -14,7 +14,7 @@
   border-radius: 8px;
   background: #fdecea;
   color: #a8322a;
-  font-size: 12px;
+  font-size: calc(17px * var(--font-scale));
   line-height: 1.4;
 }
 .drawer-error {
@@ -25,12 +25,12 @@
   padding: 24px;
   text-align: center;
   color: #89928b;
-  font-size: 12px;
+  font-size: calc(17px * var(--font-scale));
 }
 .empty-note {
   margin: 0 0 10px;
   color: #89928b;
-  font-size: 11px;
+  font-size: calc(16px * var(--font-scale));
 }
 .dev-otp-hint {
   display: block;
@@ -39,10 +39,10 @@
   border-radius: 8px;
   background: #fff6df;
   color: #7a5a12;
-  font-size: 11px;
+  font-size: calc(16px * var(--font-scale));
 }
 .dev-otp-hint b {
-  font: 700 13px Inter;
+  font: 700 calc(17.5px * var(--font-scale)) Inter;
   letter-spacing: 2px;
 }
 .api-banner {
@@ -54,7 +54,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
+  font-size: calc(17px * var(--font-scale));
 }
 button.profile {
   width: calc(100% - 24px);
