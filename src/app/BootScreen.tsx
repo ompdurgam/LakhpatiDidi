@@ -7,7 +7,7 @@ export function BootScreen() {
   const { t } = useTranslation()
   return (
     <div className="boot-screen" role="status">
-      <BrandMark />
+      <BrandMark size={112} />
       <p>{t("status.loading")}</p>
     </div>
   )

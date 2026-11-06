@@ -27,26 +27,9 @@
   border-bottom: 1px solid #ffffff1f;
 }
 .brand-mark {
-  width: 41px;
-  height: 41px;
-  border-radius: 12px;
-  position: relative;
-  display: grid;
-  place-items: center;
-  background: var(--ld-gold-500);
-  color: var(--ld-green-900);
-  font-size: calc(22px * var(--font-scale));
-  font-weight: 700;
-  overflow: hidden;
-}
-.brand-mark i {
-  position: absolute;
-  bottom: -8px;
-  right: -7px;
-  width: 25px;
-  height: 25px;
-  background: var(--ld-orange-500);
-  border-radius: 50%;
+  flex: 0 0 auto;
+  display: block;
+  object-fit: contain;
 }
 .brand strong {
   display: block;
@@ -55,7 +38,7 @@
 .brand small {
   display: block;
   /* Tagline sized to the sidebar width so it never clips. */
-  font: min(calc(13.5px * var(--font-scale)), calc((var(--sidebar-w) - 44px) / 17)) Inter;
+  font: min(calc(13.5px * var(--font-scale)), calc((var(--sidebar-w) - 112px) / 17)) Inter;
   opacity: 0.7;
   white-space: nowrap;
   text-transform: uppercase;
@@ -1404,9 +1387,40 @@ tbody tr:hover {
   }
 }
 @media (max-width: 760px) {
+  /* Phone menu: the name stays on one line beside the logo and close button. */
+  .brand {
+    gap: 10px;
+    padding: 0 16px;
+  }
+  .brand .brand-mark {
+    width: 50px;
+    height: 50px;
+  }
+  .brand strong {
+    font-size: calc(18.5px * var(--font-scale));
+    white-space: nowrap;
+  }
+  .brand .close-menu {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+  }
   /* Phones: keep A− / A+ only and a globe-only language button so the header fits. */
   .header-actions {
-    gap: 6px;
+    gap: 4px;
+    min-width: 0;
+  }
+  .header-actions .icon-button,
+  .header-actions .lang-menu-button {
+    width: 36px;
+    height: 36px;
+  }
+  .header-actions .role-switcher {
+    padding: 3px 4px;
+  }
+  .header-actions .role-switcher select {
+    max-width: 64px;
+    font-size: calc(13px * var(--font-scale));
   }
   .header-actions .text-size-control button.normal,
   .header-actions .lang-menu-button span,
@@ -1428,7 +1442,7 @@ tbody tr:hover {
   .sidebar {
     transform: translateX(-100%);
     transition: 0.25s;
-    width: 270px;
+    width: min(292px, 88vw);
   }
   .sidebar.open {
     transform: none;
@@ -1576,6 +1590,10 @@ nav a {
 @media (min-width: 761px) and (max-height: 820px) {
   .brand {
     height: 64px;
+  }
+  .brand .brand-mark {
+    width: 48px;
+    height: 48px;
   }
   .scope-card {
     margin: 10px 14px 6px;

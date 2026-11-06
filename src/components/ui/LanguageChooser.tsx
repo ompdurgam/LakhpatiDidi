@@ -26,7 +26,7 @@ export function LanguageChooser() {
         aria-modal="true"
         aria-labelledby="language-chooser-title"
       >
-        <BrandMark />
+        <BrandMark size={128} />
         <h2 id="language-chooser-title">
           <span lang="hi">{/* i18n-exempt: bilingual prompt */}भाषा चुनें</span>
           <span lang="en">Choose your language</span>

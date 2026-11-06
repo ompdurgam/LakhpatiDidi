@@ -1,10 +1,16 @@
-/** The "स्व" logo tile (gold square with orange corner). */
-export function BrandMark() {
+import logo from "@/assets/logo.svg"
+
+/** Lakhpati Didi Chhattisgarh logo. Decorative: the brand name is always shown next to it. */
+export function BrandMark({ size = 44 }: { size?: number }) {
   return (
-    <div className="brand-mark" aria-hidden="true">
-      {/* i18n-exempt: logo glyph */}
-      <span>स्व</span>
-      <i />
-    </div>
+    <img
+      className="brand-mark"
+      src={logo}
+      width={size}
+      height={size}
+      alt=""
+      aria-hidden="true"
+      decoding="async"
+    />
   )
 }

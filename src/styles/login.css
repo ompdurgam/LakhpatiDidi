@@ -120,22 +120,28 @@
   padding: 26px 28px 20px;
   box-shadow: 0 20px 50px #19312114;
 }
-.login-card-top {
+/* Text size + language, one slim row at the top (wraps only on very narrow screens). */
+.login-card .login-tools {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
   flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
 }
+/* Logo centred under it, with the programme name. */
 .login-logo {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  font-size: calc(12px * var(--font-scale));
+  gap: 6px;
+  margin-top: 8px;
+  text-align: center;
+  font-size: calc(13px * var(--font-scale));
+  font-weight: 600;
+  letter-spacing: 0.02em;
   color: var(--login-muted);
 }
 .login-greeting {
-  margin: 26px 0 14px;
+  margin: 18px 0 14px;
   display: grid;
   font-size: calc(30px * var(--font-scale));
   line-height: 1.2;
@@ -411,7 +417,7 @@
 /* ---------- Tablet ---------- */
 @media (max-width: 1000px) {
   .login-screen {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     max-width: 560px;
     margin: 0 auto;
   }
@@ -463,9 +469,20 @@
     padding: 18px 18px 16px;
   }
   .login-greeting {
-    margin-top: 34px;
+    margin-top: 14px;
   }
   .role-card-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Very narrow screens: only the current step shows its label. */
+@media (max-width: 340px) {
+  .login-steps li:not(.active) {
+    font-size: 0;
+    justify-content: center;
+  }
+  .login-card .login-tools {
+    justify-content: center;
   }
 }

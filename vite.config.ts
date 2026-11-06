@@ -14,7 +14,13 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       injectRegister: "auto",
-      includeAssets: ["favicon.png", "apple-touch-icon.png"],
+      includeAssets: [
+        "favicon.ico",
+        "favicon.svg",
+        "favicon-16x16.png",
+        "favicon-32x32.png",
+        "apple-touch-icon.png",
+      ],
       manifest: {
         name: "स्वावलंबी दीदी – लखपति अभिसरण पोर्टल",
         short_name: "लखपति दीदी",
@@ -27,8 +33,8 @@ export default defineConfig({
         theme_color: "#174e31",
         background_color: "#f6f7f3",
         icons: [
-          { src: "pwa-192x192.png", sizes: "192x192", type: "image/png" },
-          { src: "pwa-512x512.png", sizes: "512x512", type: "image/png" },
+          { src: "android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+          { src: "android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
           { src: "maskable-512x512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
         ],
       },
@@ -63,6 +69,6 @@ export default defineConfig({
     proxy: { "/api": apiTarget },
   },
   resolve: {
-    alias: { "@": path.resolve(__dirname, "./src") },
+    alias: { "@": path.resolve(import.meta.dirname, "./src") },
   },
 })
