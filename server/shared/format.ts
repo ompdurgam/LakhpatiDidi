@@ -1,6 +1,8 @@
 // Presentation helpers shared by the API modules (Hindi dates, ₹, initials).
 import crypto from "node:crypto"
 
+import { requestLang } from "./i18n.ts"
+
 const monthsHi = [
   "जन.",
   "फ़र.",
@@ -16,14 +18,36 @@ const monthsHi = [
   "दिस.",
 ]
 
-/** "2026-11-05" or "2026-11-05 14:32:00" → "05 नव. 2026" (optionally with time). */
-export function dateHi(value: string | null | undefined, withTime = false) {
+const monthsEn = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+]
+
+function formatWith(months: string[], value: string | null | undefined, withTime: boolean) {
   if (!value) return ""
   const [date, time = ""] = value.split(" ")
   const [y, m, d] = date.split("-")
-  const base = `${d} ${monthsHi[Number(m) - 1]} ${y}`
+  const base = `${d} ${months[Number(m) - 1]} ${y}`
   return withTime && time ? `${base} ${time.slice(0, 5)}` : base
 }
+
+/** "2026-11-05" or "2026-11-05 14:32:00" → "05 नव. 2026" (optionally with time). */
+export const dateHi = (value: string | null | undefined, withTime = false) =>
+  formatWith(monthsHi, value, withTime)
+
+/** Like dateHi, but "05 Nov 2026" when the request is in English. */
+export const formatDate = (value: string | null | undefined, withTime = false) =>
+  formatWith(requestLang() === "en" ? monthsEn : monthsHi, value, withTime)
 
 export function inr(amount: number | null | undefined) {
   return `₹${Math.round(Number(amount ?? 0)).toLocaleString("en-IN")}`

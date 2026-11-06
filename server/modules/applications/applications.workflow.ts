@@ -6,6 +6,7 @@ import { z } from "zod"
 import type { Db } from "../../db/pool.ts"
 import { badRequest, conflict } from "../../shared/errors.ts"
 import { inr } from "../../shared/format.ts"
+import { msg } from "../../shared/i18n.ts"
 import type { Row } from "../../shared/types.ts"
 import { isoDate, text } from "../../shared/validation.ts"
 import {
@@ -57,9 +58,9 @@ async function record(
 }
 
 const amount = z
-  .union([z.string(), z.number()], { error: "स्वीकृत राशि दर्ज करें" })
+  .union([z.string(), z.number()], { error: () => msg("स्वीकृत राशि दर्ज करें") })
   .transform((v) => Number(String(v).replace(/[^\d.]/g, "")))
-  .pipe(z.number().positive("स्वीकृत राशि दर्ज करें"))
+  .pipe(z.number().positive({ error: () => msg("स्वीकृत राशि दर्ज करें") }))
 
 const coordinate = z.coerce.number().finite().nullable().catch(null)
 
@@ -69,7 +70,7 @@ export const actions = {
     from: OPEN_STATUSES,
     run: async (_input, ctx) => {
       await record(ctx, "accepted", "विभाग द्वारा स्वीकार", "under_review")
-      return "आवेदन स्वीकार किया गया"
+      return msg("आवेदन स्वीकार किया गया")
     },
   }),
 
@@ -79,7 +80,7 @@ export const actions = {
     run: async ({ message }, ctx) => {
       await record(ctx, "info_requested", message, "info_requested")
       await insertComment(ctx.application.id, ctx.actorId, message, ctx.db)
-      return "जानकारी अनुरोध CRP को भेजा गया"
+      return msg("जानकारी अनुरोध CRP को भेजा गया")
     },
   }),
 
@@ -89,13 +90,15 @@ export const actions = {
     run: async ({ orderNo, date, amount }, ctx) => {
       const cost = Number(ctx.application.project_cost)
       if (amount > cost)
-        throw badRequest(`स्वीकृत राशि परियोजना लागत ${inr(cost)} से अधिक नहीं हो सकती`)
+        throw badRequest(
+          msg("स्वीकृत राशि परियोजना लागत {{cost}} से अधिक नहीं हो सकती", { cost: inr(cost) }),
+        )
       await record(ctx, "sanctioned", `आदेश सं. ${orderNo} • ${inr(amount)}`, "sanctioned", {
         sanction_order_no: orderNo,
         sanction_date: date,
         sanctioned_amount: amount,
       })
-      return "स्वीकृति आदेश दर्ज हुआ"
+      return msg("स्वीकृति आदेश दर्ज हुआ")
     },
   }),
 
@@ -106,7 +109,7 @@ export const actions = {
       await record(ctx, "rejected", note ? `${reason} — ${note}` : reason, "rejected", {
         rejection_reason: reason,
       })
-      return "आवेदन अस्वीकृत किया गया"
+      return msg("आवेदन अस्वीकृत किया गया")
     },
   }),
 
@@ -126,7 +129,7 @@ export const actions = {
         geo_lat: lat,
         geo_lng: lng,
       })
-      return "डिलीवरी दर्ज हुई"
+      return msg("डिलीवरी दर्ज हुई")
     },
   }),
 
@@ -134,7 +137,7 @@ export const actions = {
     schema: none,
     run: async (_input, ctx) => {
       await record(ctx, "follow_up", "विभाग अधिकारी को फॉलो-अप भेजा गया")
-      return "विभाग अधिकारी को फॉलो-अप भेजा गया"
+      return msg("विभाग अधिकारी को फॉलो-अप भेजा गया")
     },
   }),
 
@@ -146,7 +149,7 @@ export const actions = {
       await record(ctx, "escalated", `${escalationHi[level]} स्तर पर एस्केलेट`, undefined, {
         escalation_level: level,
       })
-      return `आवेदन ${escalationHi[level]} स्तर पर एस्केलेट किया गया`
+      return msg("आवेदन {{level}} स्तर पर एस्केलेट किया गया", { level: msg(escalationHi[level]) })
     },
   }),
 }
@@ -160,6 +163,10 @@ export const isActionName = (value: unknown): value is ActionName =>
 export function assertAllowed(name: ActionName, status: ApplicationStatus) {
   const action: Action<z.ZodType> = actions[name]
   if (action.from && !action.from.includes(status)) {
-    throw conflict(action.fromError ?? `आवेदन पहले से "${statusHi[status]}" है`)
+    throw conflict(
+      action.fromError
+        ? msg(action.fromError)
+        : msg('आवेदन पहले से "{{status}}" है', { status: msg(statusHi[status]) }),
+    )
   }
 }

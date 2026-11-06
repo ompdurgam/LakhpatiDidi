@@ -3,7 +3,8 @@ import { z } from "zod"
 
 import { query } from "../../db/pool.ts"
 import { badRequest } from "../../shared/errors.ts"
-import { dateHi, initials } from "../../shared/format.ts"
+import { formatDate, initials } from "../../shared/format.ts"
+import { localized, msg } from "../../shared/i18n.ts"
 import type { Row } from "../../shared/types.ts"
 import { codeList, parse } from "../../shared/validation.ts"
 import { audit } from "../audit/audit.service.ts"
@@ -11,9 +12,9 @@ import { categoryHi, lifecycleHi, type LifecycleStatus } from "./households.labe
 
 const toHouseholdRow = (r: Row) => ({
   id: r.hh_code,
-  name: r.didi_name,
+  name: localized(r, "didi_name"),
   initials: initials(r.didi_name_en, r.didi_name),
-  village: r.village_name,
+  village: localized(r, "village_name"),
   shg: r.shg_name ?? "—",
   vo: r.vo_name ?? "—",
   clf: r.clf_name ?? "—",
@@ -21,9 +22,9 @@ const toHouseholdRow = (r: Row) => ({
   sources: Number(r.active_income_sources),
   applications: Number(r.open_applications),
   gaps: Number(r.open_gaps),
-  updated: dateHi(r.updated_at),
-  status: lifecycleHi[r.lifecycle_status as LifecycleStatus],
-  category: categoryHi[r.social_category],
+  updated: formatDate(r.updated_at),
+  status: msg(lifecycleHi[r.lifecycle_status as LifecycleStatus]),
+  category: msg(categoryHi[r.social_category]),
   special: r.special_status === "NONE" ? "—" : r.special_status,
   pld: Boolean(r.is_pld),
 })
@@ -37,7 +38,7 @@ const bulkActions = {
 const bulkBody = z.object({
   codes: codeList(1000),
   action: z.enum(Object.keys(bulkActions) as [keyof typeof bulkActions], {
-    error: "अज्ञात कार्यवाही",
+    error: () => msg("अज्ञात कार्यवाही"),
   }),
 })
 
@@ -50,7 +51,7 @@ householdsRouter.get("/", async (_req, res) => {
 
 householdsRouter.post("/bulk", async (req, res) => {
   const { codes, action } = parse(bulkBody, req.body)
-  if (!codes.length) throw badRequest("कोई परिवार नहीं चुना गया")
+  if (!codes.length) throw badRequest(msg("कोई परिवार नहीं चुना गया"))
   const label = bulkActions[action]
   const sample = `${codes.slice(0, 5).join(", ")}${codes.length > 5 ? "…" : ""}`
   await audit(req, {
@@ -58,5 +59,5 @@ householdsRouter.post("/bulk", async (req, res) => {
     details: `${codes.length} परिवार: ${label} (${sample})`,
     entityType: "household",
   })
-  res.json({ message: `${codes.length} परिवार: ${label}` })
+  res.json({ message: msg("{{n}} परिवार: {{action}}", { n: codes.length, action: msg(label) }) })
 })

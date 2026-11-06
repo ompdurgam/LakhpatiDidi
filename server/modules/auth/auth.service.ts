@@ -4,6 +4,7 @@ import { config } from "../../config.ts"
 import { exec, one, transaction } from "../../db/pool.ts"
 import { HttpError } from "../../shared/errors.ts"
 import { initials, maskMobile, sha256 } from "../../shared/format.ts"
+import { msg } from "../../shared/i18n.ts"
 import type { Row } from "../../shared/types.ts"
 
 const otpHash = (mobile: string, otp: string) => sha256(`${mobile}:${otp}`)
@@ -29,15 +30,16 @@ export const toPublicUser = (user: UserFields | Row): PublicUser => ({
 /** Creates an OTP for a registered, active mobile. Returns the code only in dev mode. */
 export async function requestOtp(mobile: string) {
   const user = await one<Row>("SELECT id, status FROM master_users WHERE mobile = ?", [mobile])
-  if (!user) throw new HttpError(404, "यह मोबाइल नंबर पंजीकृत नहीं है")
-  if (user.status === "locked") throw new HttpError(403, "यह खाता लॉक है। एडमिन से संपर्क करें।")
+  if (!user) throw new HttpError(404, msg("यह मोबाइल नंबर पंजीकृत नहीं है"))
+  if (user.status === "locked")
+    throw new HttpError(403, msg("यह खाता लॉक है। एडमिन से संपर्क करें।"))
 
   const recent = await one<Row>(
     "SELECT COUNT(*) AS n FROM tbl_otp_requests WHERE mobile = ? AND created_at > NOW() - INTERVAL 15 MINUTE",
     [mobile],
   )
   if ((recent?.n ?? 0) >= config.otpRequestsPer15Min)
-    throw new HttpError(429, "बहुत अधिक प्रयास। 15 मिनट बाद पुनः प्रयास करें।")
+    throw new HttpError(429, msg("बहुत अधिक प्रयास। 15 मिनट बाद पुनः प्रयास करें।"))
 
   const otp = String(crypto.randomInt(100000, 1000000))
   await exec(
@@ -60,9 +62,9 @@ export async function verifyOtp(mobile: string, otp: string) {
      ORDER BY id DESC LIMIT 1`,
     [mobile],
   )
-  if (!request) throw new HttpError(400, "OTP की समय-सीमा समाप्त। नया OTP भेजें।")
+  if (!request) throw new HttpError(400, msg("OTP की समय-सीमा समाप्त। नया OTP भेजें।"))
   if (request.attempts >= config.otpMaxAttempts)
-    throw new HttpError(429, "बहुत अधिक गलत प्रयास। नया OTP भेजें।")
+    throw new HttpError(429, msg("बहुत अधिक गलत प्रयास। नया OTP भेजें।"))
 
   const matches = crypto.timingSafeEqual(
     Buffer.from(request.otp_hash, "hex"),
@@ -71,14 +73,14 @@ export async function verifyOtp(mobile: string, otp: string) {
   if (!matches) {
     await exec("UPDATE tbl_otp_requests SET attempts = attempts + 1 WHERE id = ?", [request.id])
     const left = config.otpMaxAttempts - request.attempts - 1
-    throw new HttpError(401, `गलत OTP। ${left} प्रयास शेष।`)
+    throw new HttpError(401, msg("गलत OTP। {{left}} प्रयास शेष।", { left }))
   }
 
   const user = await one<Row>(
     "SELECT id, name, role, designation, mobile, status FROM master_users WHERE mobile = ?",
     [mobile],
   )
-  if (!user || user.status !== "active") throw new HttpError(403, "यह खाता लॉक है।")
+  if (!user || user.status !== "active") throw new HttpError(403, msg("यह खाता लॉक है।"))
 
   const token = crypto.randomBytes(32).toString("hex")
   await transaction(async (conn) => {

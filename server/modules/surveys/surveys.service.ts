@@ -3,6 +3,7 @@ import type { PoolConnection } from "mysql2/promise"
 import { exec, one, transaction } from "../../db/pool.ts"
 import { badRequest } from "../../shared/errors.ts"
 import { financialYear } from "../../shared/format.ts"
+import { msg } from "../../shared/i18n.ts"
 import type { Row } from "../../shared/types.ts"
 import { parse } from "../../shared/validation.ts"
 import { categoryCode, lifecycleFor } from "../households/households.labels.ts"
@@ -43,7 +44,8 @@ export async function submitSurvey(body: unknown, surveyorId: number) {
       [villageName],
       db,
     )
-    if (!village) throw badRequest(`गाँव "${villageName}" भूगोल मास्टर में नहीं है`)
+    if (!village)
+      throw badRequest(msg('गाँव "{{village}}" भूगोल मास्टर में नहीं है', { village: villageName }))
     const shg = await one<Row>(
       "SELECT id FROM master_shgs WHERE name = ?",
       [fields[FIELD.shg] ?? null],

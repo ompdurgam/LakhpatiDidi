@@ -1,6 +1,7 @@
 import { transaction } from "../../db/pool.ts"
 import { badRequest, notFound } from "../../shared/errors.ts"
 import { today } from "../../shared/format.ts"
+import { msg } from "../../shared/i18n.ts"
 import { parse } from "../../shared/validation.ts"
 import { type ApplicationStatus, OPEN_STATUSES } from "./applications.labels.ts"
 import { toApplicationDetail, toApplicationRow } from "./applications.mapper.ts"
@@ -13,7 +14,7 @@ export async function listApplications() {
 
 export async function getApplicationDetail(code: string) {
   const listRow = await repo.findListRow(code)
-  if (!listRow) throw notFound("आवेदन नहीं मिला")
+  if (!listRow) throw notFound(msg("आवेदन नहीं मिला"))
   const application = await repo.findApplication(code)
   const [officer, events, documents, comments] = await Promise.all([
     repo.findOfficer(application.assigned_officer_id),
@@ -27,7 +28,7 @@ export async function getApplicationDetail(code: string) {
 /** Runs one workflow action inside a transaction; returns the success message. */
 export async function performAction(code: string, body: Record<string, unknown>, actorId: number) {
   const name = body.action
-  if (!isActionName(name)) throw badRequest("अज्ञात कार्यवाही")
+  if (!isActionName(name)) throw badRequest(msg("अज्ञात कार्यवाही"))
   return transaction(async (db) => {
     const application = await repo.findApplication(code, db, true)
     assertAllowed(name, application.status as ApplicationStatus)
@@ -44,7 +45,7 @@ export async function performAction(code: string, body: Record<string, unknown>,
 
 /** Sanctions every still-open application in `codes` at its subsidy amount. */
 export async function bulkSanction(codes: string[], actorId: number) {
-  if (!codes.length) throw badRequest("कोई आवेदन नहीं चुना गया")
+  if (!codes.length) throw badRequest(msg("कोई आवेदन नहीं चुना गया"))
   const sanctioned = await transaction(async (db) => {
     const rows = await repo.lockOpenApplications(codes, OPEN_STATUSES, db)
     for (const a of rows) {

@@ -2,6 +2,7 @@ import { Router } from "express"
 import { z } from "zod"
 
 import { currentUser } from "../../middleware/auth.ts"
+import { msg } from "../../shared/i18n.ts"
 import { mobile, parse, text } from "../../shared/validation.ts"
 import { audit } from "../audit/audit.service.ts"
 import { createUser, listUsers, resetUserOtp, setUserStatus } from "./users.service.ts"
@@ -11,12 +12,12 @@ const ROLES = ["field", "block", "department", "district", "state", "admin"] as 
 const createBody = z.object({
   name: text("नाम", 120),
   mobile,
-  role: z.enum(ROLES, { error: "मान्य भूमिका चुनें" }),
+  role: z.enum(ROLES, { error: () => msg("मान्य भूमिका चुनें") }),
   designation: z.string().trim().max(120).optional(),
   block: z.string().trim().optional(),
 })
 const statusBody = z.object({
-  status: z.enum(["active", "locked"], { error: "मान्य स्थिति चुनें" }),
+  status: z.enum(["active", "locked"], { error: () => msg("मान्य स्थिति चुनें") }),
 })
 const idParam = z.coerce.number().int().positive()
 
@@ -35,7 +36,7 @@ usersRouter.post("/", async (req, res) => {
     entityType: "user",
     entityId: input.mobile,
   })
-  res.status(201).json({ message: `${name} जोड़ा गया` })
+  res.status(201).json({ message: msg("{{name}} जोड़ा गया", { name }) })
 })
 
 usersRouter.patch("/:id", async (req, res) => {

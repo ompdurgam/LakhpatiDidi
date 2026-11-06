@@ -15,6 +15,7 @@ export type SessionUser = {
   mobile: string
 }
 
+/** Role names (Hindi where the UI shows Hindi; wrap in msg() for responses). */
 export const roleLabels: Record<Role, string> = {
   field: "CRP / Surveyor",
   block: "Block Manager",

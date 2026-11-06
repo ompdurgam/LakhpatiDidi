@@ -5,12 +5,14 @@ import path from "node:path"
 import { config } from "./config.ts"
 import { errorHandler } from "./middleware/errorHandler.ts"
 import { apiRouter } from "./routes.ts"
+import { languageMiddleware } from "./shared/i18n.ts"
 
 /** Builds the Express app (no listening — see index.ts). */
 export function createApp() {
   const app = express()
   app.set("trust proxy", "loopback")
   app.use(express.json({ limit: config.jsonLimit }))
+  app.use(languageMiddleware)
   app.use("/api", apiRouter())
 
   // Production: serve the built PWA from the same origin.

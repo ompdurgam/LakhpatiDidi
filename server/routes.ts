@@ -11,6 +11,7 @@ import { metaRouter } from "./modules/meta/meta.routes.ts"
 import { surveysRouter } from "./modules/surveys/surveys.routes.ts"
 import { usersRouter } from "./modules/users/users.routes.ts"
 import { HttpError } from "./shared/errors.ts"
+import { msg } from "./shared/i18n.ts"
 
 /** All /api routes. Each feature module owns its router. */
 export function apiRouter() {
@@ -34,6 +35,6 @@ export function apiRouter() {
   api.use("/survey-sections", surveySectionsRouter)
   api.use("/audit-logs", auditLogsRouter)
 
-  api.use((_req, _res, next) => next(new HttpError(404, "API endpoint नहीं मिला")))
+  api.use((_req, _res, next) => next(new HttpError(404, msg("API endpoint नहीं मिला"))))
   return api
 }

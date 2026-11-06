@@ -1,7 +1,8 @@
 import { Router } from "express"
 
 import { query } from "../../db/pool.ts"
-import { dateHi } from "../../shared/format.ts"
+import { formatDate } from "../../shared/format.ts"
+import { msg } from "../../shared/i18n.ts"
 import type { Row } from "../../shared/types.ts"
 
 const LIMIT = 200
@@ -18,8 +19,8 @@ auditLogsRouter.get("/", async (_req, res) => {
   res.json(
     rows.map((r) => ({
       id: r.id,
-      at: dateHi(r.created_at, true),
-      user: r.user,
+      at: formatDate(r.created_at, true),
+      user: r.user === "सिस्टम" ? msg("सिस्टम") : r.user,
       action: r.action,
       details: r.details,
       ip: r.ip_address ?? "—",

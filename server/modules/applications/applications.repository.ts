@@ -1,6 +1,7 @@
 // SQL for applications and their events, documents and comments.
 import { type Db, exec, one, query } from "../../db/pool.ts"
 import { notFound } from "../../shared/errors.ts"
+import { msg } from "../../shared/i18n.ts"
 import type { Row } from "../../shared/types.ts"
 
 export const listApplications = () =>
@@ -16,7 +17,7 @@ export async function findApplication(code: string, db?: Db, forUpdate = false) 
     [code],
     db,
   )
-  if (!row) throw notFound("आवेदन नहीं मिला")
+  if (!row) throw notFound(msg("आवेदन नहीं मिला"))
   return row
 }
 

@@ -1,7 +1,7 @@
 import { Router } from "express"
 
 import { currentUser } from "../../middleware/auth.ts"
-import { dateHi, nowIst } from "../../shared/format.ts"
+import { formatDate, nowIst } from "../../shared/format.ts"
 import { audit } from "../audit/audit.service.ts"
 import { submitSurvey } from "./surveys.service.ts"
 
@@ -15,5 +15,5 @@ surveysRouter.post("/", async (req, res) => {
     entityType: "household",
     entityId: result.hhCode,
   })
-  res.status(201).json({ ...result, submittedAt: dateHi(nowIst(), true) })
+  res.status(201).json({ ...result, submittedAt: formatDate(nowIst(), true) })
 })
