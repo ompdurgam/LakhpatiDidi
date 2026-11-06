@@ -1,5 +1,5 @@
 import { QueryClientProvider } from "@tanstack/react-query"
-import { render, screen, waitFor } from "@testing-library/react"
+import { cleanup, render, screen, waitFor } from "@testing-library/react"
 import { createMemoryRouter, RouterProvider } from "react-router"
 import { beforeEach, describe, expect, it } from "vitest"
 
@@ -58,6 +58,8 @@ const screens: [Role, string, RegExp][] = [
 describe("routes", () => {
   beforeEach(() => {
     stubFetch()
+    // Every test starts signed out; renderAt() signs in as the role it needs.
+    useSession.setState({ token: null, user: null })
   })
 
   it.each(screens)("%s %s renders", async (role, path, text) => {
@@ -69,12 +71,15 @@ describe("routes", () => {
     expect(screen.queryByText("कुछ गलत हो गया")).not.toBeInTheDocument()
   })
 
-  it("every sidebar link resolves to a screen", async () => {
+  // Renders every menu item of every role (~45 apps), so it needs more than the
+  // 5 s default; a timeout would leave the loop running into the next tests.
+  it("every sidebar link resolves to a screen", { timeout: 60_000 }, async () => {
     for (const [role, items] of Object.entries(roleNav)) {
       for (const item of items) {
         const router = renderAt(item.path, role as Role)
         await waitFor(() => expect(router.state.location.pathname).toBe(item.path))
         expect(screen.queryByText("यह पेज नहीं मिला")).not.toBeInTheDocument()
+        cleanup()
       }
     }
   })

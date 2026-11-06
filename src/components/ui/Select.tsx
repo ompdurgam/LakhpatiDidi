@@ -24,8 +24,8 @@ export function SelectControl({
           if (draft) draft[label] = event.target.value
         }}
       >
-        {options.map((option) => (
-          <option key={option} value={option}>
+        {options.map((option, index) => (
+          <option key={`${index}-${option}`} value={option}>
             {tr(option)}
           </option>
         ))}
@@ -50,8 +50,8 @@ export function FilterSelect({
     <label className="register-filter">
       <span>{tr(label)}</span>
       <select value={value} onChange={(event) => onChange?.(event.target.value)}>
-        {options.map((option) => (
-          <option key={option} value={option}>
+        {options.map((option, index) => (
+          <option key={`${index}-${option}`} value={option}>
             {tr(option)}
           </option>
         ))}

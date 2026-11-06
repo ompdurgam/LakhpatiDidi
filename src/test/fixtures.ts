@@ -39,11 +39,97 @@ export const householdFixture: HouseholdRow = {
 
 export const metaFixture: Meta = {
   departments: [{ code: "FISH", name: "मत्स्य विभाग" }],
-  blocks: [{ code: "JGD", name: "जगदलपुर" }],
+  blocks: [{ code: "JGD", name: "जगदलपुर", active: true }],
   villages: [{ code: "V-BADANJI", name: "बड़ांजी" }],
   clfs: ["माँ दंतेश्वरी CLF"],
   vos: ["शक्ति VO"],
   schemes: [{ code: "PMMSY_POND", name: "PMMSY – तालाब", department: "मत्स्य विभाग" }],
+}
+
+export const geoAreaFixture = {
+  path: [
+    { level: "state", code: "CG", name: "छत्तीसगढ़" },
+    { level: "district", code: "374", name: "बस्तर" },
+  ],
+  childLevel: "block",
+  children: [
+    {
+      code: "3595",
+      name: "जगदलपुर",
+      bodyType: null,
+      childCount: 73,
+      households: 17,
+      lakhpati: 2,
+      hasBoundary: false,
+    },
+    {
+      code: "3591",
+      name: "बकावंड",
+      bodyType: null,
+      childCount: 93,
+      households: 0,
+      lakhpati: 0,
+      hasBoundary: false,
+    },
+  ],
+  boundaries: { type: "FeatureCollection", features: [] },
+  outline: null,
+  sources: [],
+}
+
+export const geoVillageFixture = {
+  path: [...geoAreaFixture.path, { level: "village", code: "449068", name: "धुरगुड़ा" }],
+  households: 3,
+  lakhpati: 0,
+  pld: 3,
+  avgIncome: 70667,
+  shgs: 2,
+  boundary: null,
+}
+
+export const didiFixture = {
+  profile: {
+    code: "HH-BST-JGD-000123",
+    name: "सुनीता कश्यप",
+    initials: "SK",
+    guardian: "राम कश्यप",
+    age: 34,
+    mobile: "9826100123",
+    category: "ST",
+    special: "FRA",
+    pld: true,
+    village: "बड़ांजी",
+    panchayat: "बड़ांजी GP",
+    block: "जगदलपुर",
+    district: "बस्तर",
+    shg: "स्वावलंबी SHG",
+    vo: "शक्ति VO",
+    clf: "माँ दंतेश्वरी CLF",
+  },
+  meter: {
+    income: 78500,
+    target: 100000,
+    threshold: 80000,
+    remaining: 21500,
+    percent: 79,
+    status: "in_progress",
+    statusLabel: "प्रगति पर",
+    activeSources: 3,
+  },
+  incomeSources: [
+    { name: "फसल/खेती", months: ["Jun", "Jul", "Aug"], gross: 42000, cost: 10000, net: 32000 },
+    { name: "वन उपज", months: ["Mar", "Apr"], gross: 24000, cost: 5500, net: 18500 },
+  ],
+  gaps: [
+    {
+      code: "PMJJBY",
+      name: "PMMSY – तालाब",
+      department: "मत्स्य विभाग",
+      open: true,
+      identifiedOn: "2026-10-18",
+    },
+  ],
+  applications: [applicationFixture],
 }
 
 /** Minimal fake of the REST API for component and route tests. */
@@ -54,6 +140,9 @@ export function fakeApi(url: string): unknown {
   if (path === "/meta") return metaFixture
   if (path === "/survey-sections") return [{ code: "A", name: "पहचान", enabled: true }]
   if (path.startsWith("/applications/")) return null
+  if (path === "/didi/me") return didiFixture
+  if (path.startsWith("/geo/areas/")) return geoAreaFixture
+  if (path.startsWith("/geo/villages/")) return geoVillageFixture
   return []
 }
 
@@ -69,6 +158,17 @@ const englishData: Record<string, string> = {
   "18 अक्टू. 2026": "18 Oct 2026",
   "05 नव. 2026": "05 Nov 2026",
   पहचान: "Identity",
+  "राम कश्यप": "Ram Kashyap",
+  "बड़ांजी GP": "Badanji GP",
+  "स्वावलंबी SHG": "Swavalambi SHG",
+  "शक्ति VO": "Shakti VO",
+  "माँ दंतेश्वरी CLF": "Maa Danteshwari CLF",
+  "फसल/खेती": "Crops/Farming",
+  "वन उपज": "Forest produce",
+  छत्तीसगढ़: "Chhattisgarh",
+  बस्तर: "Bastar",
+  बकावंड: "Bakawand",
+  धुरगुड़ा: "Dhurguda",
 }
 
 const inEnglish = (value: unknown): unknown =>

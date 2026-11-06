@@ -30,6 +30,7 @@ export const roleNav: Record<Role, NavItem[]> = {
     { icon: "building", label: "block.blcc", path: "/block/blcc" },
     { icon: "scheme", label: "block.schemes", path: "/block/schemes" },
     { icon: "chart", label: "block.reports", path: "/block/reports" },
+    { icon: "map", label: "block.map", path: "/block/map" },
   ],
   field: [
     { icon: "home", label: "field.home", path: "/field", end: true },
@@ -67,7 +68,8 @@ export const roleNav: Record<Role, NavItem[]> = {
   ],
   district: [
     { icon: "home", label: "district.overview", path: "/district", end: true },
-    { icon: "map", label: "district.blocks", path: "/district/blocks" },
+    { icon: "map", label: "district.map", path: "/district/map" },
+    { icon: "building", label: "district.blocks", path: "/district/blocks" },
     { icon: "building", label: "district.departments", path: "/district/departments" },
     { icon: "check", label: "district.lakhpatiGram", path: "/district/lakhpati-gram" },
     { icon: "alert", label: "district.escalations", path: "/district/escalations" },
@@ -75,7 +77,8 @@ export const roleNav: Record<Role, NavItem[]> = {
   ],
   state: [
     { icon: "home", label: "state.overview", path: "/state", end: true },
-    { icon: "map", label: "state.districts", path: "/state/districts" },
+    { icon: "map", label: "state.map", path: "/state/map" },
+    { icon: "building", label: "state.districts", path: "/state/districts" },
     { icon: "building", label: "state.departments", path: "/state/departments" },
     { icon: "check", label: "state.certification", path: "/state/certification" },
     { icon: "alert", label: "state.escalations", path: "/state/escalations" },

@@ -6,6 +6,7 @@ import { auditLogsRouter } from "./modules/admin/auditLogs.routes.ts"
 import { surveySectionsRouter } from "./modules/admin/surveySections.routes.ts"
 import { applicationsRouter } from "./modules/applications/applications.routes.ts"
 import { authRouter, publicAuthRouter } from "./modules/auth/auth.routes.ts"
+import { geoRouter } from "./modules/geo/geo.routes.ts"
 import { householdsRouter } from "./modules/households/households.routes.ts"
 import { metaRouter } from "./modules/meta/meta.routes.ts"
 import { surveysRouter } from "./modules/surveys/surveys.routes.ts"
@@ -28,6 +29,7 @@ export function apiRouter() {
   api.use(requireAuth)
   api.use("/auth", authRouter)
   api.use("/meta", metaRouter)
+  api.use("/geo", geoRouter)
   api.use("/applications", applicationsRouter)
   api.use("/households", householdsRouter)
   api.use("/surveys", surveysRouter)

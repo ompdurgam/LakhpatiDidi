@@ -65,7 +65,8 @@ export type HouseholdRow = {
 
 export type Meta = {
   departments: { code: string; name: string }[]
-  blocks: { code: string; name: string }[]
+  /** `active`: has surveyed households or applications (used by list filters). */
+  blocks: { code: string; name: string; active: boolean }[]
   villages: { code: string; name: string }[]
   clfs: string[]
   vos: string[]

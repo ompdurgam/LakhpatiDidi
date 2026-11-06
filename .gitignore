@@ -6,3 +6,6 @@ coverage
 playwright-report
 test-results
 *.log
+# Large generated boundary files (see database/data/lgd/README.md)
+database/data/boundaries/*-panchayats.geojson
+database/data/boundaries/*-villages.geojson

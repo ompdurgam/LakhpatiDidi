@@ -15,6 +15,7 @@ const field = () => import("@/features/survey/pages")
 const dept = () => import("@/features/department/pages")
 const monitoring = () => import("@/features/monitoring/pages")
 const admin = () => import("@/features/admin/pages")
+const geo = () => import("@/features/geo/pages")
 
 const page = <M,>(load: () => Promise<M>, pick: (m: M) => ComponentType) => ({
   lazy: async () => ({ Component: pick(await load()) }),
@@ -64,6 +65,7 @@ export const routes: RouteObject[] = [
         { path: "block/blcc", ...page(block, (m) => m.BlockBlccPage) },
         { path: "block/schemes", ...page(block, (m) => m.BlockSchemesPage) },
         { path: "block/reports", ...page(block, (m) => m.BlockReportsPage) },
+        { path: "block/map/:level?/:code?", ...page(geo, (m) => m.BlockMapPage) },
       ]),
       guarded("field", [
         { path: "field", ...fieldPage },
@@ -91,6 +93,7 @@ export const routes: RouteObject[] = [
         { path: "district/lakhpati-gram", ...districtPage },
         { path: "district/escalations", ...districtPage },
         { path: "district/reports", ...districtPage },
+        { path: "district/map/:level?/:code?", ...page(geo, (m) => m.DistrictMapPage) },
       ]),
       guarded("state", [
         { path: "state", ...statePage },
@@ -99,6 +102,7 @@ export const routes: RouteObject[] = [
         { path: "state/certification", ...statePage },
         { path: "state/escalations", ...statePage },
         { path: "state/reports", ...statePage },
+        { path: "state/map/:level?/:code?", ...page(geo, (m) => m.StateMapPage) },
       ]),
       guarded("admin", [
         { path: "admin", element: <Navigate to="/admin/schemes" replace /> },

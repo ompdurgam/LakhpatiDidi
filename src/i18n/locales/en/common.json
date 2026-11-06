@@ -40,7 +40,8 @@
     "department": "Department officer",
     "district": "District / Collector",
     "state": "State / SMMU",
-    "admin": "Admin"
+    "admin": "Admin",
+    "didi": "Didi (PLD)"
   },
   "pageTitle": {
     "blockOverview": "Block Overview",

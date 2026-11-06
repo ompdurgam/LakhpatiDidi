@@ -160,11 +160,13 @@ export function DepartmentWorkspace({
             <label>
               <span>{tr("ब्लॉक")}</span>
               <select value={blockFilter} onChange={(event) => setBlockFilter(event.target.value)}>
-                {["सभी", ...(meta?.blocks.map((b) => b.name) ?? [])].map((option) => (
-                  <option key={option} value={option}>
-                    {tr(option)}
-                  </option>
-                ))}
+                {["सभी", ...(meta?.blocks.filter((b) => b.active).map((b) => b.name) ?? [])].map(
+                  (option, index) => (
+                    <option key={`${index}-${option}`} value={option}>
+                      {tr(option)}
+                    </option>
+                  ),
+                )}
               </select>
             </label>
           </div>

@@ -5,7 +5,8 @@
     "applications": "आवेदन",
     "blcc": "BLCC कार्यवाही",
     "schemes": "योजनाएँ",
-    "reports": "रिपोर्ट"
+    "reports": "रिपोर्ट",
+    "map": "मानचित्र"
   },
   "field": {
     "home": "होम",
@@ -29,7 +30,8 @@
     "departments": "विभाग",
     "lakhpatiGram": "लखपति ग्राम",
     "escalations": "एस्केलेशन",
-    "reports": "रिपोर्ट"
+    "reports": "रिपोर्ट",
+    "map": "मानचित्र"
   },
   "state": {
     "overview": "अवलोकन",
@@ -37,12 +39,17 @@
     "departments": "विभाग",
     "certification": "लखपति ग्राम",
     "escalations": "एस्केलेशन",
-    "reports": "रिपोर्ट"
+    "reports": "रिपोर्ट",
+    "map": "मानचित्र"
   },
   "admin": {
     "schemes": "योजना मास्टर",
     "users": "यूज़र",
     "geography": "भूगोल",
     "survey": "फॉर्म सेटिंग"
+  },
+  "didi": {
+    "profile": "मेरी प्रोफ़ाइल",
+    "applications": "मेरे आवेदन"
   }
 }

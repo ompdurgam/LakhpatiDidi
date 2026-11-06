@@ -5,7 +5,8 @@
     "applications": "Applications",
     "blcc": "BLCC Actions",
     "schemes": "Schemes",
-    "reports": "Reports"
+    "reports": "Reports",
+    "map": "Map"
   },
   "field": {
     "home": "Home",
@@ -29,7 +30,8 @@
     "departments": "Departments",
     "lakhpatiGram": "Lakhpati Gram",
     "escalations": "Escalations",
-    "reports": "Reports"
+    "reports": "Reports",
+    "map": "Map"
   },
   "state": {
     "overview": "Overview",
@@ -37,12 +39,17 @@
     "departments": "Departments",
     "certification": "Lakhpati Gram",
     "escalations": "Escalations",
-    "reports": "Reports"
+    "reports": "Reports",
+    "map": "Map"
   },
   "admin": {
     "schemes": "Scheme master",
     "users": "Users",
     "geography": "Geography",
     "survey": "Form settings"
+  },
+  "didi": {
+    "profile": "My profile",
+    "applications": "My applications"
   }
 }

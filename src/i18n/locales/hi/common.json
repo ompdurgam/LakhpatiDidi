@@ -40,7 +40,8 @@
     "department": "विभाग अधिकारी",
     "district": "जिला / कलेक्टर",
     "state": "राज्य / SMMU",
-    "admin": "एडमिन"
+    "admin": "एडमिन",
+    "didi": "दीदी (PLD)"
   },
   "pageTitle": {
     "blockOverview": "ब्लॉक अवलोकन",
