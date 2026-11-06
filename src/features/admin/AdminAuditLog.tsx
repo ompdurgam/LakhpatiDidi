@@ -2,8 +2,10 @@ import { useState } from "react"
 
 import { useResource } from "@/api/hooks"
 import { Icon } from "@/components/ui/Icon"
+import { useTr } from "@/i18n/tr"
 
 export function AdminAuditLog() {
+  const tr = useTr()
   const {
     data: rows,
     error,
@@ -19,8 +21,10 @@ export function AdminAuditLog() {
     <section className="card admin-data-table audit-log">
       <div className="card-head">
         <div>
-          <h3>ऑडिट लॉग</h3>
-          <p>सिस्टम और कॉन्फ़िगरेशन बदलाव • {visible.length} प्रविष्टियाँ</p>
+          <h3>{tr("ऑडिट लॉग")}</h3>
+          <p>
+            {tr("सिस्टम और कॉन्फ़िगरेशन बदलाव •")} {visible.length} {tr("प्रविष्टियाँ")}
+          </p>
         </div>
         <div className="audit-tools">
           <label className="filter-button">
@@ -28,43 +32,45 @@ export function AdminAuditLog() {
             <select
               value={actionFilter}
               onChange={(e) => setActionFilter(e.target.value)}
-              aria-label="क्रिया फ़िल्टर"
+              aria-label={tr("क्रिया फ़िल्टर")}
             >
               {actions.map((a) => (
-                <option key={a}>{a}</option>
+                <option key={a} value={a}>
+                  {tr(a)}
+                </option>
               ))}
             </select>
           </label>
           <button className="filter-button" onClick={reload} disabled={loading}>
-            <Icon name="clock" size={14} /> रीफ़्रेश
+            <Icon name="clock" size={14} /> {tr("रीफ़्रेश")}
           </button>
         </div>
       </div>
-      {error && <p className="form-error">{error}</p>}
+      {error && <p className="form-error">{tr(error)}</p>}
       <div className="table-scroll">
         <table>
           <thead>
             <tr>
-              <th>समय</th>
-              <th>यूज़र</th>
-              <th>क्रिया</th>
-              <th>विवरण</th>
+              <th>{tr("समय")}</th>
+              <th>{tr("यूज़र")}</th>
+              <th>{tr("क्रिया")}</th>
+              <th>{tr("विवरण")}</th>
               <th>IP</th>
             </tr>
           </thead>
           <tbody>
             {visible.map((row) => (
               <tr key={row.id}>
-                <td>{row.at}</td>
-                <td>{row.user}</td>
-                <td>{row.action}</td>
-                <td>{row.details}</td>
-                <td>{row.ip}</td>
+                <td>{tr(row.at)}</td>
+                <td>{tr(row.user)}</td>
+                <td>{tr(row.action)}</td>
+                <td>{tr(row.details)}</td>
+                <td>{tr(row.ip)}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        {!rows && !error && <div className="empty">लोड हो रहा है…</div>}
+        {!rows && !error && <div className="empty">{tr("लोड हो रहा है…")}</div>}
       </div>
     </section>
   )

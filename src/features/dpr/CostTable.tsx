@@ -1,8 +1,10 @@
 import { useState } from "react"
 
 import { Icon } from "@/components/ui/Icon"
+import { useTr } from "@/i18n/tr"
 
 export function CostTable() {
+  const tr = useTr()
   const [rows, setRows] = useState([
     { item: "तालाब तैयारी", quantity: "1", amount: 30000 },
     { item: "फिंगरलिंग बीज", quantity: "5,000", amount: 25000 },
@@ -19,9 +21,9 @@ export function CostTable() {
     <div className="cost-finance-layout">
       <div className="cost-table editable">
         <div className="cost-row head">
-          <span>लागत मद</span>
-          <span>मात्रा</span>
-          <span>राशि</span>
+          <span>{tr("लागत मद")}</span>
+          <span>{tr("मात्रा")}</span>
+          <span>{tr("राशि")}</span>
         </div>
         {rows.map((row, index) => (
           <div className="cost-row" key={`${row.item}-${index}`}>
@@ -44,40 +46,49 @@ export function CostTable() {
           className="add-cost-item"
           onClick={() => setRows([...rows, { item: "नई लागत मद", quantity: "1", amount: 0 }])}
         >
-          <Icon name="plus" size={14} /> मद जोड़ें
+          <Icon name="plus" size={14} /> {tr("मद जोड़ें")}
         </button>
         <div className="cost-total">
-          <span>कुल परियोजना लागत</span>
+          <span>{tr("कुल परियोजना लागत")}</span>
           <strong>₹{total.toLocaleString("en-IN")}</strong>
         </div>
         <div className="finance-chips">
-          <span>सब्सिडी 60% • ₹{subsidy.toLocaleString("en-IN")}</span>
-          <span>बैंक ऋण • ₹{bank.toLocaleString("en-IN")}</span>
-          <span>स्वयं अंश • ₹{own.toLocaleString("en-IN")}</span>
+          <span>
+            {tr("सब्सिडी 60% • ₹")}
+            {subsidy.toLocaleString("en-IN")}
+          </span>
+          <span>
+            {tr("बैंक ऋण • ₹")}
+            {bank.toLocaleString("en-IN")}
+          </span>
+          <span>
+            {tr("स्वयं अंश • ₹")}
+            {own.toLocaleString("en-IN")}
+          </span>
         </div>
       </div>
       <div className="finance-donut-card">
-        <h4>वित्त के साधन</h4>
+        <h4>{tr("वित्त के साधन")}</h4>
         <div className="finance-donut">
           <span>
             ₹{total.toLocaleString("en-IN")}
-            <small>कुल</small>
+            <small>{tr("कुल")}</small>
           </span>
         </div>
         <div className="finance-legend">
           <p>
             <i className="subsidy" />
-            <span>सब्सिडी 60%</span>
+            <span>{tr("सब्सिडी 60%")}</span>
             <strong>₹{subsidy.toLocaleString("en-IN")}</strong>
           </p>
           <p>
             <i className="bank" />
-            <span>बैंक ऋण 30%</span>
+            <span>{tr("बैंक ऋण 30%")}</span>
             <strong>₹{bank.toLocaleString("en-IN")}</strong>
           </p>
           <p>
             <i className="own" />
-            <span>स्वयं अंश 10%</span>
+            <span>{tr("स्वयं अंश 10%")}</span>
             <strong>₹{own.toLocaleString("en-IN")}</strong>
           </p>
         </div>

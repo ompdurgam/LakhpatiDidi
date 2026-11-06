@@ -4,6 +4,7 @@ import { Icon } from "@/components/ui/Icon"
 import { SelectControl } from "@/components/ui/Select"
 import { TextControl } from "@/components/ui/TextControl"
 import type { HouseholdRecord } from "@/features/households/types"
+import { useTr } from "@/i18n/tr"
 
 export function HouseholdTracker({
   desktop = false,
@@ -12,6 +13,7 @@ export function HouseholdTracker({
   desktop?: boolean
   household?: HouseholdRecord
 }) {
+  const tr = useTr()
   const [addIncome, setAddIncome] = useState(false)
   const profile =
     household ||
@@ -45,11 +47,11 @@ export function HouseholdTracker({
   return (
     <div className={desktop ? "tracker-desktop" : "phone-content tracker"}>
       <div className="tracker-profile">
-        <div className="avatar large">{profile.initials}</div>
+        <div className="avatar large">{tr(profile.initials)}</div>
         <div>
-          <h3>{profile.name}</h3>
+          <h3>{tr(profile.name)}</h3>
           <p>
-            {profile.id} • {profile.village}
+            {tr(profile.id)} • {tr(profile.village)}
           </p>
         </div>
         <span
@@ -58,24 +60,24 @@ export function HouseholdTracker({
           }`}
         >
           {profile.income >= 100000
-            ? "लखपति"
+            ? tr("लखपति")
             : profile.income >= 80000
-              ? "थ्रेशोल्ड"
-              : profile.status}
+              ? tr("थ्रेशोल्ड")
+              : tr(profile.status)}
         </span>
       </div>
       <div className="horizontal-timeline">
         {milestones.map(([label, date], index) => (
           <div key={label} className={index < 4 ? "done" : index === 4 ? "active" : ""}>
             <i>{index < 4 ? "✓" : index + 1}</i>
-            <span>{label}</span>
-            {date && <small>{date}</small>}
+            <span>{tr(label)}</span>
+            {date && <small>{tr(date)}</small>}
           </div>
         ))}
       </div>
       <div className="tracker-grid">
         <div className="card income-streams">
-          <h3>आय स्रोत</h3>
+          <h3>{tr("आय स्रोत")}</h3>
           {[
             ["धान खेती", "₹32,000", 32],
             ["NTFP संग्रह", "₹18,500", 19],
@@ -83,7 +85,7 @@ export function HouseholdTracker({
             ["मत्स्य (संभावित)", "+ ₹37,500", 38],
           ].map(([x, value, width], index) => (
             <div key={x}>
-              <span>{x}</span>
+              <span>{tr(String(x))}</span>
               <i>
                 <b className={index === 3 ? "potential" : ""} style={{ width: `${width}%` }} />
               </i>
@@ -92,38 +94,38 @@ export function HouseholdTracker({
           ))}
         </div>
         <div className="card activity-log">
-          <h3>हाल की गतिविधि</h3>
+          <h3>{tr("हाल की गतिविधि")}</h3>
           <p>
             <i />
-            DPR मत्स्य विभाग को भेजा <span>5 नव.</span>
+            {tr("DPR मत्स्य विभाग को भेजा")} <span>{tr("5 नव.")}</span>
           </p>
           <p>
             <i />
-            दीदी की सहमति प्राप्त <span>3 नव.</span>
+            {tr("दीदी की सहमति प्राप्त")} <span>{tr("3 नव.")}</span>
           </p>
           <p>
             <i />
-            सर्वे सफलतापूर्वक सिंक <span>2 नव.</span>
+            {tr("सर्वे सफलतापूर्वक सिंक")} <span>{tr("2 नव.")}</span>
           </p>
         </div>
       </div>
       <section className="card tracker-applications">
         <div className="tracker-section-head">
           <div>
-            <h3>आवेदन</h3>
-            <p>विभाग को भेजे गए DPR</p>
+            <h3>{tr("आवेदन")}</h3>
+            <p>{tr("विभाग को भेजे गए DPR")}</p>
           </div>
-          <span>2 आवेदन</span>
+          <span>{tr("2 आवेदन")}</span>
         </div>
         <div className="tracker-table-scroll">
           <table>
             <thead>
               <tr>
                 <th>App ID</th>
-                <th>योजना</th>
-                <th>विभाग</th>
-                <th>स्थिति</th>
-                <th>लंबित</th>
+                <th>{tr("योजना")}</th>
+                <th>{tr("विभाग")}</th>
+                <th>{tr("स्थिति")}</th>
+                <th>{tr("लंबित")}</th>
               </tr>
             </thead>
             <tbody>
@@ -132,20 +134,20 @@ export function HouseholdTracker({
                   <b>APP-260142</b>
                 </td>
                 <td>PMMSY</td>
-                <td>मत्स्य</td>
+                <td>{tr("मत्स्य")}</td>
                 <td>
-                  <span className="status blue">समीक्षाधीन</span>
+                  <span className="status blue">{tr("समीक्षाधीन")}</span>
                 </td>
-                <td>2 दिन</td>
+                <td>{tr("2 दिन")}</td>
               </tr>
               <tr>
                 <td>
                   <b>APP-260150</b>
                 </td>
-                <td>बैकयार्ड पोल्ट्री</td>
-                <td>पशुधन</td>
+                <td>{tr("बैकयार्ड पोल्ट्री")}</td>
+                <td>{tr("पशुधन")}</td>
                 <td>
-                  <span className="status blue">जमा</span>
+                  <span className="status blue">{tr("जमा")}</span>
                 </td>
                 <td>—</td>
               </tr>
@@ -156,8 +158,8 @@ export function HouseholdTracker({
       <section className="card tracker-entitlements">
         <div className="tracker-section-head">
           <div>
-            <h3>हकदारी अंतर</h3>
-            <p>लंबित और बंद मांगें</p>
+            <h3>{tr("हकदारी अंतर")}</h3>
+            <p>{tr("लंबित और बंद मांगें")}</p>
           </div>
         </div>
         <div>
@@ -165,32 +167,32 @@ export function HouseholdTracker({
             <Icon name="alert" size={14} />
           </span>
           <p>
-            <strong>आयुष्मान कार्ड</strong>
-            <small>स्वास्थ्य विभाग • CSC बड़ांजी</small>
+            <strong>{tr("आयुष्मान कार्ड")}</strong>
+            <small>{tr("स्वास्थ्य विभाग • CSC बड़ांजी")}</small>
           </p>
-          <span className="status amber">मांग दर्ज</span>
+          <span className="status amber">{tr("मांग दर्ज")}</span>
         </div>
         <div>
           <span className="gap-icon green">
             <Icon name="check" size={14} />
           </span>
           <p>
-            <strong>PMJJBY बीमा</strong>
-            <small>संस्थागत वित्त • बैंक सखी</small>
+            <strong>{tr("PMJJBY बीमा")}</strong>
+            <small>{tr("संस्थागत वित्त • बैंक सखी")}</small>
           </p>
-          <span className="status green">बंद ✔</span>
+          <span className="status green">{tr("बंद ✔")}</span>
         </div>
       </section>
       <section className="card monthly-income-register">
         <div className="tracker-section-head">
           <div>
-            <h3>मासिक आय रजिस्टर</h3>
-            <p>जून–नवंबर 2026 • स्रोत अनुसार</p>
+            <h3>{tr("मासिक आय रजिस्टर")}</h3>
+            <p>{tr("जून–नवंबर 2026 • स्रोत अनुसार")}</p>
           </div>
           <div className="income-chart-legend">
             <span>
               <i className="crop" />
-              खेती
+              {tr("खेती")}
             </span>
             <span>
               <i className="ntfp" />
@@ -198,11 +200,11 @@ export function HouseholdTracker({
             </span>
             <span>
               <i className="wage" />
-              मजदूरी
+              {tr("मजदूरी")}
             </span>
             <span>
               <i className="fish" />
-              मत्स्य
+              {tr("मत्स्य")}
             </span>
           </div>
         </div>
@@ -218,18 +220,18 @@ export function HouseholdTracker({
                   <i className="wage" style={{ height: `${month.wage / 120}%` }} />
                   <i className="fish" style={{ height: `${month.fish / 120}%` }} />
                 </div>
-                <span>{month.month}</span>
+                <span>{tr(month.month)}</span>
               </div>
             )
           })}
         </div>
         <div className="income-log-table">
           <div className="head">
-            <span>माह</span>
-            <span>स्रोत</span>
-            <span>राशि ₹</span>
-            <span>रसीद</span>
-            <span>CM सत्यापन</span>
+            <span>{tr("माह")}</span>
+            <span>{tr("स्रोत")}</span>
+            <span>{tr("राशि ₹")}</span>
+            <span>{tr("रसीद")}</span>
+            <span>{tr("CM सत्यापन")}</span>
           </div>
           {[
             ["नवंबर", "धान बिक्री", "6,400"],
@@ -238,14 +240,14 @@ export function HouseholdTracker({
             ["नवंबर", "मत्स्य", "2,500"],
           ].map((row) => (
             <div key={row[1]}>
-              <span>{row[0]}</span>
-              <span>{row[1]}</span>
-              <strong>{row[2]}</strong>
-              <button title="रसीद फोटो">
+              <span>{tr(row[0])}</span>
+              <span>{tr(row[1])}</span>
+              <strong>{tr(row[2])}</strong>
+              <button title={tr("रसीद फोटो")}>
                 <Icon name="camera" size={14} />
               </button>
               <span className="verified-cm">
-                <Icon name="check" size={12} /> सत्यापित
+                <Icon name="check" size={12} /> {tr("सत्यापित")}
               </span>
             </div>
           ))}
@@ -259,16 +261,16 @@ export function HouseholdTracker({
             />
             <TextControl label="राशि ₹" value="0" type="number" />
             <button className="secondary">
-              <Icon name="camera" size={14} /> रसीद
+              <Icon name="camera" size={14} /> {tr("रसीद")}
             </button>
             <button className="primary" onClick={() => setAddIncome(false)}>
-              सहेजें
+              {tr("सहेजें")}
             </button>
           </div>
         )}
         <button className="add-monthly-income" onClick={() => setAddIncome(!addIncome)}>
           <Icon name={addIncome ? "close" : "plus"} size={15} />
-          {addIncome ? "रद्द करें" : "इस माह की आय दर्ज करें"}
+          {addIncome ? tr("रद्द करें") : tr("इस माह की आय दर्ज करें")}
         </button>
       </section>
     </div>

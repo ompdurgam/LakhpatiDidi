@@ -6,6 +6,7 @@ import { DprEconomics } from "@/features/dpr/DprEconomics"
 import { DprPdfPreview } from "@/features/dpr/DprPdfPreview"
 import { DprSuccess } from "@/features/dpr/DprSuccess"
 import { DprVerification } from "@/features/dpr/DprVerification"
+import { useTr } from "@/i18n/tr"
 
 export function DprBuilder({
   compact = false,
@@ -16,6 +17,7 @@ export function DprBuilder({
   onNotify: (message: string) => void
   onTrack?: () => void
 }) {
+  const tr = useTr()
   const [step, setStep] = useState(1)
   const [sent, setSent] = useState(false)
   const steps = [
@@ -31,11 +33,11 @@ export function DprBuilder({
     return (
       <DprSuccess
         compact={compact}
-        onTrack={() => (onTrack ? onTrack() : onNotify("ट्रैकिंग पेज खोला गया"))}
+        onTrack={() => (onTrack ? onTrack() : onNotify(tr("ट्रैकिंग पेज खोला गया")))}
         onNext={() => {
           setSent(false)
           setStep(1)
-          onNotify("अगली चयनित योजना का DPR खोला गया")
+          onNotify(tr("अगली चयनित योजना का DPR खोला गया"))
         }}
       />
     )
@@ -44,10 +46,10 @@ export function DprBuilder({
       <div className="dpr-title">
         <div>
           <span className="eyebrow">DPR-2026-00142</span>
-          <h2>PMMSY तालाब मत्स्य इकाई</h2>
-          <p>सुनीता कश्यप • आवेदन स्वतः भरा गया</p>
+          <h2>{tr("PMMSY तालाब मत्स्य इकाई")}</h2>
+          <p>{tr("सुनीता कश्यप • आवेदन स्वतः भरा गया")}</p>
         </div>
-        {!compact && <span className="status amber">ड्राफ्ट</span>}
+        {!compact && <span className="status amber">{tr("ड्राफ्ट")}</span>}
       </div>
       <div className="dpr-steps">
         {steps.map((name, index) => (
@@ -57,13 +59,13 @@ export function DprBuilder({
             onClick={() => setStep(index + 1)}
           >
             <i>{index + 1 < step ? "✓" : index + 1}</i>
-            <span>{name}</span>
+            <span>{tr(name)}</span>
           </button>
         ))}
       </div>
       <div className="dpr-panel">
         <h3>
-          {step}. {steps[step - 1]}
+          {step}. {tr(steps[step - 1])}
         </h3>
         {step === 1 && (
           <div className="dpr-fields">
@@ -84,12 +86,16 @@ export function DprBuilder({
             ].map(([a, b]) => (
               <label key={a} className={a === "पूरा पता" ? "full-field" : ""}>
                 <span>
-                  {a} <small>सर्वे से</small>
+                  {tr(a)} <small>{tr("सर्वे से")}</small>
                 </span>
                 <div className="dpr-locked">
-                  <span>{b}</span>
-                  <button onClick={() => onNotify(`${a} के लिए सुधार अनुरोध भेजा गया`)}>
-                    सुधार अनुरोध
+                  <span>{tr(b)}</span>
+                  <button
+                    onClick={() =>
+                      onNotify(tr("{{item}} के लिए सुधार अनुरोध भेजा गया", { item: tr(a) }))
+                    }
+                  >
+                    {tr("सुधार अनुरोध")}
                   </button>
                 </div>
               </label>
@@ -110,8 +116,8 @@ export function DprBuilder({
               ["GPDP संदर्भ", "GPDP प्रविष्टि आवश्यक – SOP चरण 3"],
             ].map(([a, b]) => (
               <label key={a}>
-                <span>{a}</span>
-                <div className={a === "GPDP संदर्भ" ? "field-warning" : ""}>{b}</div>
+                <span>{tr(a)}</span>
+                <div className={a === "GPDP संदर्भ" ? "field-warning" : ""}>{tr(b)}</div>
               </label>
             ))}
           </div>
@@ -134,7 +140,7 @@ export function DprBuilder({
                 <span className="document-status">
                   <Icon name={index >= 6 ? "alert" : "check"} size={15} />
                 </span>
-                <span>{x}</span>
+                <span>{tr(x)}</span>
                 <span className="document-actions">
                   <i>
                     <Icon name="camera" size={14} />
@@ -143,7 +149,7 @@ export function DprBuilder({
                     <Icon name="upload" size={14} />
                   </i>
                 </span>
-                <small>{index >= 6 ? "दस्तावेज़ जोड़ें" : "सत्यापित"}</small>
+                <small>{index >= 6 ? tr("दस्तावेज़ जोड़ें") : tr("सत्यापित")}</small>
               </button>
             ))}
           </div>
@@ -153,7 +159,7 @@ export function DprBuilder({
       </div>
       <div className="dpr-actions">
         <button className="secondary" disabled={step === 1} onClick={() => setStep(step - 1)}>
-          पीछे
+          {tr("पीछे")}
         </button>
         <button
           className="primary"
@@ -161,11 +167,11 @@ export function DprBuilder({
             if (step < 7) setStep(step + 1)
             else {
               setSent(true)
-              onNotify("आवेदन APP-260142 मत्स्य विभाग को भेजा गया")
+              onNotify(tr("आवेदन APP-260142 मत्स्य विभाग को भेजा गया"))
             }
           }}
         >
-          {step < 7 ? "सहेजें और आगे" : "विभाग को भेजें"} <Icon name="arrow" size={16} />
+          {step < 7 ? tr("सहेजें और आगे") : tr("विभाग को भेजें")} <Icon name="arrow" size={16} />
         </button>
       </div>
     </div>

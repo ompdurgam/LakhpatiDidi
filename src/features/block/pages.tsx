@@ -2,7 +2,6 @@ import { useNavigate } from "react-router"
 
 import { useFilteredApplications } from "@/features/applications/useFilteredApplications"
 import { BlockDashboard } from "@/features/monitoring/BlockDashboard"
-import { useEnglish } from "@/i18n"
 import { useSession } from "@/stores/session"
 import { useUi } from "@/stores/ui"
 
@@ -22,7 +21,6 @@ export type BlockSection = keyof typeof sectionLabel
 
 export function BlockOverviewPage() {
   const navigate = useNavigate()
-  const english = useEnglish()
   const user = useSession((s) => s.user)
   const setRole = useSession((s) => s.setRole)
   const rows = useFilteredApplications()
@@ -31,7 +29,6 @@ export function BlockOverviewPage() {
   if (!user) return null
   return (
     <BlockDashboard
-      english={english}
       user={user}
       rows={rows}
       onSelect={openApplication}

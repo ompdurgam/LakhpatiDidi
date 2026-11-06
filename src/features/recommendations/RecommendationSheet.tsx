@@ -1,6 +1,7 @@
 import { useState } from "react"
 
 import { Icon } from "@/components/ui/Icon"
+import { useTr } from "@/i18n/tr"
 
 export function RecommendationSheet({
   type,
@@ -13,6 +14,7 @@ export function RecommendationSheet({
   onClose: () => void
   onConfirm: () => void
 }) {
+  const tr = useTr()
   const [reason, setReason] = useState("पैसा नहीं")
   const [date, setDate] = useState("2026-11-25")
   return (
@@ -22,8 +24,8 @@ export function RecommendationSheet({
         <div className="sheet-handle" />
         <div className="sheet-title">
           <div>
-            <span>{type === "reason" ? "रुचि नहीं" : "बाद में याद दिलाएँ"}</span>
-            <h3>{schemeName}</h3>
+            <span>{type === "reason" ? tr("रुचि नहीं") : tr("बाद में याद दिलाएँ")}</span>
+            <h3>{tr(schemeName)}</h3>
           </div>
           <button onClick={onClose}>
             <Icon name="close" size={17} />
@@ -38,13 +40,13 @@ export function RecommendationSheet({
                 onClick={() => setReason(option)}
               >
                 <i>{reason === option && <span />}</i>
-                {option}
+                {tr(option)}
               </button>
             ))}
           </div>
         ) : (
           <label className="reminder-date">
-            <span>याद दिलाने की तारीख</span>
+            <span>{tr("याद दिलाने की तारीख")}</span>
             <input
               type="date"
               min="2026-11-01"
@@ -52,11 +54,11 @@ export function RecommendationSheet({
               value={date}
               onChange={(event) => setDate(event.target.value)}
             />
-            <small>नवंबर 2026 में सर्वेयर होम पर रिमाइंडर दिखेगा।</small>
+            <small>{tr("नवंबर 2026 में सर्वेयर होम पर रिमाइंडर दिखेगा।")}</small>
           </label>
         )}
         <button className="primary sheet-confirm" onClick={onConfirm}>
-          {type === "reason" ? "कारण सुरक्षित करें" : "रिमाइंडर लगाएँ"}
+          {type === "reason" ? tr("कारण सुरक्षित करें") : tr("रिमाइंडर लगाएँ")}
         </button>
       </aside>
     </>

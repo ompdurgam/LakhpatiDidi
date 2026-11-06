@@ -6,10 +6,12 @@ import { Icon } from "@/components/ui/Icon"
 import { FilterSelect } from "@/components/ui/Select"
 import { HouseholdTracker } from "@/features/households/HouseholdTracker"
 import type { HouseholdRecord } from "@/features/households/types"
+import { useTr } from "@/i18n/tr"
 
 import { downloadHouseholdsCsv } from "./householdCsv"
 
 export function HouseholdRegister({ onNotify }: { onNotify: (message: string) => void }) {
+  const tr = useTr()
   const [selected, setSelected] = useState<string[]>([])
   const [tracker, setTracker] = useState<HouseholdRecord | null>(null)
   const [clf, setClf] = useState("सभी")
@@ -52,7 +54,7 @@ export function HouseholdRegister({ onNotify }: { onNotify: (message: string) =>
     setSelected(selected.includes(id) ? selected.filter((item) => item !== id) : [...selected, id])
   const bulk = async (action: "assign_crp" | "export" | "reminder") => {
     if (!selected.length) {
-      onNotify("पहले परिवार चुनें")
+      onNotify(tr("पहले परिवार चुनें"))
       return
     }
     try {
@@ -119,35 +121,37 @@ export function HouseholdRegister({ onNotify }: { onNotify: (message: string) =>
               checked={singleOnly}
               onChange={(event) => setSingleOnly(event.target.checked)}
             />
-            <span>एकल-स्रोत</span>
+            <span>{tr("एकल-स्रोत")}</span>
           </label>
         </div>
         <div className="bulk-actions">
-          <span>{selected.length} चयनित</span>
+          <span>
+            {selected.length} {tr("चयनित")}
+          </span>
           <button onClick={() => bulk("assign_crp")}>
             <Icon name="people" size={15} />
-            CRP को सौंपें
+            {tr("CRP को सौंपें")}
           </button>
           <button onClick={() => bulk("export")}>
             <Icon name="download" size={15} />
-            निर्यात
+            {tr("निर्यात")}
           </button>
           <button onClick={() => bulk("reminder")}>
             <Icon name="bell" size={15} />
-            रिमाइंडर भेजें
+            {tr("रिमाइंडर भेजें")}
           </button>
         </div>
       </section>
       <section className="card household-register-card">
         <div className="card-head">
           <div>
-            <h3>परिवार और दीदी रजिस्टर</h3>
+            <h3>{tr("परिवार और दीदी रजिस्टर")}</h3>
             <p>
-              {loading ? "लोड हो रहा है…" : `${visible.length} रिकॉर्ड`} • जगदलपुर ब्लॉक • MySQL
-              लाइव डेटा
+              {loading ? tr("लोड हो रहा है…") : tr("{{n}} रिकॉर्ड", { n: visible.length })}{" "}
+              {tr("• जगदलपुर ब्लॉक • MySQL लाइव डेटा")}
             </p>
           </div>
-          <span className="status blue">PLD रजिस्टर</span>
+          <span className="status blue">{tr("PLD रजिस्टर")}</span>
         </div>
         <div className="household-register-scroll">
           <table className="household-register-table">
@@ -162,15 +166,15 @@ export function HouseholdRegister({ onNotify }: { onNotify: (message: string) =>
                   />
                 </th>
                 <th>HH ID</th>
-                <th>दीदी</th>
+                <th>{tr("दीदी")}</th>
                 <th>SHG / VO / CLF</th>
-                <th>वर्तमान आय</th>
-                <th>सक्रिय स्रोत</th>
-                <th>लखपति मीटर</th>
-                <th>खुले आवेदन</th>
-                <th>हकदारी गैप</th>
-                <th>अंतिम अपडेट</th>
-                <th>स्थिति</th>
+                <th>{tr("वर्तमान आय")}</th>
+                <th>{tr("सक्रिय स्रोत")}</th>
+                <th>{tr("लखपति मीटर")}</th>
+                <th>{tr("खुले आवेदन")}</th>
+                <th>{tr("हकदारी गैप")}</th>
+                <th>{tr("अंतिम अपडेट")}</th>
+                <th>{tr("स्थिति")}</th>
               </tr>
             </thead>
             <tbody>
@@ -184,15 +188,15 @@ export function HouseholdRegister({ onNotify }: { onNotify: (message: string) =>
                     />
                   </td>
                   <td>
-                    <b className="app-id">{row.id}</b>
+                    <b className="app-id">{tr(row.id)}</b>
                   </td>
                   <td>
                     <div className="register-didi">
-                      <span>{row.initials}</span>
+                      <span>{tr(row.initials)}</span>
                       <div>
-                        <strong>{row.name}</strong>
+                        <strong>{tr(row.name)}</strong>
                         <small>
-                          {row.village} • {row.category}
+                          {tr(row.village)} • {row.category}
                           {row.special !== "—" ? ` • ${row.special}` : ""}
                         </small>
                       </div>
@@ -200,9 +204,9 @@ export function HouseholdRegister({ onNotify }: { onNotify: (message: string) =>
                   </td>
                   <td>
                     <div className="institution-cell">
-                      <strong>{row.shg}</strong>
-                      <span>{row.vo}</span>
-                      <small>{row.clf}</small>
+                      <strong>{tr(row.shg)}</strong>
+                      <span>{tr(row.vo)}</span>
+                      <small>{tr(row.clf)}</small>
                     </div>
                   </td>
                   <td>
@@ -231,7 +235,7 @@ export function HouseholdRegister({ onNotify }: { onNotify: (message: string) =>
                   <td>
                     <span className={`number-badge ${row.gaps ? "red" : "green"}`}>{row.gaps}</span>
                   </td>
-                  <td>{row.updated}</td>
+                  <td>{tr(row.updated)}</td>
                   <td>
                     <span
                       className={`status ${
@@ -244,14 +248,16 @@ export function HouseholdRegister({ onNotify }: { onNotify: (message: string) =>
                               : "blue"
                       }`}
                     >
-                      {row.status}
+                      {tr(row.status)}
                     </span>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {!visible.length && <div className="empty">चुने गए फ़िल्टर में कोई परिवार नहीं मिला</div>}
+          {!visible.length && (
+            <div className="empty">{tr("चुने गए फ़िल्टर में कोई परिवार नहीं मिला")}</div>
+          )}
         </div>
       </section>
       {tracker && (
@@ -260,8 +266,8 @@ export function HouseholdRegister({ onNotify }: { onNotify: (message: string) =>
           <aside className="household-tracker-drawer">
             <div className="drawer-head">
               <div>
-                <span>परिवार ट्रैकर</span>
-                <h2>{tracker.id}</h2>
+                <span>{tr("परिवार ट्रैकर")}</span>
+                <h2>{tr(tracker.id)}</h2>
               </div>
               <button className="icon-button" onClick={() => setTracker(null)}>
                 <Icon name="close" />

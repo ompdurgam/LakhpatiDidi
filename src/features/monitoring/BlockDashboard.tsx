@@ -3,6 +3,7 @@ import { Legend } from "@/components/charts/Legend"
 import { Icon } from "@/components/ui/Icon"
 import { Kpi } from "@/components/ui/Kpi"
 import { ApplicationTable } from "@/features/applications/ApplicationTable"
+import { useTr } from "@/i18n/tr"
 
 import { BlockOverviewLower } from "./BlockOverviewLower"
 import { OverviewStat } from "./widgets/OverviewStat"
@@ -11,7 +12,6 @@ export type BlockSection = "households" | "applications" | "blcc" | "reports"
 
 /** Block overview (ported 1:1 from the Figma prototype). */
 export function BlockDashboard({
-  english,
   user,
   rows,
   onSelect,
@@ -19,7 +19,6 @@ export function BlockDashboard({
   go,
   openDepartments,
 }: {
-  english: boolean
   user: User
   rows: ApplicationRow[]
   onSelect: (item: ApplicationRow) => void
@@ -27,6 +26,7 @@ export function BlockDashboard({
   go: (section: BlockSection) => void
   openDepartments: () => void
 }) {
+  const tr = useTr()
   const filtered = rows
   const setSelected = onSelect
   return (
@@ -34,21 +34,19 @@ export function BlockDashboard({
       <section className="welcome">
         <div>
           <h2>
-            {english ? "Namaste" : "नमस्ते"}, {user.name.split(" ")[0]} {english ? "ji" : "जी"}{" "}
-            <span>—</span>
+            {tr("नमस्ते")}, {tr(user.name).split(" ")[0]} {tr("जी")} <span>—</span>
           </h2>
-          <p>
-            {english
-              ? "Here is the progress of Jagdalpur Block as of today."
-              : "आज तक जगदलपुर ब्लॉक की प्रगति यहाँ है।"}
-          </p>
+          <p>{tr("आज तक जगदलपुर ब्लॉक की प्रगति यहाँ है।")}</p>
         </div>
         <div className="welcome-actions">
-          <button className="secondary" onClick={() => notify("रिपोर्ट डाउनलोड के लिए तैयार है")}>
-            <Icon name="download" size={17} /> रिपोर्ट डाउनलोड
+          <button
+            className="secondary"
+            onClick={() => notify(tr("रिपोर्ट डाउनलोड के लिए तैयार है"))}
+          >
+            <Icon name="download" size={17} /> {tr("रिपोर्ट डाउनलोड")}
           </button>
           <button className="primary" onClick={() => go("blcc")}>
-            <Icon name="plus" size={17} /> BLCC बैठक मोड
+            <Icon name="plus" size={17} /> {tr("BLCC बैठक मोड")}
           </button>
         </div>
       </section>
@@ -113,11 +111,11 @@ export function BlockDashboard({
         <div className="card progress-card">
           <div className="card-head">
             <div>
-              <h3>लखपति यात्रा</h3>
-              <p>सर्वे से आय उपलब्धि तक परिवारों की स्थिति</p>
+              <h3>{tr("लखपति यात्रा")}</h3>
+              <p>{tr("सर्वे से आय उपलब्धि तक परिवारों की स्थिति")}</p>
             </div>
             <button className="text-button">
-              विस्तृत देखें <Icon name="arrow" size={16} />
+              {tr("विस्तृत देखें")} <Icon name="arrow" size={16} />
             </button>
           </div>
           <div className="funnel">
@@ -131,7 +129,7 @@ export function BlockDashboard({
               ["लखपति", "936", 26, "deep"],
             ].map(([label, value, width, color]) => (
               <div className="funnel-row" key={label}>
-                <span>{label}</span>
+                <span>{tr(String(label))}</span>
                 <div className="funnel-track">
                   <i className={String(color)} style={{ width: `${width}%` }}>
                     <b>{value}</b>
@@ -143,26 +141,26 @@ export function BlockDashboard({
           <div className="funnel-note">
             <Icon name="trend" size={19} />
             <div>
-              <strong>29.1% PLD परिवार लखपति बने</strong>
-              <span>पिछले माह से 3.4% बेहतर</span>
+              <strong>{tr("29.1% PLD परिवार लखपति बने")}</strong>
+              <span>{tr("पिछले माह से 3.4% बेहतर")}</span>
             </div>
           </div>
         </div>
         <div className="card income-card">
           <div className="card-head">
             <div>
-              <h3>आय स्थिति</h3>
-              <p>PLD परिवारों का वार्षिक आय स्तर</p>
+              <h3>{tr("आय स्थिति")}</h3>
+              <p>{tr("PLD परिवारों का वार्षिक आय स्तर")}</p>
             </div>
             <button className="filter-button">
-              सभी CLF <Icon name="chevron" size={14} />
+              {tr("सभी CLF")} <Icon name="chevron" size={14} />
             </button>
           </div>
           <div className="donut-wrap">
             <div className="donut">
               <div>
                 <strong>3,218</strong>
-                <span>कुल PLD</span>
+                <span>{tr("कुल PLD")}</span>
               </div>
             </div>
             <div className="legend">
@@ -174,25 +172,25 @@ export function BlockDashboard({
           <div className="alert-strip">
             <Icon name="alert" size={19} />
             <div>
-              <strong>428 सिंगल-स्ट्रीम PLD</strong>
-              <span>आय का दूसरा स्रोत जोड़ना जरूरी है</span>
+              <strong>{tr("428 सिंगल-स्ट्रीम PLD")}</strong>
+              <span>{tr("आय का दूसरा स्रोत जोड़ना जरूरी है")}</span>
             </div>
-            <button onClick={() => go("households")}>देखें</button>
+            <button onClick={() => go("households")}>{tr("देखें")}</button>
           </div>
         </div>
       </section>
       <section className="card applications-card">
         <div className="card-head">
           <div>
-            <h3>हाल के आवेदन</h3>
-            <p>विभागीय कार्यवाही के लिए भेजे गए DPR</p>
+            <h3>{tr("हाल के आवेदन")}</h3>
+            <p>{tr("विभागीय कार्यवाही के लिए भेजे गए DPR")}</p>
           </div>
           <div className="table-actions">
             <button className="filter-button">
-              <Icon name="filter" size={15} /> फ़िल्टर
+              <Icon name="filter" size={15} /> {tr("फ़िल्टर")}
             </button>
             <button className="text-button" onClick={() => go("applications")}>
-              सभी आवेदन <Icon name="arrow" size={16} />
+              {tr("सभी आवेदन")} <Icon name="arrow" size={16} />
             </button>
           </div>
         </div>

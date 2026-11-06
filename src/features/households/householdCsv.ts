@@ -1,4 +1,5 @@
 import type { HouseholdRow } from "@/api/types"
+import { translate as tr } from "@/i18n/tr"
 
 const columns: [string, (r: HouseholdRow) => string | number][] = [
   ["HH ID", (r) => r.id],
@@ -17,9 +18,12 @@ const columns: [string, (r: HouseholdRow) => string | number][] = [
 
 const quote = (cell: string | number) => `"${String(cell).replace(/"/g, '""')}"`
 
-/** CSV text (quoted, comma-separated) for the household register. */
+/** CSV text (quoted, comma-separated) for the household register; headers follow the UI language. */
 export function householdsToCsv(rows: HouseholdRow[]) {
-  return [columns.map(([header]) => header), ...rows.map((r) => columns.map(([, get]) => get(r)))]
+  return [
+    columns.map(([header]) => tr(header)),
+    ...rows.map((r) => columns.map(([, get]) => get(r))),
+  ]
     .map((line) => line.map(quote).join(","))
     .join("\n")
 }

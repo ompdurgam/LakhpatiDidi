@@ -1,3 +1,5 @@
+import { useTr } from "@/i18n/tr"
+
 export function MiniStat({
   value,
   label,
@@ -7,10 +9,11 @@ export function MiniStat({
   label: string
   alert?: boolean
 }) {
+  const tr = useTr()
   return (
     <div className="card mini-stat">
-      <strong className={alert ? "red-text" : ""}>{value}</strong>
-      <span>{label}</span>
+      <strong className={alert ? "red-text" : ""}>{tr(value)}</strong>
+      <span>{tr(label)}</span>
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import { Icon } from "@/components/ui/Icon"
+import { useTr } from "@/i18n/tr"
 
 import { OPEN_STATUSES } from "./applicationStatus"
 
@@ -24,6 +25,7 @@ export function ApplicationActionBar({
   onRun: (payload: Record<string, unknown>) => void
   onOpenForm: (action: FormAction) => void
 }) {
+  const tr = useTr()
   const isOpen = OPEN_STATUSES.includes(statusCode)
   const departmentRole = role === "department"
   return (
@@ -35,35 +37,35 @@ export function ApplicationActionBar({
             disabled={busy || statusCode !== "submitted"}
             onClick={() => onRun({ action: "accept" })}
           >
-            <Icon name="check" size={14} /> स्वीकार
+            <Icon name="check" size={14} /> {tr("स्वीकार")}
           </button>
           <button
             className="secondary"
             disabled={busy || !isOpen}
             onClick={() => onOpenForm("info")}
           >
-            जानकारी माँगें
+            {tr("जानकारी माँगें")}
           </button>
           <button
             className="primary"
             disabled={busy || !isOpen}
             onClick={() => onOpenForm("sanction")}
           >
-            स्वीकृत करें
+            {tr("स्वीकृत करें")}
           </button>
           <button
             className="secondary danger-action"
             disabled={busy || !isOpen}
             onClick={() => onOpenForm("reject")}
           >
-            अस्वीकार
+            {tr("अस्वीकार")}
           </button>
           <button
             className="secondary deliver-action"
             disabled={busy || statusCode !== "sanctioned"}
             onClick={() => onOpenForm("deliver")}
           >
-            डिलीवर चिह्नित करें
+            {tr("डिलीवर चिह्नित करें")}
           </button>
         </>
       ) : (
@@ -73,14 +75,14 @@ export function ApplicationActionBar({
             disabled={busy}
             onClick={() => onRun({ action: "follow_up" })}
           >
-            <Icon name="bell" size={14} /> फॉलो-अप भेजें
+            <Icon name="bell" size={14} /> {tr("फॉलो-अप भेजें")}
           </button>
           <button
             className="primary danger-action"
             disabled={busy || !isOpen || escalation === "कलेक्टर"}
             onClick={() => onRun({ action: "escalate" })}
           >
-            <Icon name="alert" size={14} /> एस्केलेट करें
+            <Icon name="alert" size={14} /> {tr("एस्केलेट करें")}
           </button>
         </>
       )}

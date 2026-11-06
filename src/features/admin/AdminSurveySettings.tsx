@@ -1,8 +1,10 @@
 import { api } from "@/api/client"
 import { useResource } from "@/api/hooks"
 import { Icon } from "@/components/ui/Icon"
+import { useTr } from "@/i18n/tr"
 
 export function AdminSurveySettings({ onNotify }: { onNotify: (message: string) => void }) {
+  const tr = useTr()
   const { data: sections, setData: setSections } =
     useResource<{ code: string; name: string; enabled: boolean }[]>("/survey-sections")
   const enabled = (sections ?? []).filter((s) => s.enabled).map((s) => s.code)
@@ -27,8 +29,8 @@ export function AdminSurveySettings({ onNotify }: { onNotify: (message: string) 
       <section className="card section-toggles">
         <div className="card-head">
           <div>
-            <h3>सर्वे सेक्शन</h3>
-            <p>A–K सेक्शन चालू / बंद करें</p>
+            <h3>{tr("सर्वे सेक्शन")}</h3>
+            <p>{tr("A–K सेक्शन चालू / बंद करें")}</p>
           </div>
         </div>
         <div>
@@ -48,7 +50,7 @@ export function AdminSurveySettings({ onNotify }: { onNotify: (message: string) 
             const code = item[0]
             return (
               <label key={item}>
-                <span>{item}</span>
+                <span>{tr(item)}</span>
                 <button className={enabled.includes(code) ? "on" : ""} onClick={() => toggle(code)}>
                   <i />
                 </button>
@@ -60,11 +62,11 @@ export function AdminSurveySettings({ onNotify }: { onNotify: (message: string) 
       <section className="card option-list-editor">
         <div className="card-head">
           <div>
-            <h3>विकल्प सूची संपादक</h3>
-            <p>फॉर्म चिप और ड्रॉपडाउन विकल्प</p>
+            <h3>{tr("विकल्प सूची संपादक")}</h3>
+            <p>{tr("फॉर्म चिप और ड्रॉपडाउन विकल्प")}</p>
           </div>
           <button className="primary">
-            <Icon name="plus" size={14} /> सूची जोड़ें
+            <Icon name="plus" size={14} /> {tr("सूची जोड़ें")}
           </button>
         </div>
         {[
@@ -73,8 +75,8 @@ export function AdminSurveySettings({ onNotify }: { onNotify: (message: string) 
           ["जलवायु जोखिम", "सूखा • बाढ़ • गर्मी • कीट • असमय वर्षा"],
         ].map(([name, options]) => (
           <div key={name}>
-            <strong>{name}</strong>
-            <span>{options}</span>
+            <strong>{tr(name)}</strong>
+            <span>{tr(options)}</span>
             <button>
               <Icon name="settings" size={14} />
             </button>
@@ -84,8 +86,8 @@ export function AdminSurveySettings({ onNotify }: { onNotify: (message: string) 
       <section className="card conditional-logic">
         <div className="card-head">
           <div>
-            <h3>सशर्त लॉजिक</h3>
-            <p>उत्तर के अनुसार सेक्शन और फ़ील्ड</p>
+            <h3>{tr("सशर्त लॉजिक")}</h3>
+            <p>{tr("उत्तर के अनुसार सेक्शन और फ़ील्ड")}</p>
           </div>
         </div>
         {[
@@ -95,10 +97,12 @@ export function AdminSurveySettings({ onNotify }: { onNotify: (message: string) 
           ["loan.moneylender_rate > 24", "उच्च-ब्याज जोखिम दिखाएँ"],
         ].map(([condition, action]) => (
           <div key={condition}>
-            <code>{condition}</code>
+            <code>{tr(condition)}</code>
             <Icon name="arrow" size={14} />
-            <span>{action}</span>
-            <button onClick={() => onNotify("सशर्त लॉजिक संपादक खोला गया")}>संपादित करें</button>
+            <span>{tr(action)}</span>
+            <button onClick={() => onNotify(tr("सशर्त लॉजिक संपादक खोला गया"))}>
+              {tr("संपादित करें")}
+            </button>
           </div>
         ))}
       </section>

@@ -2,22 +2,27 @@ import { useState } from "react"
 
 import { Icon } from "@/components/ui/Icon"
 import { Kpi } from "@/components/ui/Kpi"
+import { useTr } from "@/i18n/tr"
 
 import { blockNames } from "./districtData"
 import { DistrictReports } from "./DistrictReports"
 
 export function DistrictWorkspace({ onNotify }: { onNotify: (message: string) => void }) {
+  const tr = useTr()
   const [metric, setMetric] = useState("लखपति %")
   return (
     <div className="page role-page district-workspace">
       <div className="workspace-heading">
         <div>
-          <span className="eyebrow">DMMU • जिला मिशन</span>
-          <h2>बस्तर जिला अवलोकन</h2>
-          <p>7 ब्लॉक • 418 ग्राम पंचायत • नवंबर 2026</p>
+          <span className="eyebrow">{tr("DMMU • जिला मिशन")}</span>
+          <h2>{tr("बस्तर जिला अवलोकन")}</h2>
+          <p>{tr("7 ब्लॉक • 418 ग्राम पंचायत • नवंबर 2026")}</p>
         </div>
-        <button className="primary" onClick={() => onNotify("नवंबर जिला रिपोर्ट SMMU को भेजी गई")}>
-          <Icon name="file" size={17} /> SMMU को रिपोर्ट भेजें
+        <button
+          className="primary"
+          onClick={() => onNotify(tr("नवंबर जिला रिपोर्ट SMMU को भेजी गई"))}
+        >
+          <Icon name="file" size={17} /> {tr("SMMU को रिपोर्ट भेजें")}
         </button>
       </div>
       <section className="monitor-kpis">
@@ -57,8 +62,10 @@ export function DistrictWorkspace({ onNotify }: { onNotify: (message: string) =>
         <div className="card cg-map-card">
           <div className="card-head">
             <div>
-              <h3>ब्लॉक प्रदर्शन मानचित्र</h3>
-              <p>{metric} के अनुसार रंग</p>
+              <h3>{tr("ब्लॉक प्रदर्शन मानचित्र")}</h3>
+              <p>
+                {tr(metric)} {tr("के अनुसार रंग")}
+              </p>
             </div>
             <div className="map-metric-toggle">
               {["सर्वे %", "लखपति %", "अतिदेय"].map((item) => (
@@ -67,7 +74,7 @@ export function DistrictWorkspace({ onNotify }: { onNotify: (message: string) =>
                   className={metric === item ? "active" : ""}
                   onClick={() => setMetric(item)}
                 >
-                  {item}
+                  {tr(item)}
                 </button>
               ))}
             </div>
@@ -83,33 +90,36 @@ export function DistrictWorkspace({ onNotify }: { onNotify: (message: string) =>
                       ? "medium"
                       : "low"
                 }
-                title={name}
+                title={tr(String(name))}
               >
                 <span>{index + 1}</span>
-                <small>{name}</small>
+                <small>{tr(name)}</small>
               </button>
             ))}
           </div>
           <div className="map-legend">
             <i />
-            कम <i />
-            मध्यम <i />
-            उच्च
+            {tr("कम")} <i />
+            {tr("मध्यम")} <i />
+            {tr("उच्च")}
           </div>
         </div>
         <div className="card ranking">
           <div className="card-head">
             <div>
-              <h3>ब्लॉक रैंकिंग</h3>
-              <p>लखपति उपलब्धि दर</p>
+              <h3>{tr("ब्लॉक रैंकिंग")}</h3>
+              <p>{tr("लखपति उपलब्धि दर")}</p>
             </div>
           </div>
           {blockNames.slice(0, 5).map((name, index) => (
             <div key={name}>
               <b>{index + 1}</b>
               <span>
-                {name}
-                <small>{82 - index * 6}% सर्वे कवरेज</small>
+                {tr(name)}
+                <small>
+                  {82 - index * 6}
+                  {tr("% सर्वे कवरेज")}
+                </small>
               </span>
               <strong>{36 - index * 3}.2%</strong>
             </div>
@@ -119,34 +129,34 @@ export function DistrictWorkspace({ onNotify }: { onNotify: (message: string) =>
       <section className="card district-matrix">
         <div className="card-head">
           <div>
-            <h3>विभागीय अभिसरण मैट्रिक्स</h3>
-            <p>विभाग × ब्लॉक</p>
+            <h3>{tr("विभागीय अभिसरण मैट्रिक्स")}</h3>
+            <p>{tr("विभाग × ब्लॉक")}</p>
           </div>
           <div className="matrix-triple-legend">
             <span>
               <i className="sanctioned" />
-              स्वीकृत
+              {tr("स्वीकृत")}
             </span>
             <span>
               <i className="pending" />
-              लंबित
+              {tr("लंबित")}
             </span>
             <span>
               <i className="overdue" />
-              अतिदेय
+              {tr("अतिदेय")}
             </span>
           </div>
         </div>
         <div className="district-matrix-scroll">
           <div className="district-matrix-head">
-            <span>विभाग</span>
+            <span>{tr("विभाग")}</span>
             {blockNames.slice(0, 5).map((name) => (
-              <b key={name}>{name}</b>
+              <b key={name}>{tr(name)}</b>
             ))}
           </div>
           {["कृषि", "उद्यानिकी", "पशुपालन", "मत्स्य", "वन"].map((dept, row) => (
             <div className="district-matrix-row" key={dept}>
-              <strong>{dept}</strong>
+              <strong>{tr(dept)}</strong>
               {[0, 1, 2, 3, 4].map((col) => (
                 <div key={col}>
                   <b>{18 + row * 4 + col}</b>
@@ -162,15 +172,15 @@ export function DistrictWorkspace({ onNotify }: { onNotify: (message: string) =>
         <div className="card candidate-villages">
           <div className="card-head">
             <div>
-              <h3>लखपति ग्राम संभावित गाँव</h3>
-              <p>50% से अधिक PLD ने ₹1 लाख पार किया</p>
+              <h3>{tr("लखपति ग्राम संभावित गाँव")}</h3>
+              <p>{tr("50% से अधिक PLD ने ₹1 लाख पार किया")}</p>
             </div>
           </div>
           <div className="candidate-table">
             <div className="head">
-              <span>गाँव</span>
+              <span>{tr("गाँव")}</span>
               <b>PLD</b>
-              <b>₹1L पार</b>
+              <b>{tr("₹1L पार")}</b>
               <span />
             </div>
             {[
@@ -181,11 +191,15 @@ export function DistrictWorkspace({ onNotify }: { onNotify: (message: string) =>
               ["कुम्हरावंड", 104, 52],
             ].map(([name, pld, pct]) => (
               <div key={String(name)}>
-                <strong>{name}</strong>
+                <strong>{tr(String(name))}</strong>
                 <b>{pld}</b>
                 <b>{pct}%</b>
-                <button onClick={() => onNotify(`${name} में आय ऑडिट शुरू हुआ`)}>
-                  आय ऑडिट शुरू करें
+                <button
+                  onClick={() =>
+                    onNotify(tr("{{name}} में आय ऑडिट शुरू हुआ", { name: tr(String(name)) }))
+                  }
+                >
+                  {tr("आय ऑडिट शुरू करें")}
                 </button>
               </div>
             ))}
@@ -194,8 +208,8 @@ export function DistrictWorkspace({ onNotify }: { onNotify: (message: string) =>
         <div className="card collector-escalations">
           <div className="card-head">
             <div>
-              <h3>कलेक्टर स्तर एस्केलेशन</h3>
-              <p>7 दिन में प्रतिक्रिया अपेक्षित</p>
+              <h3>{tr("कलेक्टर स्तर एस्केलेशन")}</h3>
+              <p>{tr("7 दिन में प्रतिक्रिया अपेक्षित")}</p>
             </div>
             <span className="count-badge">4</span>
           </div>
@@ -211,11 +225,11 @@ export function DistrictWorkspace({ onNotify }: { onNotify: (message: string) =>
               </span>
               <p>
                 <strong>
-                  {row[0]} • {row[1]}
+                  {tr(row[0])} • {tr(row[1])}
                 </strong>
-                <small>{row[3]}</small>
+                <small>{tr(row[3])}</small>
               </p>
-              <b>{row[2]}</b>
+              <b>{tr(row[2])}</b>
             </div>
           ))}
         </div>

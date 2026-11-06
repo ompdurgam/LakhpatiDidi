@@ -1,4 +1,5 @@
 import { Icon, type IconName } from "@/components/ui/Icon"
+import { useTr } from "@/i18n/tr"
 
 export function Task({
   color,
@@ -15,17 +16,18 @@ export function Task({
   action: string
   onClick: () => void
 }) {
+  const tr = useTr()
   return (
     <div className="task">
       <div className={`task-icon ${color}`}>
         <Icon name={icon} size={19} />
       </div>
       <div>
-        <strong>{title}</strong>
-        <span>{sub}</span>
+        <strong>{tr(title)}</strong>
+        <span>{tr(sub)}</span>
       </div>
       <button onClick={onClick}>
-        {action}
+        {tr(action)}
         <Icon name="chevron" size={15} />
       </button>
     </div>

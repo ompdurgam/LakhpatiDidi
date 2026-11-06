@@ -1,5 +1,6 @@
 import { Icon } from "@/components/ui/Icon"
 import { Kpi } from "@/components/ui/Kpi"
+import { useTr } from "@/i18n/tr"
 
 export function MonitoringWorkspace({
   level,
@@ -8,23 +9,28 @@ export function MonitoringWorkspace({
   level: "district" | "state"
   onNotify: (message: string) => void
 }) {
+  const tr = useTr()
   const state = level === "state"
   return (
     <div className="page role-page">
       <div className="workspace-heading">
         <div>
-          <span className="eyebrow">{state ? "SMMU • राज्य मिशन" : "DMMU • जिला मिशन"}</span>
-          <h2>{state ? "छत्तीसगढ़ राज्य अवलोकन" : "बस्तर जिला अवलोकन"}</h2>
-          <p>{state ? "33 जिले • 146 ब्लॉक" : "7 ब्लॉक • 418 ग्राम पंचायत"} • मई 2026</p>
+          <span className="eyebrow">
+            {state ? tr("SMMU • राज्य मिशन") : tr("DMMU • जिला मिशन")}
+          </span>
+          <h2>{state ? tr("छत्तीसगढ़ राज्य अवलोकन") : tr("बस्तर जिला अवलोकन")}</h2>
+          <p>
+            {state ? tr("33 जिले • 146 ब्लॉक") : tr("7 ब्लॉक • 418 ग्राम पंचायत")} {tr("• मई 2026")}
+          </p>
         </div>
         <button
           className="primary"
           onClick={() =>
-            onNotify(state ? "राज्य रिपोर्ट तैयार हुई" : "मासिक रिपोर्ट SMMU को भेजी गई")
+            onNotify(state ? tr("राज्य रिपोर्ट तैयार हुई") : tr("मासिक रिपोर्ट SMMU को भेजी गई"))
           }
         >
           <Icon name="file" size={17} />
-          {state ? "राज्य रिपोर्ट" : "SMMU को रिपोर्ट भेजें"}
+          {state ? tr("राज्य रिपोर्ट") : tr("SMMU को रिपोर्ट भेजें")}
         </button>
       </div>
       <section className="monitor-kpis">
@@ -64,14 +70,14 @@ export function MonitoringWorkspace({
         <div className="card cg-map-card">
           <div className="card-head">
             <div>
-              <h3>{state ? "जिला प्रदर्शन मानचित्र" : "ब्लॉक प्रदर्शन मानचित्र"}</h3>
-              <p>% PLD परिवार जिन्होंने ₹1 लाख पार किया</p>
+              <h3>{state ? tr("जिला प्रदर्शन मानचित्र") : tr("ब्लॉक प्रदर्शन मानचित्र")}</h3>
+              <p>{tr("% PLD परिवार जिन्होंने ₹1 लाख पार किया")}</p>
             </div>
             <div className="map-legend">
               <i />
-              कम <i />
-              मध्यम <i />
-              उच्च
+              {tr("कम")} <i />
+              {tr("मध्यम")} <i />
+              {tr("उच्च")}
             </div>
           </div>
           <div className="abstract-map">
@@ -81,10 +87,18 @@ export function MonitoringWorkspace({
                 className={index % 5 === 0 ? "high" : index % 3 === 0 ? "medium" : "low"}
                 title={
                   state
-                    ? `जिला ${index + 1}`
-                    : ["जगदलपुर", "बकावंड", "लोहंडीगुड़ा", "तोकापाल", "दरभा", "बस्तानार", "बस्तर"][
-                        index
-                      ]
+                    ? tr("जिला {{n}}", { n: index + 1 })
+                    : tr(
+                        [
+                          "जगदलपुर",
+                          "बकावंड",
+                          "लोहंडीगुड़ा",
+                          "तोकापाल",
+                          "दरभा",
+                          "बस्तानार",
+                          "बस्तर",
+                        ][index],
+                      )
                 }
               >
                 {index + 1}
@@ -95,8 +109,8 @@ export function MonitoringWorkspace({
         <div className="card ranking">
           <div className="card-head">
             <div>
-              <h3>{state ? "शीर्ष जिले" : "ब्लॉक रैंकिंग"}</h3>
-              <p>लखपति उपलब्धि दर</p>
+              <h3>{state ? tr("शीर्ष जिले") : tr("ब्लॉक रैंकिंग")}</h3>
+              <p>{tr("लखपति उपलब्धि दर")}</p>
             </div>
           </div>
           {(state
@@ -106,8 +120,11 @@ export function MonitoringWorkspace({
             <div key={x}>
               <b>{index + 1}</b>
               <span>
-                {x}
-                <small>{82 - index * 6}% सर्वे कवरेज</small>
+                {tr(x)}
+                <small>
+                  {82 - index * 6}
+                  {tr("% सर्वे कवरेज")}
+                </small>
               </span>
               <strong>{36 - index * 3}.2%</strong>
             </div>
@@ -118,19 +135,19 @@ export function MonitoringWorkspace({
         <div className="card convergence-matrix">
           <div className="card-head">
             <div>
-              <h3>विभागीय अभिसरण मैट्रिक्स</h3>
-              <p>स्वीकृत / लंबित / अतिदेय</p>
+              <h3>{tr("विभागीय अभिसरण मैट्रिक्स")}</h3>
+              <p>{tr("स्वीकृत / लंबित / अतिदेय")}</p>
             </div>
           </div>
           <div className="matrix-head">
-            <span>विभाग</span>
+            <span>{tr("विभाग")}</span>
             {["JGD", "BKW", "LHG", "TKP", "DRB"].map((x) => (
-              <b key={x}>{x}</b>
+              <b key={x}>{tr(x)}</b>
             ))}
           </div>
           {["कृषि", "उद्यानिकी", "पशुपालन", "मत्स्य", "वन"].map((x, row) => (
             <div className="matrix-row" key={x}>
-              <span>{x}</span>
+              <span>{tr(x)}</span>
               {[0, 1, 2, 3, 4].map((col) => (
                 <i
                   key={col}
@@ -145,8 +162,8 @@ export function MonitoringWorkspace({
           ))}
         </div>
         <div className="card certification">
-          <span className="eyebrow">लखपति ग्राम</span>
-          <h3>प्रमाणन पाइपलाइन</h3>
+          <span className="eyebrow">{tr("लखपति ग्राम")}</span>
+          <h3>{tr("प्रमाणन पाइपलाइन")}</h3>
           {[
             "C1 आय ऑडिट",
             "C2 50% जाँच",
@@ -158,15 +175,17 @@ export function MonitoringWorkspace({
               <i className={index < 2 ? "done" : index === 2 ? "active" : ""}>
                 {index < 2 ? "✓" : index + 1}
               </i>
-              <span>{x}</span>
-              <b>{[18, 12, 7, 4, 2][index]} गाँव</b>
+              <span>{tr(x)}</span>
+              <b>
+                {[18, 12, 7, 4, 2][index]} {tr("गाँव")}
+              </b>
             </div>
           ))}
           <button
             className="secondary"
-            onClick={() => onNotify("प्रमाण पत्र पूर्वावलोकन खोला गया")}
+            onClick={() => onNotify(tr("प्रमाण पत्र पूर्वावलोकन खोला गया"))}
           >
-            प्रमाण पत्र देखें
+            {tr("प्रमाण पत्र देखें")}
           </button>
         </div>
       </section>

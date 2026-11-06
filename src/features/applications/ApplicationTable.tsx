@@ -1,6 +1,7 @@
 import type { ApplicationRow } from "@/api/types"
 import { Icon } from "@/components/ui/Icon"
 import { statusClass } from "@/components/ui/statusClass"
+import { useTr } from "@/i18n/tr"
 
 export function ApplicationTable({
   rows,
@@ -9,18 +10,19 @@ export function ApplicationTable({
   rows: ApplicationRow[]
   onSelect: (item: ApplicationRow) => void
 }) {
+  const tr = useTr()
   return (
     <div className="table-scroll">
       <table>
         <thead>
           <tr>
-            <th>आवेदन ID</th>
-            <th>दीदी / गाँव</th>
-            <th>योजना</th>
-            <th>विभाग</th>
-            <th>राशि</th>
-            <th>लंबित</th>
-            <th>स्थिति</th>
+            <th>{tr("आवेदन ID")}</th>
+            <th>{tr("दीदी / गाँव")}</th>
+            <th>{tr("योजना")}</th>
+            <th>{tr("विभाग")}</th>
+            <th>{tr("राशि")}</th>
+            <th>{tr("लंबित")}</th>
+            <th>{tr("स्थिति")}</th>
             <th />
           </tr>
         </thead>
@@ -28,27 +30,29 @@ export function ApplicationTable({
           {rows.map((item) => (
             <tr key={item.id} onClick={() => onSelect(item)}>
               <td>
-                <b className="app-id">{item.id}</b>
+                <b className="app-id">{tr(item.id)}</b>
               </td>
               <td>
                 <div className="person">
-                  <span>{item.initials}</span>
+                  <span>{tr(item.initials)}</span>
                   <div>
-                    <strong>{item.name}</strong>
-                    <small>{item.village}</small>
+                    <strong>{tr(item.name)}</strong>
+                    <small>{tr(item.village)}</small>
                   </div>
                 </div>
               </td>
-              <td>{item.scheme}</td>
-              <td>{item.dept}</td>
+              <td>{tr(item.scheme)}</td>
+              <td>{tr(item.dept)}</td>
               <td>
-                <strong>{item.amount}</strong>
+                <strong>{tr(item.amount)}</strong>
               </td>
               <td>
-                <span className={item.days > 15 ? "days overdue" : "days"}>{item.days} दिन</span>
+                <span className={item.days > 15 ? "days overdue" : "days"}>
+                  {item.days} {tr("दिन")}
+                </span>
               </td>
               <td>
-                <span className={`status ${statusClass[item.status]}`}>{item.status}</span>
+                <span className={`status ${statusClass[item.status]}`}>{tr(item.status)}</span>
               </td>
               <td>
                 <button className="row-arrow">
@@ -59,7 +63,7 @@ export function ApplicationTable({
           ))}
         </tbody>
       </table>
-      {rows.length === 0 && <div className="empty">कोई मिलान रिकॉर्ड नहीं मिला</div>}
+      {rows.length === 0 && <div className="empty">{tr("कोई मिलान रिकॉर्ड नहीं मिला")}</div>}
     </div>
   )
 }

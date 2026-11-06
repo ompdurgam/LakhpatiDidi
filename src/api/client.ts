@@ -1,4 +1,6 @@
 // Typed fetch wrapper for the REST API (proxied at /api by Vite).
+import i18n from "@/i18n"
+import { translate } from "@/i18n/tr"
 import { useSession } from "@/stores/session"
 
 export class ApiError extends Error {
@@ -19,13 +21,15 @@ export async function api<T = unknown>(
     response = await fetch(`/api${path}`, {
       method: options.method ?? (options.body ? "POST" : "GET"),
       headers: {
+        // The API answers (names, labels, messages) in the UI language.
+        "Accept-Language": i18n.language === "en" ? "en" : "hi",
         ...(options.body ? { "Content-Type": "application/json" } : {}),
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: options.body ? JSON.stringify(options.body) : undefined,
     })
   } catch {
-    throw new ApiError(0, "सर्वर से संपर्क नहीं हो सका। इंटरनेट/सर्वर जाँचें।")
+    throw new ApiError(0, translate("सर्वर से संपर्क नहीं हो सका। इंटरनेट/सर्वर जाँचें।"))
   }
   const data = await response.json().catch(() => ({}))
   if (!response.ok) {
@@ -33,7 +37,10 @@ export async function api<T = unknown>(
     if (response.status === 401 && token && !path.startsWith("/auth/")) {
       useSession.getState().signOut()
     }
-    throw new ApiError(response.status, (data as { error?: string }).error ?? "अनुरोध विफल रहा")
+    throw new ApiError(
+      response.status,
+      (data as { error?: string }).error ?? translate("अनुरोध विफल रहा"),
+    )
   }
   return data as T
 }

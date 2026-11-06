@@ -2,6 +2,7 @@
 export function BrandMark() {
   return (
     <div className="brand-mark" aria-hidden="true">
+      {/* i18n-exempt: logo glyph */}
       <span>स्व</span>
       <i />
     </div>

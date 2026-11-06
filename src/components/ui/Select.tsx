@@ -1,6 +1,7 @@
 import { useContext } from "react"
 
 import { SurveyDraftContext } from "@/components/ui/FormDraftContext"
+import { useTr } from "@/i18n/tr"
 
 export function SelectControl({
   label,
@@ -11,11 +12,12 @@ export function SelectControl({
   value: string
   options: string[]
 }) {
+  const tr = useTr()
   const draft = useContext(SurveyDraftContext)
   if (draft && draft[label] === undefined) draft[label] = value
   return (
     <label className="text-control">
-      <span>{label}</span>
+      <span>{tr(label)}</span>
       <select
         defaultValue={draft?.[label] ?? value}
         onChange={(event) => {
@@ -23,7 +25,9 @@ export function SelectControl({
         }}
       >
         {options.map((option) => (
-          <option key={option}>{option}</option>
+          <option key={option} value={option}>
+            {tr(option)}
+          </option>
         ))}
       </select>
     </label>
@@ -41,12 +45,15 @@ export function FilterSelect({
   value?: string
   onChange?: (value: string) => void
 }) {
+  const tr = useTr()
   return (
     <label className="register-filter">
-      <span>{label}</span>
+      <span>{tr(label)}</span>
       <select value={value} onChange={(event) => onChange?.(event.target.value)}>
         {options.map((option) => (
-          <option key={option}>{option}</option>
+          <option key={option} value={option}>
+            {tr(option)}
+          </option>
         ))}
       </select>
     </label>

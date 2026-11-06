@@ -1,34 +1,36 @@
 import { Icon } from "@/components/ui/Icon"
+import { useTr } from "@/i18n/tr"
 
 /** Department funnel, awareness gap and target-vs-achievement panels. */
 export function DepartmentAnalytics() {
+  const tr = useTr()
   return (
     <>
       <section className="analytics-grid department-analytics">
         <div className="card bar-chart">
           <div className="card-head">
             <div>
-              <h3>योजना-वार फनल</h3>
-              <p>प्राप्त → स्वीकृत → डिलीवर</p>
+              <h3>{tr("योजना-वार फनल")}</h3>
+              <p>{tr("प्राप्त → स्वीकृत → डिलीवर")}</p>
             </div>
           </div>
           <div className="funnel-legend">
             <span>
               <i className="received" />
-              प्राप्त
+              {tr("प्राप्त")}
             </span>
             <span>
               <i className="sanctioned" />
-              स्वीकृत
+              {tr("स्वीकृत")}
             </span>
             <span>
               <i className="delivered" />
-              डिलीवर
+              {tr("डिलीवर")}
             </span>
           </div>
           {["PMMSY", "Boat / Net", "Pond", "Biofloc", "Ice Box"].map((x, index) => (
             <div className="bar-row" key={x}>
-              <span>{x}</span>
+              <span>{tr(x)}</span>
               <i>
                 <b style={{ width: `${92 - index * 10}%` }} />
                 <em style={{ width: `${68 - index * 7}%` }} />
@@ -38,20 +40,20 @@ export function DepartmentAnalytics() {
           ))}
         </div>
         <div className="card sla-gauge">
-          <h3>औसत स्वीकृति समय</h3>
+          <h3>{tr("औसत स्वीकृति समय")}</h3>
           <strong>
-            11.4 <small>दिन</small>
+            11.4 <small>{tr("दिन")}</small>
           </strong>
           <div>
             <i />
           </div>
-          <p>लक्ष्य 15 दिन • 78% समय पर</p>
+          <p>{tr("लक्ष्य 15 दिन • 78% समय पर")}</p>
         </div>
         <div className="card awareness-gap-card">
           <div className="card-head">
             <div>
-              <h3>जागरूकता बनाम लाभ अंतर</h3>
-              <p>सर्वे D सेक्शन से प्रतिशत</p>
+              <h3>{tr("जागरूकता बनाम लाभ अंतर")}</h3>
+              <p>{tr("सर्वे D सेक्शन से प्रतिशत")}</p>
             </div>
           </div>
           {[
@@ -61,10 +63,10 @@ export function DepartmentAnalytics() {
             ["Biofloc", 46, 18],
           ].map(([scheme, aware, received]) => (
             <div className="awareness-row" key={String(scheme)}>
-              <strong>{scheme}</strong>
+              <strong>{tr(String(scheme))}</strong>
               <div>
                 <span>
-                  जागरूक <b>{aware}%</b>
+                  {tr("जागरूक")} <b>{aware}%</b>
                 </span>
                 <i>
                   <em style={{ width: `${aware}%` }} />
@@ -72,7 +74,7 @@ export function DepartmentAnalytics() {
               </div>
               <div>
                 <span>
-                  लाभ मिला <b>{received}%</b>
+                  {tr("लाभ मिला")} <b>{received}%</b>
                 </span>
                 <i>
                   <em style={{ width: `${received}%` }} />
@@ -85,22 +87,22 @@ export function DepartmentAnalytics() {
       <section className="card target-achievement">
         <div className="card-head">
           <div>
-            <h3>योजना लक्ष्य बनाम उपलब्धि</h3>
-            <p>वित्तीय वर्ष 2026–27 • नवंबर तक</p>
+            <h3>{tr("योजना लक्ष्य बनाम उपलब्धि")}</h3>
+            <p>{tr("वित्तीय वर्ष 2026–27 • नवंबर तक")}</p>
           </div>
           <button className="filter-button">
-            <Icon name="download" size={14} /> निर्यात
+            <Icon name="download" size={14} /> {tr("निर्यात")}
           </button>
         </div>
         <div className="target-table-scroll">
           <table>
             <thead>
               <tr>
-                <th>योजना</th>
-                <th>वार्षिक लक्ष्य</th>
-                <th>स्वीकृत</th>
-                <th>उपलब्धि %</th>
-                <th>बजट उपयोग</th>
+                <th>{tr("योजना")}</th>
+                <th>{tr("वार्षिक लक्ष्य")}</th>
+                <th>{tr("स्वीकृत")}</th>
+                <th>{tr("उपलब्धि %")}</th>
+                <th>{tr("बजट उपयोग")}</th>
               </tr>
             </thead>
             <tbody>
@@ -112,7 +114,7 @@ export function DepartmentAnalytics() {
               ].map(([scheme, target, sanctioned, pct, budget]) => (
                 <tr key={String(scheme)}>
                   <td>
-                    <strong>{scheme}</strong>
+                    <strong>{tr(String(scheme))}</strong>
                   </td>
                   <td>{target}</td>
                   <td>{sanctioned}</td>

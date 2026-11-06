@@ -1,11 +1,13 @@
 import { type ReactNode, useState } from "react"
 
 import { Icon } from "@/components/ui/Icon"
+import { useTr } from "@/i18n/tr"
 
 export function ChipField({ label, children }: { label: string; children: ReactNode }) {
+  const tr = useTr()
   return (
     <div className="chip-field">
-      <span>{label}</span>
+      <span>{tr(label)}</span>
       {children}
     </div>
   )
@@ -22,6 +24,7 @@ export function ChipGroup({
   onToggle?: (item: string) => void
   single?: boolean
 }) {
+  const tr = useTr()
   const [localSelected, setLocalSelected] = useState(selected)
   const active = onToggle ? selected : localSelected
   const handleToggle = (option: string) => {
@@ -47,7 +50,7 @@ export function ChipGroup({
           onClick={() => handleToggle(option)}
           aria-pressed={active.includes(option)}
         >
-          {option}
+          {tr(option)}
           {single && active.includes(option) && <Icon name="check" size={12} />}
         </button>
       ))}

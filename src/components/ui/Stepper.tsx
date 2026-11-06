@@ -1,3 +1,5 @@
+import { useTr } from "@/i18n/tr"
+
 /** Compact step indicator (`.mini-stepper`) for wizards. */
 export function Stepper({
   steps,
@@ -8,6 +10,7 @@ export function Stepper({
   current: number
   onSelect?: (index: number) => void
 }) {
+  const tr = useTr()
   return (
     <div className="mini-stepper">
       {steps.map((label, index) => (
@@ -18,7 +21,7 @@ export function Stepper({
           aria-current={index === current ? "step" : undefined}
           onClick={() => onSelect?.(index)}
         >
-          {label}
+          {tr(label)}
         </button>
       ))}
     </div>

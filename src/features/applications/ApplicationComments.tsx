@@ -2,6 +2,7 @@ import { useState } from "react"
 
 import type { ApplicationDetail } from "@/api/types"
 import { Icon } from "@/components/ui/Icon"
+import { useTr } from "@/i18n/tr"
 
 /** CRP ↔ officer comment thread with a reply box. */
 export function ApplicationComments({
@@ -14,6 +15,7 @@ export function ApplicationComments({
   /** Resolves true when the comment was saved. */
   onSend: (body: string) => Promise<boolean>
 }) {
+  const tr = useTr()
   const [draft, setDraft] = useState("")
   const send = async () => {
     if (!draft.trim()) return
@@ -21,29 +23,29 @@ export function ApplicationComments({
   }
   return (
     <div className="drawer-section comment-thread">
-      <h4>CRP के साथ टिप्पणियाँ</h4>
-      {comments.length === 0 && <p className="empty-note">अभी कोई टिप्पणी नहीं</p>}
+      <h4>{tr("CRP के साथ टिप्पणियाँ")}</h4>
+      {comments.length === 0 && <p className="empty-note">{tr("अभी कोई टिप्पणी नहीं")}</p>}
       {comments.map((c) => (
         <div key={c.id} className={`comment ${c.fromOfficer ? "officer" : "crp"}`}>
-          <span>{c.initials}</span>
+          <span>{tr(c.initials)}</span>
           <p>
             <strong>
-              {c.author} • {c.roleLabel}
+              {tr(c.author)} • {tr(c.roleLabel)}
             </strong>
-            {c.body}
-            <small>{c.at}</small>
+            {tr(c.body)}
+            <small>{tr(c.at)}</small>
           </p>
         </div>
       ))}
       <label className="comment-box">
         <input
-          placeholder="टिप्पणी लिखें..."
+          placeholder={tr("टिप्पणी लिखें...")}
           value={draft}
           maxLength={1000}
           onChange={(event) => setDraft(event.target.value)}
           onKeyDown={(event) => event.key === "Enter" && send()}
         />
-        <button onClick={send} disabled={busy || !draft.trim()} aria-label="टिप्पणी भेजें">
+        <button onClick={send} disabled={busy || !draft.trim()} aria-label={tr("टिप्पणी भेजें")}>
           <Icon name="arrow" size={14} />
         </button>
       </label>

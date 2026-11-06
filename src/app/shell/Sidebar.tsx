@@ -4,6 +4,7 @@ import { NavLink, useMatch } from "react-router"
 import { useApplications } from "@/api/hooks"
 import { BrandMark } from "@/components/ui/BrandMark"
 import { Icon } from "@/components/ui/Icon"
+import { useTr } from "@/i18n/tr"
 import { useSession } from "@/stores/session"
 import { useUi } from "@/stores/ui"
 
@@ -12,6 +13,7 @@ import { navForRole } from "../navigation"
 const OPEN = ["submitted", "under_review", "info_requested"]
 
 export function Sidebar() {
+  const tr = useTr()
   const { t } = useTranslation()
   const { t: tn } = useTranslation("nav")
   const role = useSession((s) => s.role)
@@ -82,7 +84,7 @@ export function Sidebar() {
       <button className="profile" onClick={signOut} title={t("profile.logout")}>
         <div className="avatar">{user?.initials}</div>
         <div>
-          <strong>{user?.name}</strong>
+          <strong>{tr(user?.name ?? "")}</strong>
           <span>
             {user?.designation} • {t("profile.logout")}
           </span>

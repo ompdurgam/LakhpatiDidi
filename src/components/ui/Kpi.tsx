@@ -1,4 +1,5 @@
 import { Icon, type IconName } from "@/components/ui/Icon"
+import { useTr } from "@/i18n/tr"
 
 export function Kpi({
   icon,
@@ -17,27 +18,28 @@ export function Kpi({
   progress?: number
   trend?: boolean
 }) {
+  const tr = useTr()
   return (
     <div className="card kpi">
       <div className={`kpi-icon ${color}`}>
         <Icon name={icon} />
       </div>
       <div className="kpi-label">
-        {label}
+        {tr(label)}
         <Icon name="chevron" size={15} />
       </div>
-      <strong>{value}</strong>
+      <strong>{tr(value)}</strong>
       {progress ? (
         <>
           <div className="mini-progress">
             <i style={{ width: `${progress}%` }} />
           </div>
-          <span>{meta}</span>
+          <span>{tr(meta)}</span>
         </>
       ) : (
         <span className={trend ? "positive" : ""}>
           {trend && "↑ "}
-          {meta}
+          {tr(meta)}
         </span>
       )}
     </div>

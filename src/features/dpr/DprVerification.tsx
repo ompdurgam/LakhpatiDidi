@@ -1,6 +1,8 @@
 import { Icon } from "@/components/ui/Icon"
+import { useTr } from "@/i18n/tr"
 
 export function DprVerification() {
+  const tr = useTr()
   return (
     <div className="verification-step">
       {[
@@ -13,15 +15,19 @@ export function DprVerification() {
             <Icon name="check" size={17} />
           </span>
           <div>
-            <strong>{title} ✔</strong>
-            <p>{name}</p>
-            <small>{meta}</small>
+            <strong>{tr(title)} ✔</strong>
+            <p>{tr(name)}</p>
+            <small>{tr(meta)}</small>
           </div>
         </div>
       ))}
       <label className="verification-remarks">
-        <span>सत्यापन टिप्पणी</span>
-        <textarea defaultValue="लाभार्थी ने परियोजना लागत, ऋण और विभागीय प्रक्रिया समझ ली है। तालाब स्थल का GPS सत्यापित है।" />
+        <span>{tr("सत्यापन टिप्पणी")}</span>
+        <textarea
+          defaultValue={tr(
+            "लाभार्थी ने परियोजना लागत, ऋण और विभागीय प्रक्रिया समझ ली है। तालाब स्थल का GPS सत्यापित है।",
+          )}
+        />
       </label>
     </div>
   )

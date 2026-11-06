@@ -1,6 +1,8 @@
 import { Icon } from "@/components/ui/Icon"
+import { useTr } from "@/i18n/tr"
 
 export function SchemeConvergence() {
+  const tr = useTr()
   const rows = [
     ["PMMSY तालाब", "मत्स्य", 284, 198, 142, 96, 58, "₹69.6L"],
     ["बैकयार्ड पोल्ट्री", "पशुपालन", 362, 274, 186, 144, 112, "₹53.8L"],
@@ -24,25 +26,25 @@ export function SchemeConvergence() {
       <section className="card convergence-table-card">
         <div className="card-head">
           <div>
-            <h3>योजना अभिसरण</h3>
-            <p>सुझाव से वितरण तक • नवंबर 2026</p>
+            <h3>{tr("योजना अभिसरण")}</h3>
+            <p>{tr("सुझाव से वितरण तक • नवंबर 2026")}</p>
           </div>
           <button className="filter-button">
-            <Icon name="download" size={14} /> निर्यात
+            <Icon name="download" size={14} /> {tr("निर्यात")}
           </button>
         </div>
         <div className="table-scroll">
           <table>
             <thead>
               <tr>
-                <th>योजना</th>
-                <th>विभाग</th>
-                <th>सुझाए</th>
-                <th>सहमति</th>
+                <th>{tr("योजना")}</th>
+                <th>{tr("विभाग")}</th>
+                <th>{tr("सुझाए")}</th>
+                <th>{tr("सहमति")}</th>
                 <th>DPR</th>
-                <th>स्वीकृत</th>
-                <th>वितरित</th>
-                <th>₹ स्वीकृत</th>
+                <th>{tr("स्वीकृत")}</th>
+                <th>{tr("वितरित")}</th>
+                <th>{tr("₹ स्वीकृत")}</th>
               </tr>
             </thead>
             <tbody>
@@ -50,7 +52,11 @@ export function SchemeConvergence() {
                 <tr key={String(row[0])}>
                   {row.map((cell, index) => (
                     <td key={index}>
-                      {index === 0 || index === 7 ? <strong>{cell}</strong> : cell}
+                      {index === 0 || index === 7 ? (
+                        <strong>{tr(String(cell))}</strong>
+                      ) : (
+                        tr(String(cell))
+                      )}
                     </td>
                   ))}
                 </tr>
@@ -63,8 +69,8 @@ export function SchemeConvergence() {
         <div className="card block-awareness-chart">
           <div className="card-head">
             <div>
-              <h3>जागरूकता बनाम लाभ अंतर</h3>
-              <p>परिवार सर्वे के आधार पर</p>
+              <h3>{tr("जागरूकता बनाम लाभ अंतर")}</h3>
+              <p>{tr("परिवार सर्वे के आधार पर")}</p>
             </div>
           </div>
           {[
@@ -75,21 +81,25 @@ export function SchemeConvergence() {
             ["फसल बीमा", 84, 52],
           ].map(([name, aware, benefit]) => (
             <div key={String(name)}>
-              <strong>{name}</strong>
-              <span>जागरूक {aware}%</span>
+              <strong>{tr(String(name))}</strong>
+              <span>
+                {tr("जागरूक")} {aware}%
+              </span>
               <i>
                 <b className="aware" style={{ width: `${aware}%` }} />
                 <b className="benefit" style={{ width: `${benefit}%` }} />
               </i>
-              <small>लाभ {benefit}%</small>
+              <small>
+                {tr("लाभ")} {benefit}%
+              </small>
             </div>
           ))}
         </div>
         <div className="card cluster-demand">
           <div className="card-head">
             <div>
-              <h3>क्लस्टर मांग</h3>
-              <p>SHG, इकाई और अनुमानित निवेश</p>
+              <h3>{tr("क्लस्टर मांग")}</h3>
+              <p>{tr("SHG, इकाई और अनुमानित निवेश")}</p>
             </div>
           </div>
           {clusters.map(([name, shg, units, cost]) => (
@@ -97,9 +107,9 @@ export function SchemeConvergence() {
               <span className="cluster-icon">
                 <Icon name="scheme" size={14} />
               </span>
-              <strong>{name}</strong>
+              <strong>{tr(String(name))}</strong>
               <p>
-                <b>{shg}</b> SHG <b>{units}</b> इकाई
+                <b>{shg}</b> SHG <b>{units}</b> {tr("इकाई")}
               </p>
               <em>{cost}</em>
             </div>

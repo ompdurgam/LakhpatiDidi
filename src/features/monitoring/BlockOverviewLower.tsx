@@ -1,4 +1,5 @@
 import { Icon } from "@/components/ui/Icon"
+import { useTr } from "@/i18n/tr"
 
 import type { BlockSection } from "./BlockDashboard"
 import { Task } from "./widgets/Task"
@@ -14,17 +15,18 @@ export function BlockOverviewLower({
   /** Switch to the department role (prototype behaviour). */
   openDepartments: () => void
 }) {
+  const tr = useTr()
   return (
     <>
       <section className="bottom-grid">
         <div className="card coverage-card">
           <div className="card-head">
             <div>
-              <h3>CLF-वार सर्वे कवरेज</h3>
-              <p>लक्ष्य के विरुद्ध पूर्ण सर्वे</p>
+              <h3>{tr("CLF-वार सर्वे कवरेज")}</h3>
+              <p>{tr("लक्ष्य के विरुद्ध पूर्ण सर्वे")}</p>
             </div>
             <button className="filter-button">
-              कवरेज % <Icon name="chevron" size={14} />
+              {tr("कवरेज %")} <Icon name="chevron" size={14} />
             </button>
           </div>
           {[
@@ -35,7 +37,7 @@ export function BlockOverviewLower({
           ].map(([name, pct, count]) => (
             <div className="coverage-row" key={name}>
               <div>
-                <strong>{name}</strong>
+                <strong>{tr(String(name))}</strong>
                 <span>{count}</span>
               </div>
               <div className="progress-line">
@@ -48,15 +50,15 @@ export function BlockOverviewLower({
         <div className="card deadline-card">
           <div className="card-head">
             <div>
-              <h3>SLA और जरूरी कार्य</h3>
-              <p>समय सीमा के करीब और अतिदेय</p>
+              <h3>{tr("SLA और जरूरी कार्य")}</h3>
+              <p>{tr("समय सीमा के करीब और अतिदेय")}</p>
             </div>
             <span className="count-badge">12</span>
           </div>
           <Task
             color="red"
             icon="alert"
-            title="6 आवेदन स्वीकृति में अतिदेय"
+            title={tr("6 आवेदन स्वीकृति में अतिदेय")}
             sub="15 दिन की समय सीमा पार"
             action="अभी देखें"
             onClick={() => go("applications")}
@@ -64,15 +66,15 @@ export function BlockOverviewLower({
           <Task
             color="amber"
             icon="clock"
-            title="4 डिलीवरी 3 दिन में देय"
+            title={tr("4 डिलीवरी 3 दिन में देय")}
             sub="स्वीकृति के बाद 30 दिन"
             action="फॉलो-अप"
-            onClick={() => notify("संबंधित अधिकारियों को रिमाइंडर भेजा गया")}
+            onClick={() => notify(tr("संबंधित अधिकारियों को रिमाइंडर भेजा गया"))}
           />
           <Task
             color="blue"
             icon="file"
-            title="मासिक रिपोर्ट जमा करें"
+            title={tr("मासिक रिपोर्ट जमा करें")}
             sub="DMMU को देय • 10 दिसंबर"
             action="तैयार करें"
             onClick={() => go("reports")}
@@ -83,19 +85,19 @@ export function BlockOverviewLower({
         <div className="card department-pendency">
           <div className="card-head">
             <div>
-              <h3>विभागीय लंबितता</h3>
-              <p>प्राप्त / लंबित / अतिदेय आवेदन</p>
+              <h3>{tr("विभागीय लंबितता")}</h3>
+              <p>{tr("प्राप्त / लंबित / अतिदेय आवेदन")}</p>
             </div>
             <button className="text-button" onClick={openDepartments}>
-              विभाग खोलें <Icon name="arrow" size={14} />
+              {tr("विभाग खोलें")} <Icon name="arrow" size={14} />
             </button>
           </div>
           <div className="pendency-table">
             <div className="head">
-              <span>विभाग</span>
-              <b>प्राप्त</b>
-              <b>लंबित</b>
-              <b>अतिदेय</b>
+              <span>{tr("विभाग")}</span>
+              <b>{tr("प्राप्त")}</b>
+              <b>{tr("लंबित")}</b>
+              <b>{tr("अतिदेय")}</b>
             </div>
             {[
               ["मत्स्य", 142, 38, 12],
@@ -106,7 +108,7 @@ export function BlockOverviewLower({
               ["उद्योग", 74, 22, 4],
             ].map(([dept, received, pending, overdue]) => (
               <div key={String(dept)}>
-                <span>{dept}</span>
+                <span>{tr(String(dept))}</span>
                 <b>{received}</b>
                 <b className="pending">{pending}</b>
                 <b className="overdue">{overdue}</b>
@@ -117,18 +119,18 @@ export function BlockOverviewLower({
         <div className="card surveyor-performance">
           <div className="card-head">
             <div>
-              <h3>सर्वेयर प्रदर्शन</h3>
-              <p>नवंबर 2026 • गुणवत्ता और सिंक</p>
+              <h3>{tr("सर्वेयर प्रदर्शन")}</h3>
+              <p>{tr("नवंबर 2026 • गुणवत्ता और सिंक")}</p>
             </div>
           </div>
           <div className="surveyor-table">
             <div className="head">
-              <span>सर्वेयर</span>
-              <b>निर्धारित</b>
-              <b>पूर्ण</b>
-              <b>ड्राफ्ट</b>
-              <b>सिंक बाकी</b>
-              <b>गुणवत्ता</b>
+              <span>{tr("सर्वेयर")}</span>
+              <b>{tr("निर्धारित")}</b>
+              <b>{tr("पूर्ण")}</b>
+              <b>{tr("ड्राफ्ट")}</b>
+              <b>{tr("सिंक बाकी")}</b>
+              <b>{tr("गुणवत्ता")}</b>
             </div>
             {[
               ["गीता नेताम", 86, 72, 8, 2, "उत्कृष्ट"],
@@ -137,12 +139,12 @@ export function BlockOverviewLower({
               ["मीना नाग", 78, 66, 7, 1, "उत्कृष्ट"],
             ].map(([name, assigned, done, draft, sync, quality]) => (
               <div key={String(name)}>
-                <span>{name}</span>
+                <span>{tr(String(name))}</span>
                 <b>{assigned}</b>
                 <b>{done}</b>
                 <b>{draft}</b>
                 <b className={Number(sync) > 4 ? "warning" : ""}>{sync}</b>
-                <em className={quality === "जाँचें" ? "warning" : ""}>{quality}</em>
+                <em className={quality === "जाँचें" ? "warning" : ""}>{tr(String(quality))}</em>
               </div>
             ))}
           </div>

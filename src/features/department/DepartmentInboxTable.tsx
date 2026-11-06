@@ -1,5 +1,6 @@
 import type { ApplicationRow } from "@/api/types"
 import { statusClass } from "@/components/ui/statusClass"
+import { useTr } from "@/i18n/tr"
 
 export type DepartmentInboxRecord = ApplicationRow
 
@@ -14,6 +15,7 @@ export function DepartmentInboxTable({
   onToggle: (id: string) => void
   onSelect: (item: ApplicationRow) => void
 }) {
+  const tr = useTr()
   return (
     <div className="table-scroll department-inbox-table">
       <table>
@@ -21,13 +23,13 @@ export function DepartmentInboxTable({
           <tr>
             <th></th>
             <th>App ID</th>
-            <th>दीदी / गाँव</th>
-            <th>योजना</th>
-            <th>परियोजना लागत</th>
-            <th>अनुदान ₹</th>
-            <th>प्राप्ति तिथि</th>
-            <th>लंबित</th>
-            <th>स्थिति</th>
+            <th>{tr("दीदी / गाँव")}</th>
+            <th>{tr("योजना")}</th>
+            <th>{tr("परियोजना लागत")}</th>
+            <th>{tr("अनुदान ₹")}</th>
+            <th>{tr("प्राप्ति तिथि")}</th>
+            <th>{tr("लंबित")}</th>
+            <th>{tr("स्थिति")}</th>
           </tr>
         </thead>
         <tbody>
@@ -41,40 +43,44 @@ export function DepartmentInboxTable({
                 />
               </td>
               <td>
-                <b className="app-id">{item.id}</b>
+                <b className="app-id">{tr(item.id)}</b>
               </td>
               <td>
                 <div className="person">
-                  <span>{item.initials}</span>
+                  <span>{tr(item.initials)}</span>
                   <div>
-                    <strong>{item.name}</strong>
+                    <strong>{tr(item.name)}</strong>
                     <small>
-                      {item.village} • {item.block}
+                      {tr(item.village)} • {tr(item.block)}
                     </small>
                   </div>
                 </div>
               </td>
-              <td>{item.scheme}</td>
+              <td>{tr(item.scheme)}</td>
               <td>
-                <strong>{item.amount}</strong>
+                <strong>{tr(item.amount)}</strong>
               </td>
               <td>
-                <strong>{item.subsidy}</strong>
+                <strong>{tr(item.subsidy)}</strong>
               </td>
-              <td>{item.received}</td>
+              <td>{tr(item.received)}</td>
               <td>
-                <span className={item.days > 15 ? "days overdue" : "days"}>{item.days} दिन</span>
+                <span className={item.days > 15 ? "days overdue" : "days"}>
+                  {item.days} {tr("दिन")}
+                </span>
               </td>
               <td>
                 <span className={`status ${statusClass[item.status] || "blue"}`}>
-                  {item.status}
+                  {tr(item.status)}
                 </span>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      {!rows.length && <div className="empty">इस विभाग और फ़िल्टर में कोई आवेदन नहीं मिला</div>}
+      {!rows.length && (
+        <div className="empty">{tr("इस विभाग और फ़िल्टर में कोई आवेदन नहीं मिला")}</div>
+      )}
     </div>
   )
 }

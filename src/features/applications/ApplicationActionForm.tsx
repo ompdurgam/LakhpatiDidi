@@ -3,6 +3,7 @@ import { useState } from "react"
 import type { ApplicationDetail } from "@/api/types"
 import { Icon } from "@/components/ui/Icon"
 import { todayIso } from "@/features/applications/applicationStatus"
+import { useTr } from "@/i18n/tr"
 
 export function ApplicationActionForm({
   action,
@@ -17,6 +18,7 @@ export function ApplicationActionForm({
   onCancel: () => void
   onSubmit: (payload: Record<string, unknown>) => void
 }) {
+  const tr = useTr()
   const labels = {
     info: ["जानकारी माँगें", "अनुरोध भेजें"],
     sanction: ["आवेदन स्वीकृत करें", "स्वीकृति दर्ज करें"],
@@ -25,7 +27,7 @@ export function ApplicationActionForm({
   }
   const missingDoc = detail.documents.find((d) => !d.verified)?.name
   const [message, setMessage] = useState(
-    `कृपया ${missingDoc ?? "आवश्यक दस्तावेज़"} की स्पष्ट प्रति अपलोड करें।`,
+    tr("कृपया {{doc}} की स्पष्ट प्रति अपलोड करें।", { doc: tr(missingDoc ?? "आवश्यक दस्तावेज़") }),
   )
   const [orderNo, setOrderNo] = useState("")
   const [date, setDate] = useState(todayIso())
@@ -73,20 +75,20 @@ export function ApplicationActionForm({
     <section className={`drawer-section action-form ${action}`}>
       <div className="drawer-section-title">
         <h4>{labels[action][0]}</h4>
-        <button onClick={onCancel} aria-label="बंद करें">
+        <button onClick={onCancel} aria-label={tr("बंद करें")}>
           <Icon name="close" size={14} />
         </button>
       </div>
       {action === "info" && (
         <label>
-          <span>CRP के लिए संदेश</span>
+          <span>{tr("CRP के लिए संदेश")}</span>
           <textarea value={message} onChange={(event) => setMessage(event.target.value)} />
         </label>
       )}
       {action === "sanction" && (
         <div className="action-form-grid">
           <label className="text-control">
-            <span>आदेश सं.</span>
+            <span>{tr("आदेश सं.")}</span>
             <input
               value={orderNo}
               placeholder="FISH/JGD/2026/284"
@@ -94,11 +96,13 @@ export function ApplicationActionForm({
             />
           </label>
           <label className="text-control">
-            <span>दिनांक</span>
+            <span>{tr("दिनांक")}</span>
             <input type="date" value={date} onChange={(event) => setDate(event.target.value)} />
           </label>
           <label className="text-control">
-            <span>स्वीकृत राशि ₹ (लागत {detail.amount})</span>
+            <span>
+              {tr("स्वीकृत राशि ₹ (लागत")} {detail.amount})
+            </span>
             <input
               type="number"
               min={1}
@@ -111,16 +115,16 @@ export function ApplicationActionForm({
       {action === "reject" && (
         <>
           <label>
-            <span>कारण</span>
+            <span>{tr("कारण")}</span>
             <select value={reason} onChange={(event) => setReason(event.target.value)}>
-              <option>दस्तावेज़ अपूर्ण</option>
-              <option>पात्रता पूरी नहीं</option>
-              <option>बजट उपलब्ध नहीं</option>
-              <option>दोहरा लाभ</option>
+              <option value="दस्तावेज़ अपूर्ण">{tr("दस्तावेज़ अपूर्ण")}</option>
+              <option value="पात्रता पूरी नहीं">{tr("पात्रता पूरी नहीं")}</option>
+              <option value="बजट उपलब्ध नहीं">{tr("बजट उपलब्ध नहीं")}</option>
+              <option value="दोहरा लाभ">{tr("दोहरा लाभ")}</option>
             </select>
           </label>
           <label>
-            <span>टिप्पणी</span>
+            <span>{tr("टिप्पणी")}</span>
             <textarea value={note} onChange={(event) => setNote(event.target.value)} />
           </label>
         </>
@@ -128,32 +132,32 @@ export function ApplicationActionForm({
       {action === "deliver" && (
         <div className="action-form-grid">
           <label className="text-control">
-            <span>डिलीवरी दिनांक</span>
+            <span>{tr("डिलीवरी दिनांक")}</span>
             <input type="date" value={date} onChange={(event) => setDate(event.target.value)} />
           </label>
           <label className="text-control">
-            <span>परिसंपत्ति विवरण</span>
+            <span>{tr("परिसंपत्ति विवरण")}</span>
             <input
               value={asset}
-              placeholder="5,000 फिंगरलिंग + जाल"
+              placeholder={tr("5,000 फिंगरलिंग + जाल")}
               onChange={(event) => setAsset(event.target.value)}
             />
           </label>
           <button type="button" className="action-upload" onClick={captureGeo}>
-            <Icon name="camera" size={15} /> Geo-tag लोकेशन
+            <Icon name="camera" size={15} /> {tr("Geo-tag लोकेशन")}
           </button>
           <div className="geo-proof">
             <Icon name="map" size={14} />
-            {geo ? `${geo.lat}, ${geo.lng}` : geoState || "लोकेशन नहीं ली गई"}
+            {geo ? `${geo.lat}, ${geo.lng}` : tr(geoState || "लोकेशन नहीं ली गई")}
           </div>
         </div>
       )}
       <div className="action-form-buttons">
         <button className="secondary" onClick={onCancel} disabled={busy}>
-          रद्द करें
+          {tr("रद्द करें")}
         </button>
         <button className="primary" disabled={busy || !valid} onClick={() => onSubmit(payload())}>
-          {busy ? "सहेजा जा रहा है…" : labels[action][1]}
+          {busy ? tr("सहेजा जा रहा है…") : tr(labels[action][1])}
         </button>
       </div>
     </section>

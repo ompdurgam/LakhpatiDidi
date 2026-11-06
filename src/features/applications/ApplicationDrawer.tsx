@@ -5,6 +5,7 @@ import { useRefreshData, useResource } from "@/api/hooks"
 import type { ApplicationDetail, ApplicationRow } from "@/api/types"
 import { Drawer } from "@/components/ui/Drawer"
 import { statusClass } from "@/components/ui/statusClass"
+import { useTr } from "@/i18n/tr"
 
 import { ApplicationActionBar, type FormAction } from "./ApplicationActionBar"
 import { ApplicationActionForm } from "./ApplicationActionForm"
@@ -24,6 +25,7 @@ export function ApplicationDrawer({
   onClose: () => void
   onNotify: (s: string) => void
 }) {
+  const tr = useTr()
   const refresh = useRefreshData()
   const {
     data: detail,
@@ -72,19 +74,19 @@ export function ApplicationDrawer({
 
   return (
     <>
-      <Drawer eyebrow="आवेदन विवरण" title={item.id} onClose={onClose}>
+      <Drawer eyebrow={tr("आवेदन विवरण")} title={item.id} onClose={onClose}>
         <div className="drawer-person">
-          <div className="avatar large">{view.initials}</div>
+          <div className="avatar large">{tr(view.initials)}</div>
           <div>
-            <h3>{view.name}</h3>
+            <h3>{tr(view.name)}</h3>
             <p>
-              {view.village}, {view.block} • {view.hhCode}
+              {tr(view.village)}, {view.block} • {tr(view.hhCode)}
             </p>
           </div>
-          <span className={`status ${statusClass[view.status] || "blue"}`}>{view.status}</span>
+          <span className={`status ${statusClass[view.status] || "blue"}`}>{tr(view.status)}</span>
         </div>
-        {loadError && <p className="form-error drawer-error">{loadError}</p>}
-        {!detail && !loadError && <div className="drawer-loading">लोड हो रहा है…</div>}
+        {loadError && <p className="form-error drawer-error">{tr(loadError)}</p>}
+        {!detail && !loadError && <div className="drawer-loading">{tr("लोड हो रहा है…")}</div>}
         {detail && (
           <>
             <ApplicationOverview detail={detail} onOpenPdf={() => setPdfOpen(true)} />
@@ -105,7 +107,7 @@ export function ApplicationDrawer({
         )}
         {actionError && (
           <p className="form-error drawer-error" role="alert">
-            {actionError}
+            {tr(actionError)}
           </p>
         )}
         <ApplicationActionBar

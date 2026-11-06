@@ -1,4 +1,5 @@
 import { Icon } from "@/components/ui/Icon"
+import { useTr } from "@/i18n/tr"
 
 export function EntitlementGaps({
   raised,
@@ -7,6 +8,7 @@ export function EntitlementGaps({
   raised: string[]
   setRaised: (items: string[]) => void
 }) {
+  const tr = useTr()
   const gaps = [
     [
       "आयुष्मान कार्ड",
@@ -43,36 +45,36 @@ export function EntitlementGaps({
   ]
   return (
     <div className="entitlement-gaps">
-      <p className="section-help">सर्वे में पात्र लेकिन लाभ न मिलने वाली योजनाएँ</p>
+      <p className="section-help">{tr("सर्वे में पात्र लेकिन लाभ न मिलने वाली योजनाएँ")}</p>
       {gaps.map(([name, dept, missing, apply, docs, color]) => {
         const isRaised = raised.includes(name)
         return (
           <article className="gap-card" key={name}>
             <div className="gap-card-head">
               <div>
-                <strong>{name}</strong>
-                <span>{dept}</span>
+                <strong>{tr(name)}</strong>
+                <span>{tr(dept)}</span>
               </div>
               <span className={`status ${color}`}>
-                {isRaised ? "मांग दर्ज" : color === "amber" ? "लंबित" : "गैप"}
+                {isRaised ? tr("मांग दर्ज") : color === "amber" ? tr("लंबित") : tr("गैप")}
               </span>
             </div>
             <dl>
               <div>
-                <dt>क्या कमी है</dt>
-                <dd>{missing}</dd>
+                <dt>{tr("क्या कमी है")}</dt>
+                <dd>{tr(missing)}</dd>
               </div>
               <div>
-                <dt>कहाँ आवेदन करें</dt>
-                <dd>{apply}</dd>
+                <dt>{tr("कहाँ आवेदन करें")}</dt>
+                <dd>{tr(apply)}</dd>
               </div>
               <div>
-                <dt>दस्तावेज़</dt>
-                <dd>{docs}</dd>
+                <dt>{tr("दस्तावेज़")}</dt>
+                <dd>{tr(docs)}</dd>
               </div>
             </dl>
             <button disabled={isRaised} onClick={() => setRaised([...raised, name])}>
-              {isRaised ? "मांग दर्ज हो गई" : "मांग दर्ज करें"}{" "}
+              {isRaised ? tr("मांग दर्ज हो गई") : tr("मांग दर्ज करें")}{" "}
               <Icon name={isRaised ? "check" : "arrow"} size={14} />
             </button>
           </article>

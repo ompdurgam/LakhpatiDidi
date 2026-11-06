@@ -57,10 +57,37 @@ export function fakeApi(url: string): unknown {
   return []
 }
 
+// What the real API sends instead in English (name_en columns, English labels and dates).
+const englishData: Record<string, string> = {
+  "PMMSY – तालाब": "PMMSY – Pond",
+  "मत्स्य विभाग": "Fisheries Department",
+  जगदलपुर: "Jagdalpur",
+  बड़ांजी: "Badanji",
+  "सुनीता कश्यप": "Sunita Kashyap",
+  अतिदेय: "Overdue",
+  "प्रगति पर": "In progress",
+  "18 अक्टू. 2026": "18 Oct 2026",
+  "05 नव. 2026": "05 Nov 2026",
+  पहचान: "Identity",
+}
+
+const inEnglish = (value: unknown): unknown =>
+  typeof value === "string"
+    ? (englishData[value] ?? value)
+    : Array.isArray(value)
+      ? value.map(inEnglish)
+      : value && typeof value === "object"
+        ? Object.fromEntries(Object.entries(value).map(([k, v]) => [k, inEnglish(v)]))
+        : value
+
+/** Stubs fetch with fakeApi; honours Accept-Language like the real API. */
 export function stubFetch() {
-  globalThis.fetch = (async (input: RequestInfo | URL) =>
-    new Response(JSON.stringify(fakeApi(String(input))), {
+  globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+    const english = new Headers(init?.headers).get("accept-language") === "en"
+    const body = fakeApi(String(input))
+    return new Response(JSON.stringify(english ? inEnglish(body) : body), {
       status: 200,
       headers: { "Content-Type": "application/json" },
-    })) as typeof fetch
+    })
+  }) as typeof fetch
 }

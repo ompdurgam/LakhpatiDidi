@@ -4,6 +4,7 @@ import { AdminGeography } from "@/features/admin/AdminGeography"
 import { AdminMapping } from "@/features/admin/AdminMapping"
 import { AdminSurveySettings } from "@/features/admin/AdminSurveySettings"
 import { AdminUsers } from "@/features/admin/AdminUsers"
+import { useTr } from "@/i18n/tr"
 
 export function AdminModule({
   active,
@@ -12,6 +13,7 @@ export function AdminModule({
   active: string
   onNotify: (message: string) => void
 }) {
+  const tr = useTr()
   if (active === "mapping") return <AdminMapping onNotify={onNotify} />
   if (active === "users") return <AdminUsers onNotify={onNotify} />
   if (active === "geography") return <AdminGeography onNotify={onNotify} />
@@ -57,11 +59,11 @@ export function AdminModule({
     <section className="card admin-module">
       <div className="card-head">
         <div>
-          <h3>{title}</h3>
-          <p>{subtitle}</p>
+          <h3>{tr(title)}</h3>
+          <p>{tr(subtitle)}</p>
         </div>
-        <button className="primary" onClick={() => onNotify("नया रिकॉर्ड जोड़ा गया")}>
-          <Icon name="plus" size={15} /> नया जोड़ें
+        <button className="primary" onClick={() => onNotify(tr("नया रिकॉर्ड जोड़ा गया"))}>
+          <Icon name="plus" size={15} /> {tr("नया जोड़ें")}
         </button>
       </div>
       {items.map((item, index) => (
@@ -73,18 +75,18 @@ export function AdminModule({
             />
           </span>
           <div>
-            <strong>{item}</strong>
-            <small>सक्रिय • आज अपडेट</small>
+            <strong>{tr(item)}</strong>
+            <small>{tr("सक्रिय • आज अपडेट")}</small>
           </div>
           {active === "village" && (
             <div className="availability">
-              <span>उपलब्ध</span>
+              <span>{tr("उपलब्ध")}</span>
               <b>{18 + index * 5}</b>
-              <span>कार्यशील</span>
+              <span>{tr("कार्यशील")}</span>
               <b>{14 + index * 4}</b>
             </div>
           )}
-          <span className="status green">सक्रिय</span>
+          <span className="status green">{tr("सक्रिय")}</span>
           <Icon name="chevron" size={16} />
         </div>
       ))}

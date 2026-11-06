@@ -1,17 +1,20 @@
+import { useTr } from "@/i18n/tr"
+
 import { Icon } from "./Icon"
 
 export type TimelineStep = { label: string; date: string; state: "done" | "active" | "" | string }
 
 /** Vertical progress timeline (`.timeline`). */
 export function Timeline({ steps, className = "" }: { steps: TimelineStep[]; className?: string }) {
+  const tr = useTr()
   return (
     <div className={`timeline ${className}`.trim()}>
       {steps.map(({ label, date, state }) => (
         <div key={label} className={state}>
           <i>{state === "done" && <Icon name="check" size={12} />}</i>
           <div>
-            <strong>{label}</strong>
-            <span>{date}</span>
+            <strong>{tr(label)}</strong>
+            <span>{tr(date)}</span>
           </div>
         </div>
       ))}

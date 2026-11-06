@@ -6,6 +6,7 @@ import { Blcc } from "@/features/blcc/BlccRegister"
 import { SchemeConvergence } from "@/features/block/SchemeConvergence"
 import { HouseholdRegister } from "@/features/households/HouseholdRegister"
 import { BlockReports } from "@/features/reports/BlockReports"
+import { useTr } from "@/i18n/tr"
 
 export function ModulePage({
   active,
@@ -18,6 +19,7 @@ export function ModulePage({
   onSelect: (item: ApplicationRow) => void
   onNotify: (s: string) => void
 }) {
+  const tr = useTr()
   const titleMap: Record<string, string> = {
     परिवार: "परिवार और दीदी रजिस्टर",
     आवेदन: "आवेदन एवं DPR ट्रैकर",
@@ -30,15 +32,15 @@ export function ModulePage({
     <div className="page module-page">
       <section className="welcome">
         <div>
-          <h2>{titleMap[active] || active}</h2>
-          <p>जगदलपुर ब्लॉक • अंतिम अपडेट आज, 10:42 AM</p>
+          <h2>{tr(titleMap[active] || active)}</h2>
+          <p>{tr("जगदलपुर ब्लॉक • अंतिम अपडेट आज, 10:42 AM")}</p>
         </div>
         <div className="welcome-actions">
           <button className="secondary">
-            <Icon name="download" size={17} /> एक्सपोर्ट
+            <Icon name="download" size={17} /> {tr("एक्सपोर्ट")}
           </button>
-          <button className="primary" onClick={() => onNotify("नया रिकॉर्ड फॉर्म खोला गया")}>
-            <Icon name="plus" size={17} /> नया जोड़ें
+          <button className="primary" onClick={() => onNotify(tr("नया रिकॉर्ड फॉर्म खोला गया"))}>
+            <Icon name="plus" size={17} /> {tr("नया जोड़ें")}
           </button>
         </div>
       </section>
@@ -48,11 +50,11 @@ export function ModulePage({
         <section className="card applications-card">
           <div className="card-head">
             <div>
-              <h3>सभी आवेदन</h3>
-              <p>कुल 1,847 आवेदन • 24 पर कार्यवाही बाकी</p>
+              <h3>{tr("सभी आवेदन")}</h3>
+              <p>{tr("कुल 1,847 आवेदन • 24 पर कार्यवाही बाकी")}</p>
             </div>
             <button className="filter-button">
-              <Icon name="filter" size={15} /> स्थिति फ़िल्टर
+              <Icon name="filter" size={15} /> {tr("स्थिति फ़िल्टर")}
             </button>
           </div>
           <ApplicationTable rows={rows} onSelect={onSelect} />
@@ -74,11 +76,11 @@ export function ModulePage({
           <section className="card generic-list">
             <div className="card-head">
               <div>
-                <h3>{titleMap[active]}</h3>
-                <p>प्राथमिकता और हाल के अपडेट</p>
+                <h3>{tr(titleMap[active])}</h3>
+                <p>{tr("प्राथमिकता और हाल के अपडेट")}</p>
               </div>
               <button className="filter-button">
-                <Icon name="filter" size={15} /> फ़िल्टर
+                <Icon name="filter" size={15} /> {tr("फ़िल्टर")}
               </button>
             </div>
             {[
@@ -94,11 +96,14 @@ export function ModulePage({
                   />
                 </div>
                 <div>
-                  <strong>{x}</strong>
-                  <span>रिकॉर्ड #{260140 - i} • आज अपडेट किया</span>
+                  <strong>{tr(x)}</strong>
+                  <span>
+                    {tr("रिकॉर्ड #")}
+                    {260140 - i} {tr("• आज अपडेट किया")}
+                  </span>
                 </div>
                 <span className={`status ${i === 2 ? "amber" : "green"}`}>
-                  {i === 2 ? "ध्यान दें" : "सक्रिय"}
+                  {i === 2 ? tr("ध्यान दें") : tr("सक्रिय")}
                 </span>
                 <Icon name="chevron" size={17} />
               </div>

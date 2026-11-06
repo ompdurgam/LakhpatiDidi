@@ -2,6 +2,7 @@ import { useState } from "react"
 
 import { Icon } from "@/components/ui/Icon"
 import type { RecommendationScheme } from "@/features/recommendations/types"
+import { useTr } from "@/i18n/tr"
 
 export function SchemeConsentModal({
   schemes,
@@ -12,6 +13,7 @@ export function SchemeConsentModal({
   onClose: () => void
   onConfirm: () => void
 }) {
+  const tr = useTr()
   const [method, setMethod] = useState<"OTP" | "thumb">("OTP")
   const [otp, setOtp] = useState(["", "", "", "", "", ""])
   const [thumb, setThumb] = useState(false)
@@ -22,34 +24,37 @@ export function SchemeConsentModal({
       <div className="scheme-consent-modal">
         <div className="consent-modal-head">
           <div>
-            <span>अंतिम चरण</span>
-            <h3>दीदी की सहमति</h3>
+            <span>{tr("अंतिम चरण")}</span>
+            <h3>{tr("दीदी की सहमति")}</h3>
           </div>
           <button onClick={onClose}>
             <Icon name="close" size={17} />
           </button>
         </div>
         <div className="selected-scheme-list">
-          <span>चयनित योजनाएँ ({schemes.length})</span>
+          <span>
+            {tr("चयनित योजनाएँ (")}
+            {schemes.length})
+          </span>
           {schemes.map((scheme) => (
             <div key={scheme.key}>
               <Icon name="check" size={13} />
-              <strong>{scheme.name}</strong>
-              <small>{scheme.dept}</small>
+              <strong>{tr(scheme.name)}</strong>
+              <small>{tr(scheme.dept)}</small>
             </div>
           ))}
         </div>
         <div className="consent-method modal-method">
           <button className={method === "OTP" ? "active" : ""} onClick={() => setMethod("OTP")}>
-            6-अंकीय OTP
+            {tr("6-अंकीय OTP")}
           </button>
           <button className={method === "thumb" ? "active" : ""} onClick={() => setMethod("thumb")}>
-            अंगूठा निशान
+            {tr("अंगूठा निशान")}
           </button>
         </div>
         {method === "OTP" ? (
           <div className="modal-otp">
-            <p>98•••••412 पर भेजा गया OTP दर्ज करें</p>
+            <p>{tr("98•••••412 पर भेजा गया OTP दर्ज करें")}</p>
             <div className="otp-boxes">
               {otp.map((digit, index) => (
                 <input
@@ -67,27 +72,31 @@ export function SchemeConsentModal({
                 />
               ))}
             </div>
-            <button>OTP दोबारा भेजें</button>
+            <button>{tr("OTP दोबारा भेजें")}</button>
           </div>
         ) : (
           <button
             className={`consent-thumb ${thumb ? "captured" : ""}`}
             onClick={() => setThumb(true)}
           >
-            <span className="thumb-mark">अं</span>
+            <span className="thumb-mark">{tr("अं")}</span>
             <div>
-              <strong>{thumb ? "अंगूठा निशान कैप्चर हुआ" : "अंगूठा निशान कैप्चर करें"}</strong>
-              <small>{thumb ? "18 नवंबर 2026 • सत्यापित" : "बायोमेट्रिक डिवाइस पर टैप करें"}</small>
+              <strong>
+                {thumb ? tr("अंगूठा निशान कैप्चर हुआ") : tr("अंगूठा निशान कैप्चर करें")}
+              </strong>
+              <small>
+                {thumb ? tr("18 नवंबर 2026 • सत्यापित") : tr("बायोमेट्रिक डिवाइस पर टैप करें")}
+              </small>
             </div>
             {thumb && <Icon name="check" size={17} />}
           </button>
         )}
         <label className="consent-record-note">
-          <input type="checkbox" defaultChecked /> दीदी ने चयनित योजनाओं और DPR निर्माण के लिए सहमति
-          दी है।
+          <input type="checkbox" defaultChecked />{" "}
+          {tr("दीदी ने चयनित योजनाओं और DPR निर्माण के लिए सहमति दी है।")}
         </label>
         <button className="primary consent-confirm" disabled={!ready} onClick={onConfirm}>
-          सहमति दर्ज करें और DPR बनाएँ <Icon name="arrow" size={16} />
+          {tr("सहमति दर्ज करें और DPR बनाएँ")} <Icon name="arrow" size={16} />
         </button>
       </div>
     </>

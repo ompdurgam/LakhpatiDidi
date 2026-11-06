@@ -2,10 +2,12 @@ import { Fragment } from "react"
 
 import { Icon } from "@/components/ui/Icon"
 import { Kpi } from "@/components/ui/Kpi"
+import { useTr } from "@/i18n/tr"
 
 import { StateCompliance } from "./StateCompliance"
 
 export function StateWorkspace({ onNotify }: { onNotify: (message: string) => void }) {
+  const tr = useTr()
   const regions = [
     [
       "उत्तर",
@@ -60,12 +62,15 @@ export function StateWorkspace({ onNotify }: { onNotify: (message: string) => vo
     <div className="page role-page state-workspace">
       <div className="workspace-heading">
         <div>
-          <span className="eyebrow">SMMU • राज्य मिशन</span>
-          <h2>छत्तीसगढ़ राज्य अवलोकन</h2>
-          <p>33 जिले • 146 ब्लॉक • नवंबर 2026</p>
+          <span className="eyebrow">{tr("SMMU • राज्य मिशन")}</span>
+          <h2>{tr("छत्तीसगढ़ राज्य अवलोकन")}</h2>
+          <p>{tr("33 जिले • 146 ब्लॉक • नवंबर 2026")}</p>
         </div>
-        <button className="secondary" onClick={() => onNotify("राज्य रिपोर्ट डाउनलोड तैयार है")}>
-          <Icon name="download" size={16} /> राज्य रिपोर्ट
+        <button
+          className="secondary"
+          onClick={() => onNotify(tr("राज्य रिपोर्ट डाउनलोड तैयार है"))}
+        >
+          <Icon name="download" size={16} /> {tr("राज्य रिपोर्ट")}
         </button>
       </div>
       <section className="monitor-kpis">
@@ -105,20 +110,20 @@ export function StateWorkspace({ onNotify }: { onNotify: (message: string) => vo
         <div className="card state-map-card">
           <div className="card-head">
             <div>
-              <h3>छत्तीसगढ़ • 33 जिले</h3>
-              <p>क्षेत्र अनुसार जिला प्रदर्शन</p>
+              <h3>{tr("छत्तीसगढ़ • 33 जिले")}</h3>
+              <p>{tr("क्षेत्र अनुसार जिला प्रदर्शन")}</p>
             </div>
             <div className="map-legend">
               <i />
-              कम <i />
-              मध्यम <i />
-              उच्च
+              {tr("कम")} <i />
+              {tr("मध्यम")} <i />
+              {tr("उच्च")}
             </div>
           </div>
           <div className="state-regions">
             {regions.map(([region, districts], regionIndex) => (
               <div key={String(region)}>
-                <h4>{region}</h4>
+                <h4>{tr(String(region))}</h4>
                 <div>
                   {(districts as string[]).map((district, index) => (
                     <button
@@ -130,9 +135,9 @@ export function StateWorkspace({ onNotify }: { onNotify: (message: string) => vo
                             ? "medium"
                             : "low"
                       }
-                      title={district}
+                      title={tr(district)}
                     >
-                      {district.slice(0, 2)}
+                      {tr(district).slice(0, 2)}
                     </button>
                   ))}
                 </div>
@@ -143,8 +148,8 @@ export function StateWorkspace({ onNotify }: { onNotify: (message: string) => vo
         <div className="card statewide-funnel">
           <div className="card-head">
             <div>
-              <h3>राज्यव्यापी फनल</h3>
-              <p>सर्वे से लखपति तक</p>
+              <h3>{tr("राज्यव्यापी फनल")}</h3>
+              <p>{tr("सर्वे से लखपति तक")}</p>
             </div>
           </div>
           {[
@@ -158,14 +163,16 @@ export function StateWorkspace({ onNotify }: { onNotify: (message: string) => vo
             ["लखपति", "94,620", 25],
           ].map(([label, value, width], index) => (
             <div key={String(label)}>
-              <span>{label}</span>
+              <span>{tr(String(label))}</span>
               <i>
                 <b style={{ width: `${width}%` }}>{value}</b>
               </i>
               <small>
                 {index < 7
-                  ? `${Math.round(Number(width) - Number([85, 72, 61, 50, 42, 34, 25, 0][index]))}% अगला चरण`
-                  : "लक्ष्य"}
+                  ? tr("{{n}}% अगला चरण", {
+                      n: Math.round(Number(width) - Number([85, 72, 61, 50, 42, 34, 25, 0][index])),
+                    })
+                  : tr("लक्ष्य")}
               </small>
             </div>
           ))}
@@ -174,18 +181,18 @@ export function StateWorkspace({ onNotify }: { onNotify: (message: string) => vo
       <section className="card department-leaderboard">
         <div className="card-head">
           <div>
-            <h3>विभाग प्रदर्शन लीडरबोर्ड</h3>
-            <p>औसत समय, डिलीवरी और अभिसरण</p>
+            <h3>{tr("विभाग प्रदर्शन लीडरबोर्ड")}</h3>
+            <p>{tr("औसत समय, डिलीवरी और अभिसरण")}</p>
           </div>
         </div>
         <table>
           <thead>
             <tr>
-              <th>रैंक</th>
-              <th>विभाग</th>
-              <th>औसत स्वीकृति दिन</th>
-              <th>समय पर डिलीवरी %</th>
-              <th>₹ स्वीकृत</th>
+              <th>{tr("रैंक")}</th>
+              <th>{tr("विभाग")}</th>
+              <th>{tr("औसत स्वीकृति दिन")}</th>
+              <th>{tr("समय पर डिलीवरी %")}</th>
+              <th>{tr("₹ स्वीकृत")}</th>
             </tr>
           </thead>
           <tbody>
@@ -198,7 +205,7 @@ export function StateWorkspace({ onNotify }: { onNotify: (message: string) => vo
             ].map((row) => (
               <tr key={row[0]}>
                 {row.map((cell, index) => (
-                  <td key={index}>{index === 0 ? <b>{cell}</b> : cell}</td>
+                  <td key={index}>{index === 0 ? <b>{tr(cell)}</b> : tr(cell)}</td>
                 ))}
               </tr>
             ))}
@@ -209,20 +216,20 @@ export function StateWorkspace({ onNotify }: { onNotify: (message: string) => vo
         <div className="card state-heatmap">
           <div className="card-head">
             <div>
-              <h3>योजना × जिला जागरूकता-लाभ अंतर</h3>
-              <p>अंतर प्रतिशत अंक • लाल = अधिक गैप</p>
+              <h3>{tr("योजना × जिला जागरूकता-लाभ अंतर")}</h3>
+              <p>{tr("अंतर प्रतिशत अंक • लाल = अधिक गैप")}</p>
             </div>
           </div>
           <div className="heatmap-grid">
             <div />
             <>
               {["बस्तर", "कांकेर", "सरगुजा", "रायपुर", "दुर्ग", "कोरबा"].map((item) => (
-                <b key={item}>{item}</b>
+                <b key={item}>{tr(item)}</b>
               ))}
             </>
             {["PMMSY", "पोल्ट्री", "PMFBY", "वन धन", "PMEGP"].map((scheme, row) => (
               <Fragment key={scheme}>
-                <strong key={`${scheme}-label`}>{scheme}</strong>
+                <strong key={`${scheme}-label`}>{tr(scheme)}</strong>
                 {[0, 1, 2, 3, 4, 5].map((col) => {
                   const value = 12 + ((row * 7 + col * 5) % 34)
                   return (
@@ -241,8 +248,8 @@ export function StateWorkspace({ onNotify }: { onNotify: (message: string) => vo
         <div className="card financial-support">
           <div className="card-head">
             <div>
-              <h3>वित्तीय सहायता</h3>
-              <p>राशि और लाभार्थी</p>
+              <h3>{tr("वित्तीय सहायता")}</h3>
+              <p>{tr("राशि और लाभार्थी")}</p>
             </div>
           </div>
           {[
@@ -255,9 +262,11 @@ export function StateWorkspace({ onNotify }: { onNotify: (message: string) => vo
               <span>
                 <Icon name="scheme" size={15} />
               </span>
-              <strong>{name}</strong>
-              <b>{amount}</b>
-              <small>{count} लाभार्थी</small>
+              <strong>{tr(name)}</strong>
+              <b>{tr(amount)}</b>
+              <small>
+                {count} {tr("लाभार्थी")}
+              </small>
             </div>
           ))}
         </div>

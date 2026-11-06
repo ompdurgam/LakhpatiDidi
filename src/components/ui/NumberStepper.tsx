@@ -1,3 +1,5 @@
+import { useTr } from "@/i18n/tr"
+
 export function NumberControl({
   label,
   value,
@@ -7,9 +9,10 @@ export function NumberControl({
   value: number
   onChange: (value: number) => void
 }) {
+  const tr = useTr()
   return (
     <div className="number-control">
-      <span>{label}</span>
+      <span>{tr(label)}</span>
       <div>
         <button type="button" onClick={() => onChange(value - 1)}>
           −

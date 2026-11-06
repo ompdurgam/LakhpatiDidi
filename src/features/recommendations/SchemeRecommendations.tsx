@@ -5,6 +5,7 @@ import { EntitlementGaps } from "@/features/recommendations/EntitlementGaps"
 import { RecommendationCard } from "@/features/recommendations/RecommendationCard"
 import { RecommendationSheet } from "@/features/recommendations/RecommendationSheet"
 import { SchemeConsentModal } from "@/features/recommendations/SchemeConsentModal"
+import { useTr } from "@/i18n/tr"
 
 export function SchemeRecommendations({
   selected,
@@ -17,6 +18,7 @@ export function SchemeRecommendations({
   setScreen: (screen: string) => void
   desktop?: boolean
 }) {
+  const tr = useTr()
   const [tab, setTab] = useState<"schemes" | "gaps">("schemes")
   const [sheet, setSheet] = useState<{
     type: "reason" | "later"
@@ -129,29 +131,29 @@ export function SchemeRecommendations({
       <div className="recommend-profile">
         <div className="avatar large">SK</div>
         <div>
-          <strong>सुनीता कश्यप</strong>
+          <strong>{tr("सुनीता कश्यप")}</strong>
           <span>HH-BST-JGD-000123</span>
         </div>
         <b>
-          ₹78,500 <small>वर्तमान आय</small>
+          ₹78,500 <small>{tr("वर्तमान आय")}</small>
         </b>
       </div>
       <div className="stacking-path">
-        <span>पूर्ण स्टैकिंग मार्ग (वन + तालाब गाँव)</span>
-        <strong>धान ₹35–45K + NTFP ₹20–30K + मत्स्य (PMMSY) ₹20–35K</strong>
+        <span>{tr("पूर्ण स्टैकिंग मार्ग (वन + तालाब गाँव)")}</span>
+        <strong>{tr("धान ₹35–45K + NTFP ₹20–30K + मत्स्य (PMMSY) ₹20–35K")}</strong>
         <div>
           <i style={{ width: "34%" }} />
           <i style={{ width: "23%" }} />
           <i style={{ width: "43%" }} />
         </div>
-        <small>अनुमानित आय ₹1,16,000 • 3 सक्रिय स्रोत</small>
+        <small>{tr("अनुमानित आय ₹1,16,000 • 3 सक्रिय स्रोत")}</small>
       </div>
       <div className="recommend-tabs">
         <button className={tab === "schemes" ? "active" : ""} onClick={() => setTab("schemes")}>
-          आजीविका योजनाएँ <b>6</b>
+          {tr("आजीविका योजनाएँ")} <b>6</b>
         </button>
         <button className={tab === "gaps" ? "active" : ""} onClick={() => setTab("gaps")}>
-          हकदारी अंतर <b>4</b>
+          {tr("हकदारी अंतर")} <b>4</b>
         </button>
       </div>
       {tab === "schemes" ? (
@@ -163,9 +165,9 @@ export function SchemeRecommendations({
                   <span>
                     <Icon name="building" size={15} />
                   </span>
-                  <strong>{department}</strong>
+                  <strong>{tr(department)}</strong>
                   <small>
-                    {schemes.filter((scheme) => scheme.dept === department).length} सुझाव
+                    {schemes.filter((scheme) => scheme.dept === department).length} {tr("सुझाव")}
                   </small>
                 </div>
                 <div className="scheme-list">
@@ -195,7 +197,8 @@ export function SchemeRecommendations({
           disabled={!selected.length}
           onClick={() => setConsentOpen(true)}
         >
-          चयनित के लिए DPR बनाएँ ({selected.length}) <Icon name="arrow" size={17} />
+          {tr("चयनित के लिए DPR बनाएँ (")}
+          {selected.length}) <Icon name="arrow" size={17} />
         </button>
       )}
       {sheet && (

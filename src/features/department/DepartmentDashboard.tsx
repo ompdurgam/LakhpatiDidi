@@ -7,6 +7,7 @@ import type { ApplicationRow } from "@/api/types"
 import { Icon } from "@/components/ui/Icon"
 import { departmentByCode, departmentByHindiName, departments } from "@/data/departments"
 import { DepartmentInboxTable } from "@/features/department/DepartmentInboxTable"
+import { useTr } from "@/i18n/tr"
 
 import { DepartmentAnalytics } from "./DepartmentAnalytics"
 
@@ -19,6 +20,7 @@ export function DepartmentWorkspace({
   onSelect: (item: ApplicationRow) => void
   onNotify: (message: string) => void
 }) {
+  const tr = useTr()
   const { deptCode } = useParams()
   const navigate = useNavigate()
   const dept = (departmentByCode(deptCode) ?? departments[0]).name.hi
@@ -62,9 +64,9 @@ export function DepartmentWorkspace({
         { body: { codes: selectedIds } },
       )
       const skipped = result.skipped.length
-        ? ` • ${result.skipped.length} छोड़े गए (पहले से बंद)`
+        ? tr(" • {{n}} छोड़े गए (पहले से बंद)", { n: result.skipped.length })
         : ""
-      onNotify(`${result.sanctioned.length} आवेदन स्वीकृत किए गए${skipped}`)
+      onNotify(tr("{{n}} आवेदन स्वीकृत किए गए", { n: result.sanctioned.length }) + skipped)
       setSelectedIds([])
       await refresh()
     } catch (e) {
@@ -88,13 +90,15 @@ export function DepartmentWorkspace({
     <div className="page role-page">
       <div className="workspace-heading">
         <div>
-          <span className="eyebrow">लाइन विभाग डैशबोर्ड</span>
-          <h2>{dept}</h2>
-          <p>जगदलपुर ब्लॉक • सहायक संचालक कार्यालय</p>
+          <span className="eyebrow">{tr("लाइन विभाग डैशबोर्ड")}</span>
+          <h2>{tr(dept)}</h2>
+          <p>{tr("जगदलपुर ब्लॉक • सहायक संचालक कार्यालय")}</p>
         </div>
         <select className="workspace-select" value={dept} onChange={(e) => setDept(e.target.value)}>
           {departmentOptions.map((x) => (
-            <option key={x}>{x}</option>
+            <option key={x} value={x}>
+              {tr(x)}
+            </option>
           ))}
         </select>
       </div>
@@ -110,9 +114,9 @@ export function DepartmentWorkspace({
           ["आय सक्रिय लाभार्थी", String(count(["delivered"])), "green"],
         ].map(([label, value, color]) => (
           <div className="card" key={label}>
-            <span>{label}</span>
-            <strong className={color}>{value}</strong>
-            <small>लाइव</small>
+            <span>{tr(label)}</span>
+            <strong className={color}>{tr(value)}</strong>
+            <small>{tr("लाइव")}</small>
           </div>
         ))}
       </section>
@@ -120,15 +124,17 @@ export function DepartmentWorkspace({
         <section className="card department-inbox">
           <div className="card-head">
             <div>
-              <h3>आवेदन इनबॉक्स</h3>
-              <p>{dept} • केवल इस विभाग के आवेदन</p>
+              <h3>{tr("आवेदन इनबॉक्स")}</h3>
+              <p>
+                {tr(dept)} {tr("• केवल इस विभाग के आवेदन")}
+              </p>
             </div>
             <button
               className="primary bulk-sanction"
               disabled={!selectedIds.length || bulkBusy}
               onClick={bulkSanction}
             >
-              <Icon name="check" size={14} /> चयनित स्वीकृत करें
+              <Icon name="check" size={14} /> {tr("चयनित स्वीकृत करें")}
             </button>
           </div>
           <div className="department-filter-row">
@@ -136,24 +142,28 @@ export function DepartmentWorkspace({
               className={overdueOnly ? "active" : ""}
               onClick={() => setOverdueOnly(!overdueOnly)}
             >
-              <Icon name="alert" size={13} /> केवल अतिदेय
+              <Icon name="alert" size={13} /> {tr("केवल अतिदेय")}
             </button>
             <label>
-              <span>योजना</span>
+              <span>{tr("योजना")}</span>
               <select
                 value={schemeFilter}
                 onChange={(event) => setSchemeFilter(event.target.value)}
               >
                 {schemeOptions.map((option) => (
-                  <option key={option}>{option}</option>
+                  <option key={option} value={option}>
+                    {tr(option)}
+                  </option>
                 ))}
               </select>
             </label>
             <label>
-              <span>ब्लॉक</span>
+              <span>{tr("ब्लॉक")}</span>
               <select value={blockFilter} onChange={(event) => setBlockFilter(event.target.value)}>
                 {["सभी", ...(meta?.blocks.map((b) => b.name) ?? [])].map((option) => (
-                  <option key={option}>{option}</option>
+                  <option key={option} value={option}>
+                    {tr(option)}
+                  </option>
                 ))}
               </select>
             </label>
@@ -168,13 +178,13 @@ export function DepartmentWorkspace({
         <section className="card escalation-panel">
           <div className="card-head">
             <div>
-              <h3>एस्केलेशन</h3>
-              <p>आपकी कार्यवाही अपेक्षित</p>
+              <h3>{tr("एस्केलेशन")}</h3>
+              <p>{tr("आपकी कार्यवाही अपेक्षित")}</p>
             </div>
             <span className="count-badge">{escalations.length}</span>
           </div>
           {escalations.length === 0 && (
-            <p className="empty-note">इस विभाग में कोई अतिदेय आवेदन नहीं</p>
+            <p className="empty-note">{tr("इस विभाग में कोई अतिदेय आवेदन नहीं")}</p>
           )}
           {escalations.slice(0, 4).map((x, index) => (
             <div
@@ -187,20 +197,22 @@ export function DepartmentWorkspace({
             >
               <i className={index === 0 ? "red" : "amber"} />
               <div>
-                <strong>{x.id}</strong>
+                <strong>{tr(x.id)}</strong>
                 <span>
-                  {x.name} • {x.scheme}
+                  {tr(x.name)} • {tr(x.scheme)}
                 </span>
                 <small>
-                  {x.block} • प्राप्ति {x.received}
+                  {tr(x.block)} {tr("• प्राप्ति")} {tr(x.received)}
                 </small>
               </div>
-              <b>{x.days} दिन अतिदेय</b>
+              <b>
+                {x.days} {tr("दिन अतिदेय")}
+              </b>
             </div>
           ))}
           {escalations[0] && (
             <button className="primary" onClick={() => onSelect(escalations[0])}>
-              प्रतिक्रिया दर्ज करें
+              {tr("प्रतिक्रिया दर्ज करें")}
             </button>
           )}
         </section>
