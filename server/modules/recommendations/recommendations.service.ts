@@ -96,7 +96,7 @@ export async function recommendationsForDidi(code: string) {
   const recs = recommendationsFor(h, schemes, applied.get(h.id) ?? new Set(), dpr.get(h.id))
   const lev = leverage(h.income, recs)
 
-  const [gaps, apps] = await Promise.all([
+  const [gaps, apps, interests] = await Promise.all([
     query<Row>(
       `SELECT g.identified_on, s.code, s.name_hi, s.name_en,
               d.name_hi AS department, d.name_en AS department_en
@@ -112,7 +112,14 @@ export async function recommendationsForDidi(code: string) {
        WHERE a.household_id = ? ORDER BY a.received_on DESC`,
       [h.id],
     ),
+    // The Didi's own answer per scheme (asked on her phone).
+    query<Row>(
+      `SELECT s.code, i.status FROM tbl_scheme_interests i
+       JOIN master_schemes s ON s.id = i.scheme_id WHERE i.household_id = ?`,
+      [h.id],
+    ),
   ])
+  const interestBy = new Map(interests.map((i) => [i.code as string, i.status as string]))
 
   return {
     household: {
@@ -131,7 +138,7 @@ export async function recommendationsForDidi(code: string) {
       ...lev,
       steps: lev.steps.map((s) => ({ ...s, name: schemes.get(s.code)?.name ?? s.code })),
     },
-    recommendations: recs,
+    recommendations: recs.map((r) => ({ ...r, interest: interestBy.get(r.code) ?? null })),
     entitlements: gaps.map((g) => ({
       code: g.code as string,
       name: localizedName(g),

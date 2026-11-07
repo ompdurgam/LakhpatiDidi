@@ -12,7 +12,7 @@ import { useDidiRecommendations } from "./useRecommendations"
 /** One Didi's personalised scheme recommendations and how far they take her toward ₹1 lakh. */
 export function RecommendationDetail({ code, compact }: { code: string; compact: boolean }) {
   const tr = useTr()
-  const { data, error, loading } = useDidiRecommendations(code)
+  const { data, error, loading, reload } = useDidiRecommendations(code)
   const wrap = (body: ReactNode) => (
     <div className={compact ? "phone-content field-detail-page" : "field-detail-page wide"}>
       <Link to="/field/recommendations" className="back-link">
@@ -86,7 +86,13 @@ export function RecommendationDetail({ code, compact }: { code: string; compact:
       {data.recommendations.length === 0 && <EmptyState>{tr("अभी कोई नई योजना नहीं")}</EmptyState>}
       <div className="rec-cards">
         {data.recommendations.map((fit, index) => (
-          <RecommendationCard key={fit.code} fit={fit} rank={index + 1} didi={h.code} />
+          <RecommendationCard
+            key={fit.code}
+            fit={fit}
+            rank={index + 1}
+            didi={h.code}
+            onChanged={() => void reload()}
+          />
         ))}
       </div>
 

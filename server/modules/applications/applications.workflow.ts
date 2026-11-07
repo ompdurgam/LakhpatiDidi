@@ -10,6 +10,10 @@ import { msg } from "../../shared/i18n.ts"
 import type { Row } from "../../shared/types.ts"
 import { isoDate, text } from "../../shared/validation.ts"
 import {
+  isApplicationEvent,
+  notifyApplication,
+} from "../notifications/notifications.applications.ts"
+import {
   type ApplicationStatus,
   escalationHi,
   type EscalationLevel,
@@ -55,6 +59,8 @@ async function record(
     },
     db,
   )
+  // Same transaction: the notice exists only if the change commits.
+  if (isApplicationEvent(type)) await notifyApplication(application.id, type, { actorId, note }, db)
 }
 
 const amount = z

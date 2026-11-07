@@ -3,6 +3,7 @@ import { badRequest, notFound } from "../../shared/errors.ts"
 import { today } from "../../shared/format.ts"
 import { msg } from "../../shared/i18n.ts"
 import { parse } from "../../shared/validation.ts"
+import { notifyApplication } from "../notifications/notifications.applications.ts"
 import { type ApplicationStatus, OPEN_STATUSES } from "./applications.labels.ts"
 import { toApplicationDetail, toApplicationRow } from "./applications.mapper.ts"
 import * as repo from "./applications.repository.ts"
@@ -71,6 +72,7 @@ export async function bulkSanction(codes: string[], actorId: number) {
         },
         db,
       )
+      await notifyApplication(a.id, "sanctioned", { actorId }, db)
     }
     return rows.map((r) => r.app_code as string)
   })

@@ -213,5 +213,10 @@
   "गैर-कृषि उद्यम": "Non-farm enterprise",
   "ST श्रेणी": "ST category",
   "मजदूरी आय स्रोत": "Wage income source",
-  "पर्यटन आय स्रोत": "Tourism income source"
+  "पर्यटन आय स्रोत": "Tourism income source",
+  "सूचना नहीं मिली": "Notification not found",
+  "अमान्य उत्तर": "Invalid answer",
+  "यह लिंक अब मान्य नहीं है": "This link is no longer valid",
+  "दीदी के फ़ोन पर पूछा गया": "Asked on Didi's phone",
+  "दीदी से पूछा नहीं जा सका — लॉगिन नहीं है या पहले पूछा जा चुका है": "Could not ask Didi — she has no login or was already asked"
 }

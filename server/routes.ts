@@ -11,6 +11,10 @@ import { dprRouter } from "./modules/dpr/dpr.routes.ts"
 import { geoRouter } from "./modules/geo/geo.routes.ts"
 import { householdsRouter } from "./modules/households/households.routes.ts"
 import { metaRouter } from "./modules/meta/meta.routes.ts"
+import {
+  notificationsRouter,
+  publicNotificationsRouter,
+} from "./modules/notifications/notifications.routes.ts"
 import { recommendationsRouter } from "./modules/recommendations/recommendations.routes.ts"
 import { surveysRouter } from "./modules/surveys/surveys.routes.ts"
 import { usersRouter } from "./modules/users/users.routes.ts"
@@ -27,11 +31,13 @@ export function apiRouter() {
     res.json({ ok: true })
   })
   api.use("/auth", publicAuthRouter)
+  api.use("/notifications", publicNotificationsRouter)
 
   // Signed-in
   api.use(requireAuth)
   api.use("/auth", authRouter)
   api.use("/didi", didiRouter)
+  api.use("/notifications", notificationsRouter)
 
   // A Didi account reaches only her own profile (above), never staff data below.
   api.use((_req, res, next) =>

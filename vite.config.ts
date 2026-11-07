@@ -26,8 +26,16 @@ export default defineConfig({
         short_name: "लखपति दीदी",
         description: "सर्वे से स्थायी आय तक — हर परिवार की एक पहचान।",
         lang: "hi",
+        id: "/",
         start_url: "/",
         scope: "/",
+        // Lets the browser detect the installed app and route in-scope links into it.
+        related_applications: [{ platform: "webapp", url: "/manifest.webmanifest" }],
+        prefer_related_applications: false,
+        ...({
+          handle_links: "preferred",
+          launch_handler: { client_mode: "navigate-existing" },
+        } as object),
         display: "standalone",
         orientation: "any",
         theme_color: "#174e31",
@@ -39,6 +47,8 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // Web Push "push" / "notificationclick" handlers (public/push-sw.js).
+        importScripts: ["push-sw.js"],
         globPatterns: ["**/*.{js,css,html,png,jpg,svg,ico,woff2}"],
         navigateFallback: "/index.html",
         navigateFallbackDenylist: [/^\/api\//],

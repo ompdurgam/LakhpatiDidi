@@ -2,6 +2,7 @@ import { exec, one, transaction } from "../../db/pool.ts"
 import { badRequest, conflict, notFound } from "../../shared/errors.ts"
 import { msg } from "../../shared/i18n.ts"
 import type { Row } from "../../shared/types.ts"
+import { notifyApplication } from "../notifications/notifications.applications.ts"
 import { leverage, recommend } from "../recommendations/engine.ts"
 import { type Household, loadHousehold, toProfile } from "../recommendations/household.ts"
 import { ruleFor } from "../recommendations/schemeRules.ts"
@@ -203,6 +204,7 @@ export async function sendDpr(code: string, schemeCode: string, userId: number) 
       [created.insertId, "DPR जमा (फील्ड सर्वेयर द्वारा)", userId],
       db,
     )
+    await notifyApplication(created.insertId, "submitted", { actorId: userId }, db)
     await exec(
       "UPDATE tbl_dpr_drafts SET status = 'sent', application_id = ?, updated_by = ? WHERE id = ?",
       [created.insertId, userId, draft.id],

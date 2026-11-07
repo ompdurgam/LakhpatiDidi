@@ -46,13 +46,7 @@
     "stateOverview": "राज्य अवलोकन"
   },
   "notifications": {
-    "close": "बंद करें",
-    "overdue": "{{id}} अतिदेय",
-    "overdueMeta": "{{name}} • {{dept}} • {{days}} दिन",
-    "blccTitle": "BLCC बैठक कल",
-    "blccMeta": "7 लंबित मांगों पर निर्णय अपेक्षित",
-    "reportTitle": "DMMU मासिक रिपोर्ट",
-    "reportMeta": "10 दिसंबर 2026 तक जमा करें"
+    "close": "बंद करें"
   },
   "status": {
     "loading": "लोड हो रहा है…",

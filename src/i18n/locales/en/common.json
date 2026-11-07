@@ -46,13 +46,7 @@
     "stateOverview": "State Overview"
   },
   "notifications": {
-    "close": "Close",
-    "overdue": "{{id}} overdue",
-    "overdueMeta": "{{name}} • {{dept}} • {{days}} days",
-    "blccTitle": "BLCC meeting tomorrow",
-    "blccMeta": "Decision expected on 7 pending demands",
-    "reportTitle": "DMMU monthly report",
-    "reportMeta": "Submit by 10 December 2026"
+    "close": "Close"
   },
   "status": {
     "loading": "Loading…",

@@ -214,3 +214,44 @@
   width: 100%;
   margin-top: 13px;
 }
+/* The Didi's answer to "would you like to apply?" / ask her on her phone */
+.rec-ask {
+  width: 100%;
+  min-height: 38px;
+  margin-top: 8px;
+  border: 1px dashed #9dbda6;
+  border-radius: 8px;
+  background: white;
+  color: var(--ld-green-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: calc(13px * var(--font-scale));
+  font-weight: 600;
+}
+.rec-ask:disabled {
+  opacity: 0.6;
+}
+.rec-interest {
+  margin: 8px 0 0;
+  padding: 7px 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: calc(12.5px * var(--font-scale));
+  font-weight: 600;
+}
+.rec-interest.yes {
+  background: var(--ld-green-50);
+  color: var(--ld-green-700);
+}
+.rec-interest.no {
+  background: #f1f2f0;
+  color: #68766d;
+}
+.rec-interest.wait {
+  background: var(--ld-gold-50);
+  color: #a56f1a;
+}

@@ -64,6 +64,8 @@ erDiagram
 | Households | `tbl_households`, `tbl_surveys`, `tbl_household_income_sources`, `tbl_monthly_income_entries`, `tbl_household_loans`, `tbl_entitlement_gaps` | `current_annual_income`, `active_income_sources` and `lifecycle_status` on `tbl_households` are cached from the latest survey. `tbl_surveys.responses` holds the full form as JSON. |
 | Applications | `tbl_applications`, `tbl_application_events`, `tbl_application_documents`, `tbl_application_comments` | `department_id` is copied from the scheme so department inboxes can filter quickly. Every status change writes an event row. |
 | Audit | `tbl_audit_logs` | The API writes a row for every change and every login. |
+| Notifications | `master_notification_types`, `tbl_notifications`, `tbl_notification_recipients`, `tbl_push_subscriptions`, `tbl_notification_deliveries` | See *Notifications* below. |
+| Scheme interest | `tbl_scheme_interests` | A Didi's answer (asked / interested / not interested) when asked on her phone about a recommended scheme. One row per household and scheme, so she is never asked twice. |
 
 ### Application status lifecycle
 
@@ -98,3 +100,28 @@ npm run db:status     # ✓ applied / · pending
 To add a change, create the next file (for example `006_add_village_facilities.sql`) with both sections, and follow the naming convention above. Never edit a migration that has already run on a shared database.
 
 `seeds/001_demo_data.sql` loads the Bastar / Jagdalpur demo data from the Figma design: 17 households, 20 applications, 15 users, officer mappings, gaps and audit history. Seed dates are relative to `CURDATE()`, so "days pending" stays realistic.
+
+### Notifications
+
+```
+master_notification_types ─┐   bilingual templates, priority, push TTL, answer buttons
+                           ▼
+tbl_notifications (1 per event: type + JSON parameters, dedupe_key)
+        │ fan-out on write
+        ▼
+tbl_notification_recipients (1 per user: read / archived / answer)  ◀── inbox + badge
+        │ × each active device
+        ▼
+tbl_notification_deliveries (push outbox: pending → sent / failed / gone / skipped)
+        ▲
+tbl_push_subscriptions (browser push endpoint + keys per device)
+```
+
+- **Rendered when read.** Events store the template parameters, not text, so a notice shows in Hindi or English.
+- **Same transaction.** Producers call `notify()` inside their own transaction (transactional outbox): a notice exists only if the business change commits.
+- **Idempotent.** `dedupe_key` is unique, so sweeps (for example the hourly overdue check) can re-run safely.
+- **Fast reads.** The inbox uses keyset pagination on `ix_recipient_inbox`. The badge count is answered from the `ix_recipient_unread` index alone.
+- **Delivery worker.** It runs in the API process and leases rows with a `claim_token`, because MariaDB 10.4 has no `SKIP LOCKED`. It retries after 1 min, 5 min, 30 min, 2 h and 12 h. It revokes a device when the push service answers 404/410, and it skips a push the user has already read in the app.
+- **Answer buttons.** Phone alerts carry a random single-use token; only its SHA-256 hash is stored, in `action_token_hash`. Tokens expire after 14 days.
+- **Retention.** Notices older than 180 days and finished deliveries older than 30 days are deleted.
+

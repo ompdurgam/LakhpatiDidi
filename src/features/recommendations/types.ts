@@ -29,6 +29,8 @@ export type SchemeFit = {
   maxCost: number
   maxSubsidy: number
   dpr: DprState
+  /** The Didi's answer when asked on her phone (null = not asked yet). */
+  interest: "asked" | "interested" | "not_interested" | null
 }
 
 export type DidiRecommendations = {

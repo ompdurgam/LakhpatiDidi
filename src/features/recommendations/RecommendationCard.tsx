@@ -4,6 +4,7 @@ import { Icon } from "@/components/ui/Icon"
 import { useTr } from "@/i18n/tr"
 import { rupees } from "@/lib/money"
 
+import { AskDidi } from "./AskDidi"
 import type { SchemeFit } from "./types"
 
 /** One scheme that fits the Didi: why, eligibility checks, papers, where to apply, and the DPR link. */
@@ -11,10 +12,12 @@ export function RecommendationCard({
   fit,
   rank,
   didi,
+  onChanged,
 }: {
   fit: SchemeFit
   rank: number
   didi: string
+  onChanged: () => void
 }) {
   const tr = useTr()
   const action =
@@ -62,6 +65,7 @@ export function RecommendationCard({
       <p className="rec-office">
         <Icon name="building" size={13} /> {fit.office}
       </p>
+      <AskDidi didi={didi} fit={fit} onAsked={onChanged} />
       <Link
         className={`rec-action ${fit.dpr ? "continue" : ""}`}
         to={`/field/dpr/${didi}/${fit.code}`}

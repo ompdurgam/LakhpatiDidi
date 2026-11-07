@@ -180,3 +180,110 @@
   padding: 18px 20px;
   overflow: hidden;
 }
+
+/* Bell inbox (server notifications) */
+.notification-menu {
+  display: contents;
+}
+.notification-dropdown .notification-list {
+  max-height: min(420px, 60vh);
+  overflow-y: auto;
+  display: block;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+}
+.notification-dropdown .notice {
+  position: relative;
+  border-bottom: 1px solid #edf0ed;
+  background: white;
+}
+.notification-dropdown .notice.unread {
+  background: #f4f9f5;
+}
+.notification-dropdown .notice-open {
+  width: 100%;
+  min-height: 58px;
+  padding: 9px 22px 9px 10px;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  text-align: left;
+}
+.notification-dropdown .notice-open:hover {
+  background: #0000000a;
+}
+.notification-dropdown .notice-actions {
+  display: flex;
+  gap: 6px;
+  padding: 0 10px 10px 48px;
+}
+.notification-dropdown .notice-actions button {
+  flex: 1;
+  min-height: 34px;
+  padding: 0 8px;
+  border: 1px solid var(--ld-border);
+  border-radius: 7px;
+  background: white;
+  color: #56645b;
+  font-size: calc(12px * var(--font-scale));
+  font-weight: 600;
+}
+.notification-dropdown .notice-actions .primary-answer {
+  border-color: var(--ld-green-700);
+  background: var(--ld-green-700);
+  color: white;
+}
+.notification-dropdown .notice-answer {
+  margin: 0;
+  padding: 0 10px 9px 48px;
+  color: var(--ld-green-700);
+  font-size: calc(11.5px * var(--font-scale));
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.notification-dropdown .notice:not(.unread) p strong {
+  font-weight: 500;
+}
+.notification-dropdown .notice time {
+  display: block;
+  margin-top: 3px;
+  color: #98a29b;
+  font-size: calc(10.5px * var(--font-scale));
+}
+.notification-dropdown .unread-dot {
+  position: absolute;
+  top: 14px;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ld-green-600);
+}
+.notification-dropdown span.green {
+  background: var(--ld-green-50);
+  color: var(--ld-green-700);
+}
+.notification-dropdown .push-optin {
+  background: #fbf7ea;
+}
+.notification-dropdown .notification-hint {
+  margin: 0;
+  padding: 14px 12px;
+  color: var(--ld-text-muted);
+  font-size: calc(12px * var(--font-scale));
+  text-align: center;
+}
+.notification-dropdown .notification-more {
+  width: 100%;
+  min-height: 40px;
+  border: 0;
+  background: white;
+  color: var(--ld-green-700);
+  font-weight: 600;
+  font-size: calc(12.5px * var(--font-scale));
+}
