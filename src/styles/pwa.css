@@ -1,0 +1,64 @@
+/* "Install the app" banner (browser tab only). */
+.install-prompt {
+  position: fixed;
+  z-index: 90;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  max-width: 460px;
+  margin-inline: auto;
+  padding: 12px;
+  border: 1px solid var(--ld-border);
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 10px 30px rgba(28, 45, 33, 0.22);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 4px 12px;
+  align-items: center;
+}
+.install-prompt-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--ld-green-50);
+  color: var(--ld-green-700);
+  display: grid;
+  place-items: center;
+}
+.install-prompt-text {
+  display: grid;
+  gap: 2px;
+}
+.install-prompt-text strong {
+  color: var(--ld-text-strong);
+  font-size: calc(15px * var(--font-scale));
+}
+.install-prompt-text span {
+  color: var(--ld-text-muted);
+  font-size: calc(13px * var(--font-scale));
+}
+.install-prompt-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 6px;
+}
+.install-prompt-actions button {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 9px;
+  font-size: calc(14px * var(--font-scale));
+  font-weight: 600;
+}
+.install-skip {
+  border: 1px solid var(--ld-border);
+  background: white;
+  color: #56645b;
+}
+.install-yes {
+  border: 0;
+  background: var(--ld-green-700);
+  color: white;
+}

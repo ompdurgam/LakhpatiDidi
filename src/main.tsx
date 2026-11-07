@@ -1,6 +1,7 @@
 import "./i18n"
 import "./lib/screenFit"
 import "./lib/textSize"
+import "./lib/pwaInstall" // starts listening for the install prompt before React mounts
 import "./styles/index.css"
 
 import React from "react"
