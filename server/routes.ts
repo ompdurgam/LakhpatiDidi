@@ -11,6 +11,7 @@ import { dprRouter } from "./modules/dpr/dpr.routes.ts"
 import { geoRouter } from "./modules/geo/geo.routes.ts"
 import { householdsRouter } from "./modules/households/households.routes.ts"
 import { metaRouter } from "./modules/meta/meta.routes.ts"
+import { broadcastsRouter } from "./modules/notifications/broadcasts.routes.ts"
 import {
   notificationsRouter,
   publicNotificationsRouter,
@@ -55,6 +56,7 @@ export function apiRouter() {
   api.use("/users", usersRouter)
   api.use("/survey-sections", surveySectionsRouter)
   api.use("/audit-logs", auditLogsRouter)
+  api.use("/broadcasts", broadcastsRouter)
 
   api.use((_req, _res, next) => next(new HttpError(404, msg("API endpoint नहीं मिला"))))
   return api

@@ -1,8 +1,10 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useRef, useState } from "react"
+import { createPortal } from "react-dom"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router"
 
+import { useBroadcastOptions } from "@/api/broadcasts"
 import {
   type Notice,
   notificationKeys,
@@ -15,6 +17,7 @@ import { Icon } from "@/components/ui/Icon"
 import { useTr } from "@/i18n/tr"
 import { enablePush, pushState } from "@/lib/push"
 
+import { BroadcastComposer } from "./BroadcastComposer"
 import { NotificationItem } from "./NotificationItem"
 
 /** Bell button + dropdown inbox (server notifications) with the phone-alerts switch. */
@@ -30,6 +33,9 @@ export function NotificationMenu() {
   const inbox = useInbox(open)
   const markRead = useMarkRead()
   const respond = useRespond()
+  const [composing, setComposing] = useState(false)
+  const { data: broadcast } = useBroadcastOptions()
+  const canSend = Array.isArray(broadcast?.roles) && broadcast.roles.length > 0
   const notices = inbox.data?.pages.flatMap((page) => page.items) ?? []
 
   // A push arriving while the app is open refreshes the badge and list at once.
@@ -86,6 +92,18 @@ export function NotificationMenu() {
               <button onClick={() => setOpen(false)}>{t("notifications.close")}</button>
             )}
           </div>
+          {canSend && (
+            <button
+              className="broadcast-open"
+              onClick={() => {
+                setOpen(false)
+                setComposing(true)
+              }}
+            >
+              <Icon name="plus" size={14} />
+              {tr("सूचना भेजें")}
+            </button>
+          )}
           {push === "default" && (
             <button className="push-optin" onClick={() => void turnOnAlerts()}>
               <span className="alert green">
@@ -129,6 +147,13 @@ export function NotificationMenu() {
           </div>
         </div>
       )}
+      {composing &&
+        broadcast &&
+        // Portalled so the header's stacking/clipping never traps the fixed modal.
+        createPortal(
+          <BroadcastComposer options={broadcast} onClose={() => setComposing(false)} />,
+          document.body,
+        )}
     </div>
   )
 }

@@ -9,5 +9,19 @@
   "दीदी आवेदन करना चाहती हैं": "Didi wants to apply",
   "दीदी ने अभी मना किया": "Didi said not now",
   "दीदी के उत्तर की प्रतीक्षा": "Waiting for Didi's answer",
-  "दीदी के फ़ोन पर पूछें": "Ask Didi on her phone"
+  "दीदी के फ़ोन पर पूछें": "Ask Didi on her phone",
+  "नीचे के स्तर को सूचना": "Notice to the levels below you",
+  "सूचना भेजें": "Send notice",
+  "नई सूचना": "New notice",
+  "भेजी गई": "Sent",
+  "किसे भेजें": "Send to",
+  "पूरा राज्य": "Whole state",
+  "पूरा जिला": "Whole district",
+  "जैसे: कल ब्लॉक में बैठक": "e.g. Meeting at the block office tomorrow",
+  "संदेश": "Message",
+  "ऊपर से समूह चुनें": "Choose a group above",
+  "{{people}} लोगों तक पहुँचेगी • {{phones}} फ़ोन पर अलर्ट": "Reaches {{people}} people • phone alert on {{phones}}",
+  "भेजा जा रहा है…": "Sending…",
+  "अभी तक कोई सूचना नहीं भेजी गई": "You haven't sent any notices yet",
+  "{{seen}}/{{people}} ने पढ़ा": "{{seen}}/{{people}} read"
 }
