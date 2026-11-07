@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next"
 import { useLocation, useMatch, useNavigate } from "react-router"
 
+import { BrandMark } from "@/components/ui/BrandMark"
 import { Icon } from "@/components/ui/Icon"
 import { LanguageMenu } from "@/components/ui/LanguageMenu"
 import { TextSizeControl } from "@/components/ui/TextSizeControl"
@@ -58,6 +59,7 @@ export function Header() {
         <Icon name="menu" />
       </button>
       <div className="header-title">
+        <BrandMark size={52} />
         <small>{scope.breadcrumb}</small>
         <h1>{title}</h1>
       </div>

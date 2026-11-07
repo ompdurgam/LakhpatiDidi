@@ -215,6 +215,9 @@ header {
   z-index: 20;
   backdrop-filter: blur(12px);
 }
+.header-title .brand-mark {
+  display: none; /* phones only: the logo stands in for the page title */
+}
 .header-title small {
   display: block;
   color: #7a847c;
@@ -1483,12 +1486,19 @@ tbody tr:hover {
   .global-search {
     display: none;
   }
+  /* Phones: the logo replaces the title text (the h1 stays for screen readers). */
+  .header-title .brand-mark {
+    display: block;
+    width: 52px;
+    height: 52px;
+  }
   .header-title h1 {
-    font-size: calc(17.5px * var(--font-scale));
-    line-height: 1.25;
-    white-space: nowrap;
+    position: absolute;
+    width: 1px;
+    height: 1px;
     overflow: hidden;
-    text-overflow: ellipsis;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
   .header-actions .role-switcher select {
     max-width: 52px;
