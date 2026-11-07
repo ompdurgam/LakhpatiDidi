@@ -62,10 +62,12 @@ export default defineConfig({
     }),
   ],
   server: {
+    host: true, // listen on LAN so a phone on the same Wi-Fi can open the app
     port: Number(process.env.VITE_PORT ?? 5173),
     proxy: { "/api": apiTarget },
   },
   preview: {
+    host: true,
     proxy: { "/api": apiTarget },
   },
   resolve: {
