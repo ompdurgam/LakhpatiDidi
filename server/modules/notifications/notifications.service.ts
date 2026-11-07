@@ -40,7 +40,8 @@ export async function notify(input: NoticeInput, db: Db = pool): Promise<number 
     return null
   }
 
-  // ON DUPLICATE KEY … id = id is a no-op that reports 0 affected rows for a repeated dedupe key.
+  // ON DUPLICATE KEY … id = id is a no-op for a repeated dedupe key. mysql2 sets CLIENT_FOUND_ROWS,
+  // so a duplicate still reports affectedRows = 1; only insertId (0 on a duplicate) tells them apart.
   const created = await exec(
     `INSERT INTO tbl_notifications (type_id, payload, entity_type, entity_ref, actor_user_id, dedupe_key)
      VALUES (?, ?, ?, ?, ?, ?)
@@ -55,8 +56,8 @@ export async function notify(input: NoticeInput, db: Db = pool): Promise<number 
     ],
     db,
   )
-  if (created.affectedRows !== 1) return null
   const notificationId = created.insertId
+  if (!notificationId) return null
 
   await exec(
     "INSERT INTO tbl_notification_recipients (notification_id, user_id, link) VALUES ?",
