@@ -1471,15 +1471,30 @@ tbody tr:hover {
     display: grid;
     margin-right: 10px;
   }
+  /* The title shrinks (max two lines) so long English titles never push the header past the screen. */
   .header-title {
     flex: 1;
+    min-width: 0;
+  }
+  .header-actions {
+    flex: none;
   }
   .header-title small,
   .global-search {
     display: none;
   }
   .header-title h1 {
-    font-size: calc(19.5px * var(--font-scale));
+    font-size: calc(17.5px * var(--font-scale));
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .header-actions .role-switcher select {
+    max-width: 52px;
+  }
+  body {
+    overflow-x: hidden;
   }
   .page {
     padding: 17px 14px 35px;

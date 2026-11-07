@@ -188,11 +188,18 @@
 .field-mobile {
   background: #f7f8f5;
   min-height: calc(100dvh - 65px);
+  max-width: 100vw;
+  overflow-x: clip;
 }
 .field-mobile .phone-content {
   height: auto;
   overflow: visible;
   padding-bottom: 76px;
+}
+.field-mobile .field-list-page,
+.field-mobile .field-detail-page {
+  padding: 14px 14px 84px; /* side gutters + room above the tab bar */
+  overflow-wrap: anywhere;
 }
 .field-mobile .phone-nav {
   position: fixed;
@@ -219,8 +226,18 @@
   display: flex;
   z-index: 5;
 }
+.phone-nav {
+  padding-inline: 0; /* undo the sidebar's generic nav padding */
+}
 .phone-nav button {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
+  height: auto;
+  padding: 0 2px;
+  border-radius: 0;
+  box-shadow: none;
+  text-align: center;
   border: 0;
   background: transparent;
   color: #8a948c;
@@ -236,6 +253,7 @@
 .phone-nav button.active {
   color: #1f6b3a;
   background: #f1f6f2;
+  box-shadow: none;
 }
 .offline-banner {
   background: #fff0d4;

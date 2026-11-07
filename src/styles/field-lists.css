@@ -2,8 +2,10 @@
 .field-list-page,
 .field-detail-page {
   display: grid;
+  grid-template-columns: minmax(0, 1fr); /* content can never widen the page */
   align-content: start;
   gap: 12px;
+  min-width: 0;
 }
 .field-list-page.wide,
 .field-detail-page.wide {
