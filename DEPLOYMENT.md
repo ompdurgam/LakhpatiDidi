@@ -142,12 +142,15 @@ Optional map basemap: `VITE_MAP_TILE_URL` and `VITE_MAP_ATTRIBUTION` are read **
 ```bash
 npm ci                 # includes dev tools; the build needs TypeScript and Vite
 npm run build          # type-check, then build the PWA into dist/
-npm run db:migrate     # create all tables
-npm run db:seed        # departments, schemes, demo users and sample data
+npm run db:migrate     # create all tables + reference data (state, departments, schemes, survey sections)
 npm run geo:lgd        # all Chhattisgarh districts, blocks, GPs and villages
 ```
 
-`db:seed` only loads into an empty database. Right now it is also the only source of the departments, schemes and first user accounts, so it must run on a fresh install. See *Before going live* for removing the demo users afterwards.
+**Demo or real?** For a demo / UAT server, also run `npm run db:seed` (Bastar demo households, applications and demo logins; it only loads into a database with no users). For production, skip it and create the first admin by hand. They then add everyone else from the Admin screen:
+
+```bash
+sudo mysql lakhpati_didi -e "INSERT INTO master_users (name, mobile, role, designation) VALUES ('State Admin', '9XXXXXXXXX', 'admin', 'State MIS');"
+```
 
 Map boundaries (district and block files are in git):
 
@@ -246,7 +249,7 @@ sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d didi.example.gov.in
 ```
 
-Open `https://didi.example.gov.in`. With the demo seed loaded, log in with **9826143412**; while `OTP_DEV_MODE=true` the OTP appears on screen.
+Open `https://didi.example.gov.in` and log in with the admin mobile from step 7 (or **9826143412** if you loaded the demo seed). While `OTP_DEV_MODE=true` the OTP appears on screen.
 
 The API trusts `X-Forwarded-For` only from localhost, so keep Nginx on the same VM. If you move Nginx or a load balancer to another machine, change `trust proxy` in [server/app.ts](server/app.ts).
 
@@ -288,7 +291,7 @@ gunzip -c /var/backups/lakhpati-didi/db-2026-11-10.sql.gz | sudo mysql lakhpati_
 These are known gaps in the current code, not deployment steps:
 
 - **SMS for OTP.** With `OTP_DEV_MODE=true`, anyone can see the login OTP on screen. Connect an SMS provider in the auth module (`server/modules/auth/auth.service.ts`), then set `OTP_DEV_MODE=false`.
-- **Demo users and data.** The seed creates demo accounts (`9826143412`, `9752314412`, `9425118881`, `9301245176`, `9993000001`, …) and sample households. After adding real officers from the Admin screen, lock or delete the demo accounts. There is no separate "reference data only" seed yet.
+- **Demo users and data.** If `db:seed` was run, it created demo accounts (`9826143412`, `9752314412`, `9425118881`, `9301245176`, `9993000001`, …) and sample households. Lock or delete those accounts before real use, or rebuild production without the seed.
 - **Role checks.** Any logged-in user can switch roles from the header, and the API records who did what but does not yet restrict actions by role. Add per-role checks before giving access to real users.
 
 ## Troubleshooting
