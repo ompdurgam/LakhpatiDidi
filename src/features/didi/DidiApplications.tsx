@@ -1,10 +1,14 @@
+import { useState } from "react"
+
 import type { ApplicationRow } from "@/api/types"
 import { Card } from "@/components/ui/Card"
 import { EmptyState } from "@/components/ui/EmptyState"
+import { Icon } from "@/components/ui/Icon"
 import { StatusBadge, type StatusTone } from "@/components/ui/StatusBadge"
 import { type Column, Table } from "@/components/ui/Table"
 import { useTr } from "@/i18n/tr"
 
+import { DidiApplicationDetail } from "./DidiApplicationDetail"
 import { useDidi } from "./useDidi"
 
 const tone: Record<string, StatusTone> = {
@@ -20,6 +24,7 @@ const tone: Record<string, StatusTone> = {
 export function DidiApplications() {
   const tr = useTr()
   const { data, isLoading, error } = useDidi()
+  const [open, setOpen] = useState<ApplicationRow | null>(null)
   if (error) return <EmptyState>{(error as Error).message}</EmptyState>
   if (isLoading || !data) return <EmptyState>{tr("लोड हो रहा है…")}</EmptyState>
 
@@ -46,6 +51,22 @@ export function DidiApplications() {
         <StatusBadge label={r.status} tone={r.overdue ? "red" : (tone[r.statusCode] ?? "blue")} />
       ),
     },
+    {
+      key: "open",
+      header: <span className="sr-only">{tr("विवरण")}</span>,
+      render: (r) => (
+        <button
+          type="button"
+          className="didi-app-open"
+          onClick={(event) => {
+            event.stopPropagation()
+            setOpen(r)
+          }}
+        >
+          <Icon name="file" size={14} /> {tr("देखें")}
+        </button>
+      ),
+    },
   ]
   return (
     <div className="page didi-page">
@@ -61,9 +82,36 @@ export function DidiApplications() {
           columns={columns}
           rows={data.applications}
           rowKey={(r) => r.id}
+          onRowClick={setOpen}
+          className="didi-app-table"
           empty={tr("अभी तक कोई आवेदन नहीं भेजा गया है।")}
         />
+        {data.applications.length > 0 && (
+          <ul className="didi-app-cards">
+            {data.applications.map((r) => (
+              <li key={r.id}>
+                <button type="button" onClick={() => setOpen(r)}>
+                  <strong>{r.scheme}</strong>
+                  <StatusBadge
+                    label={r.status}
+                    tone={r.overdue ? "red" : (tone[r.statusCode] ?? "blue")}
+                  />
+                  <small>
+                    {r.id} • {r.amount}
+                  </small>
+                  <span className="didi-app-open">
+                    <Icon name="file" size={14} /> {tr("देखें")}
+                  </span>
+                  <small>
+                    {tr("प्राप्ति तिथि")}: {r.received}
+                  </small>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </Card>
+      {open && <DidiApplicationDetail row={open} onClose={() => setOpen(null)} />}
     </div>
   )
 }

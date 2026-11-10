@@ -22,18 +22,6 @@ const sections = [
   "K मजदूरी",
   "समीक्षा",
 ]
-const journey = [
-  "सर्वे",
-  "सिंक",
-  "योजना सुझाव",
-  "सहमति",
-  "DPR",
-  "विभाग",
-  "स्वीकृति",
-  "डिलीवरी",
-  "आय",
-  "लखपति",
-]
 
 /**
  * Field (surveyor) workspace. Phones get the full-screen field app;
@@ -70,14 +58,6 @@ export function FieldWorkspace({ onNotify }: { onNotify: (message: string) => vo
         <div className="sync-pill">
           <i /> {tr("ऑफलाइन डेटा सुरक्षित • 4 लंबित")}
         </div>
-      </div>
-      <div className="journey-strip">
-        {journey.map((item, index) => (
-          <div key={item} className={index < 4 ? "complete" : index === 4 ? "current" : ""}>
-            <i>{index < 4 ? "✓" : index + 1}</i>
-            <span>{tr(item)}</span>
-          </div>
-        ))}
       </div>
       <FieldDesktop {...state} />
     </div>

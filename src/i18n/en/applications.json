@@ -81,5 +81,22 @@
   "अनुरोध विफल रहा": "The request failed",
   "अनिल कश्यप": "Anil Kashyap",
   "कुछ गलत हो गया": "Something went wrong",
-  "यह पेज नहीं मिला": "This page was not found"
+  "यह पेज नहीं मिला": "This page was not found",
+  "योजना आवेदन पत्र": "Scheme Application",
+  "लाभार्थी विवरण": "Beneficiary details",
+  "परिवार कोड": "Household code",
+  "निर्णय की अंतिम तिथि": "Decision due by",
+  "आय पर प्रभाव": "Effect on income",
+  "योजना के बाद अनुमानित आय": "Expected income after the scheme",
+  "अनुमानित अतिरिक्त आय (प्रति वर्ष)": "Expected extra income (per year)",
+  "निर्णय": "Decision",
+  "स्वीकृति आदेश संख्या": "Sanction order no.",
+  "स्वीकृति तिथि": "Sanction date",
+  "डिलीवरी तिथि": "Delivery date",
+  "प्राप्त संपत्ति": "Asset received",
+  "अस्वीकृति का कारण": "Reason for rejection",
+  "जारी तिथि: {{date}} • यह कंप्यूटर द्वारा बनाया गया दस्तावेज़ है": "Issued on {{date}} • This is a computer-generated document",
+  "आवेदन पत्र": "Application",
+  "प्रिंट करें": "Print",
+  "डाउनलोड के लिए प्रिंट विंडो में “PDF के रूप में सेव करें” चुनें": "To download, choose “Save as PDF” in the print window"
 }

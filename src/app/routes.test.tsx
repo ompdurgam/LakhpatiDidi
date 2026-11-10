@@ -51,6 +51,7 @@ const screens: [Role, string, RegExp][] = [
   ["didi", "/didi", /मेरी प्रोफ़ाइल/],
   ["didi", "/didi/tasks", /मेरे कार्य/],
   ["didi", "/didi/applications", /मेरे आवेदन/],
+  ["didi", "/didi/schemes", /PMMSY – तालाब/],
   ["admin", "/admin/schemes", /योजना मास्टर/],
   ["admin", "/admin/mapping", /विभाग एवं अधिकारी मैपिंग/],
   ["admin", "/admin/users", /यूज़र और भूमिकाएँ/],

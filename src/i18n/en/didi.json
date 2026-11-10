@@ -32,5 +32,21 @@
   "{{scheme}} ({{id}}): डिलीवरी हो गई": "{{scheme}} ({{id}}): delivered",
   "{{scheme}} ({{id}}): स्वीकृति मिल गई — संपत्ति की डिलीवरी लें": "{{scheme}} ({{id}}): sanctioned — collect the asset delivery",
   "आप लखपति दीदी बन गई हैं!": "You have become a Lakhpati Didi!",
-  "सालाना आय ₹1,00,000 तक पहुँचें": "Reach an annual income of ₹1,00,000"
+  "सालाना आय ₹1,00,000 तक पहुँचें": "Reach an annual income of ₹1,00,000",
+  "पात्रता, दस्तावेज़ और कहाँ आवेदन करें": "Eligibility, papers and where to apply",
+  "आपने रुचि दिखाई — CRP आवेदन में मदद करेंगी": "You said yes — your CRP will help you apply",
+  "आपने अभी मना किया है। मन बदले तो बताएँ।": "You said not now. Tell us if you change your mind.",
+  "क्या आप इस योजना में आवेदन करना चाहती हैं?": "Would you like to apply for this scheme?",
+  "हाँ, आवेदन करना है": "Yes, I want to apply",
+  "अभी नहीं": "Not now",
+  "आपके लिए": "For you",
+  "मेरी योजनाएँ": "My schemes",
+  "आपके सर्वे के आधार पर ये योजनाएँ आपकी आय बढ़ा सकती हैं": "Based on your survey, these schemes can raise your income",
+  "अभी की वार्षिक आय": "Annual income now",
+  "योजनाओं के बाद संभावित आय": "Possible income with these schemes",
+  "इन योजनाओं से आप लखपति दीदी (₹1,00,000/वर्ष) बन सकती हैं": "These schemes can make you a Lakhpati Didi (₹1,00,000/year)",
+  "इन योजनाओं से आय +{{extra}} बढ़ सकती है": "These schemes can add +{{extra}} to your income",
+  "अभी आपके लिए कोई नई योजना नहीं है। सर्वे अपडेट होने पर यहाँ दिखेगी।": "No new schemes for you right now. They will show here when your survey is updated.",
+  "आपके हक़ की योजनाएँ": "Schemes you are entitled to",
+  "आप इनकी पात्र हैं पर अभी लाभ नहीं मिला — CRP से बात करें": "You qualify for these but haven't received them yet — talk to your CRP"
 }

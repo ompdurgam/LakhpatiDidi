@@ -49,7 +49,10 @@ describe("broadcast rules", () => {
     expect(scopeFor(sender("state"), 7)).toEqual({ districtId: 7 })
     expect(scopeFor(sender("district", { districtId: 3 }))).toEqual({ districtId: 3 })
     // A DPM narrowing to a block still stays inside her district.
-    expect(scopeFor(sender("district", { districtId: 3 }), 9)).toEqual({ districtId: 3, blockId: 9 })
+    expect(scopeFor(sender("district", { districtId: 3 }), 9)).toEqual({
+      districtId: 3,
+      blockId: 9,
+    })
     // Block and CRP senders cannot widen their area, whatever area id is sent.
     expect(scopeFor(sender("block", { blockId: 5 }), 99)).toEqual({ blockId: 5 })
     expect(scopeFor(sender("field", { villageId: 11 }), 99)).toEqual({ villageId: 11 })

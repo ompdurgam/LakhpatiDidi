@@ -26,7 +26,8 @@ export type BroadcastDraft = { roles: Role[]; area: number | null; title: string
 
 const keys = {
   options: ["broadcasts", "options"] as const,
-  audience: (roles: Role[], area: number | null) => ["broadcasts", "audience", roles, area] as const,
+  audience: (roles: Role[], area: number | null) =>
+    ["broadcasts", "audience", roles, area] as const,
   sent: ["broadcasts", "sent"] as const,
 }
 

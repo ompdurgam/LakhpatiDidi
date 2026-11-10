@@ -226,5 +226,8 @@
   "एक घंटे में अधिकतम {{n}} सूचनाएँ भेजी जा सकती हैं": "You can send at most {{n}} notices an hour",
   "सूचना भेजना अभी बंद है": "Sending notices is switched off right now",
   "चुने गए समूह में कोई सक्रिय यूज़र नहीं है": "There are no active users in the chosen group",
-  "सूचना {{n}} लोगों को भेजी गई": "Notice sent to {{n}} people"
+  "सूचना {{n}} लोगों को भेजी गई": "Notice sent to {{n}} people",
+  "यह योजना आपके लिए सुझाई नहीं गई है": "This scheme was not suggested for you",
+  "आपकी रुचि CRP को भेजी गई — वे आवेदन में मदद करेंगी": "Your interest was sent to your CRP — she will help you apply",
+  "ठीक है, आप बाद में भी आवेदन कर सकती हैं": "Okay, you can still apply later"
 }

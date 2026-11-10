@@ -49,9 +49,10 @@
     "survey": "Form settings"
   },
   "didi": {
-    "profile": "My profile",
-    "applications": "My applications",
-    "tasks": "My tasks",
+    "profile": "Profile",
+    "applications": "Applications",
+    "tasks": "Tasks",
+    "schemes": "Schemes",
     "menu": "Didi menu"
   }
 }

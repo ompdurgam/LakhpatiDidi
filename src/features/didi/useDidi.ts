@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 
 import { api } from "@/api/client"
-import type { ApplicationRow } from "@/api/types"
+import type { ApplicationDetail, ApplicationRow } from "@/api/types"
 import { useSession } from "@/stores/session"
 
 export type DidiProfileData = {
@@ -54,6 +54,16 @@ export function useDidi() {
     queryKey: ["didi", "me"],
     queryFn: () => api<DidiProfileData>("/didi/me"),
     enabled: signedIn,
+    staleTime: 60_000,
+    retry: false,
+  })
+}
+
+/** Full detail of one of her own applications. */
+export function useDidiApplication(code: string) {
+  return useQuery({
+    queryKey: ["didi", "me", "applications", code],
+    queryFn: () => api<ApplicationDetail>(`/didi/me/applications/${encodeURIComponent(code)}`),
     staleTime: 60_000,
     retry: false,
   })

@@ -1,11 +1,7 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import {
-  type BroadcastOptions,
-  useAudienceCount,
-  useSendBroadcast,
-} from "@/api/broadcasts"
+import { type BroadcastOptions, useAudienceCount, useSendBroadcast } from "@/api/broadcasts"
 import { Icon } from "@/components/ui/Icon"
 import { Modal } from "@/components/ui/Modal"
 import { useTr } from "@/i18n/tr"
@@ -119,7 +115,9 @@ export function BroadcastComposer({
               <span>{options.areaLevel === "district" ? tr("जिला") : tr("ब्लॉक")}</span>
               <select
                 value={area ?? ""}
-                onChange={(event) => setArea(event.target.value ? Number(event.target.value) : null)}
+                onChange={(event) =>
+                  setArea(event.target.value ? Number(event.target.value) : null)
+                }
               >
                 <option value="">
                   {options.areaLevel === "district" ? tr("पूरा राज्य") : tr("पूरा जिला")}

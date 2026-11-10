@@ -86,7 +86,9 @@ export async function composerOptions(sender: Sender) {
   const level = roles.length ? areaLevelFor(sender.role) : null
   let areas: { id: number; name: string }[] = []
   if (level === "district") {
-    const rows = await query<Row>("SELECT id, name_hi, name_en FROM master_districts ORDER BY name_en")
+    const rows = await query<Row>(
+      "SELECT id, name_hi, name_en FROM master_districts ORDER BY name_en",
+    )
     areas = rows.map((r) => ({ id: r.id, name: localizedName(r) }))
   } else if (level === "block" && sender.districtId) {
     const rows = await query<Row>(
@@ -99,7 +101,11 @@ export async function composerOptions(sender: Sender) {
 }
 
 /** How many people a notice would reach, and how many of them get a phone alert. */
-export async function countAudience(sender: Sender, roles: readonly string[], areaId?: number | null) {
+export async function countAudience(
+  sender: Sender,
+  roles: readonly string[],
+  areaId?: number | null,
+) {
   const target = resolve(sender, roles, areaId)
   const from = audienceFrom(target.scope, target.roles, sender.id)
   const row = await one<Row>(
@@ -133,7 +139,10 @@ export async function sendBroadcast(
     [sender.id],
   )
   if (Number(recent?.n ?? 0) >= HOURLY_LIMIT)
-    throw new HttpError(429, msg("एक घंटे में अधिकतम {{n}} सूचनाएँ भेजी जा सकती हैं", { n: HOURLY_LIMIT }))
+    throw new HttpError(
+      429,
+      msg("एक घंटे में अधिकतम {{n}} सूचनाएँ भेजी जा सकती हैं", { n: HOURLY_LIMIT }),
+    )
 
   const type = await one<Row>(
     "SELECT id, push_enabled FROM master_notification_types WHERE code = ? AND is_active = 1",
@@ -206,7 +215,9 @@ export async function listSent(senderId: number) {
       id: r.id,
       title: payload.title ?? "",
       body: payload.body ?? "",
-      roles: String(payload.roles ?? "").split(",").filter(Boolean) as Role[],
+      roles: String(payload.roles ?? "")
+        .split(",")
+        .filter(Boolean) as Role[],
       people: Number(r.people),
       seen: Number(r.seen),
       sentAt: formatDate(r.created_at, true),

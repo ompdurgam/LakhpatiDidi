@@ -1,0 +1,217 @@
+/* Application document: on-screen preview, print / "Save as PDF" copy, and the Didi list */
+
+.application-document {
+  color: #222;
+  font-family: "Noto Sans Devanagari", Inter, sans-serif;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+.application-document header {
+  display: block;
+  height: auto;
+  padding: 0 0 10px;
+  background: none;
+  position: static;
+  border-bottom: 2px solid #2d714a;
+  text-align: center;
+}
+.application-document header span {
+  color: #555;
+  font-size: 11px;
+}
+.application-document h1 {
+  margin: 2px 0;
+  color: #1f4d33;
+  font-size: 19px;
+}
+.application-document header p {
+  margin: 0;
+  font-size: 12.5px;
+}
+.application-document section {
+  margin-top: 12px;
+  break-inside: avoid;
+}
+.application-document h2 {
+  margin: 0 0 4px;
+  color: #2d714a;
+  font-size: 13.5px;
+}
+.application-document table {
+  width: 100%;
+  min-width: 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.application-document th,
+.application-document td {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  padding: 4px 7px;
+  border: 1px solid #d5dbd6;
+  text-align: left;
+  vertical-align: top;
+}
+.application-document th {
+  width: 44%;
+  background: #f3f6f3;
+  color: #333;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-transform: none;
+}
+.application-document td {
+  color: #222;
+  font-size: 12.5px;
+}
+.document-steps tr.pending {
+  color: #888;
+}
+.document-files {
+  margin: 0;
+  padding-left: 18px;
+}
+.document-files small {
+  color: #666;
+}
+.application-document footer {
+  margin-top: 26px;
+  break-inside: avoid;
+}
+.document-signs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.document-signs span {
+  padding-top: 34px;
+  border-bottom: 1px solid #888;
+  text-align: center;
+  font-size: 11.5px;
+}
+.document-signs span::after {
+  content: "";
+}
+.application-document footer p {
+  margin: 14px 0 0;
+  color: #777;
+  font-size: 10.5px;
+  text-align: center;
+}
+
+/* Preview inside the modal */
+.document-preview {
+  margin-top: 11px;
+  padding: 18px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(27, 45, 33, 0.09);
+}
+
+.document-actions {
+  margin: 4px 0 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.application-pdf-modal .document-actions {
+  margin: 12px 0 0;
+}
+.drawer .document-actions {
+  margin: 4px 17px 12px;
+}
+.document-actions button {
+  min-height: 42px;
+  justify-content: center;
+}
+.document-actions small {
+  grid-column: 1 / -1;
+  color: var(--ld-text-muted);
+  font-size: calc(11.5px * var(--font-scale));
+  text-align: center;
+}
+
+/* Didi's application list */
+.didi-app-table tbody tr {
+  cursor: pointer;
+}
+.didi-app-open {
+  min-height: 34px;
+  padding: 0 11px;
+  border: 1px solid var(--ld-border);
+  border-radius: var(--ld-radius-md);
+  background: white;
+  color: var(--ld-green-700);
+  font-weight: 600;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Phones: one card per application instead of a wide table */
+.didi-app-cards {
+  display: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.didi-app-cards li + li {
+  border-top: 1px solid var(--ld-border-soft);
+}
+.didi-app-cards button {
+  width: 100%;
+  padding: 12px 2px;
+  border: 0;
+  background: none;
+  text-align: left;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 10px;
+  align-items: start;
+}
+.didi-app-cards strong {
+  color: var(--ld-text-strong);
+  font-size: calc(15px * var(--font-scale));
+}
+.didi-app-cards small {
+  color: var(--ld-text-muted);
+  font-size: calc(12.5px * var(--font-scale));
+}
+.didi-app-cards .didi-app-open {
+  grid-column: 2;
+  grid-row: 2 / span 2;
+  align-self: center;
+}
+@media (max-width: 720px) {
+  .didi-app-table {
+    display: none;
+  }
+  .didi-app-cards {
+    display: block;
+  }
+}
+
+/* Hidden on screen; the only thing printed. */
+.print-root {
+  display: none;
+}
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+  body {
+    background: white !important;
+  }
+  body > *:not(.print-root) {
+    display: none !important;
+  }
+  .print-root {
+    display: block;
+  }
+  .application-document th {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

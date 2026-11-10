@@ -1,15 +1,13 @@
 // Asks a Didi on her phone whether she wants to apply for the scheme that fits her
-// best, and tells her CRP (and block, on a "yes") what she answered.
-import { type Db, exec, one, query, transaction } from "../../db/pool.ts"
+// best. Her answer is handled in interest.ts.
+import { exec, one, query, transaction } from "../../db/pool.ts"
 import { inr } from "../../shared/format.ts"
 import { withLang } from "../../shared/i18n.ts"
 import type { Row } from "../../shared/types.ts"
-import { notify, type Recipient } from "../notifications/notifications.service.ts"
+import { notify } from "../notifications/notifications.service.ts"
 import { loadHousehold } from "./household.ts"
 import { recommendationsFor } from "./recommendations.service.ts"
 import { loadSchemes } from "./schemes.ts"
-
-export type InterestAnswer = "yes" | "no"
 
 /** Scheme codes this household already applied for or was already asked about. */
 async function settledSchemes(householdId: number) {
@@ -85,7 +83,7 @@ export async function askAboutBestScheme(
         entity: { type: "scheme_interest", ref: String(interest.insertId) },
         actorId: options.askedBy ?? null,
         dedupeKey: `scheme_interest:${interest.insertId}`,
-        recipients: [{ userId: Number(didi.id), link: "/didi" }],
+        recipients: [{ userId: Number(didi.id), link: "/didi/schemes" }],
       },
       db,
     )
@@ -96,59 +94,4 @@ export async function askAboutBestScheme(
     )
     return pick.code
   })
-}
-
-/** Records her answer to a "scheme.suggested" notice and tells the field team. */
-export async function onSchemeAnswer(
-  notificationId: number,
-  answer: InterestAnswer,
-  via: "app" | "push",
-  db: Db,
-) {
-  const row = await one<Row>(
-    `SELECT i.id, i.status, i.expected_gain, h.hh_code, h.didi_name, h.didi_name_en, h.village_id,
-            gp.block_id, s.code AS scheme_code, s.name_hi, s.name_en
-     FROM tbl_scheme_interests i
-     JOIN tbl_households h          ON h.id = i.household_id
-     JOIN master_villages v         ON v.id = h.village_id
-     JOIN master_gram_panchayats gp ON gp.id = v.gram_panchayat_id
-     JOIN master_schemes s          ON s.id = i.scheme_id
-     WHERE i.notification_id = ? FOR UPDATE`,
-    [notificationId],
-    db,
-  )
-  if (!row || row.status !== "asked") return
-  await exec(
-    `UPDATE tbl_scheme_interests SET status = ?, responded_via = ?, responded_at = NOW()
-     WHERE id = ?`,
-    [answer === "yes" ? "interested" : "not_interested", via, row.id],
-    db,
-  )
-
-  const staff = await query<Row>(
-    `SELECT id, role FROM master_users WHERE status = 'active'
-       AND ((role = 'field' AND village_id = ?) OR (? AND role = 'block' AND block_id = ?))`,
-    [row.village_id, answer === "yes", row.block_id],
-    db,
-  )
-  const recipients: Recipient[] = staff.map((u) => ({
-    userId: Number(u.id),
-    link: u.role === "field" ? `/field/dpr/${row.hh_code}/${row.scheme_code}` : "/block/households",
-  }))
-  await notify(
-    {
-      type: answer === "yes" ? "scheme.interested" : "scheme.declined",
-      payload: {
-        didi: row.didi_name,
-        didi_en: row.didi_name_en || null,
-        scheme: row.name_hi,
-        scheme_en: row.name_en || null,
-        gain: inr(Number(row.expected_gain ?? 0)),
-      },
-      entity: { type: "household", ref: row.hh_code },
-      dedupeKey: `scheme_interest:${row.id}:${answer}`,
-      recipients,
-    },
-    db,
-  )
 }

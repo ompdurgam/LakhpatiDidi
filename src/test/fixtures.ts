@@ -158,6 +158,18 @@ export function fakeApi(url: string): unknown {
   if (path === "/survey-sections") return [{ code: "A", name: "पहचान", enabled: true }]
   if (path.startsWith("/applications/")) return null
   if (path === "/didi/me") return didiFixture
+  if (path === "/didi/me/schemes")
+    return {
+      income: recommendationsFixture.household.income,
+      leverage: recommendationsFixture.leverage,
+      recommendations: recommendationsFixture.recommendations.map((fit) => ({
+        ...fit,
+        interest: null,
+      })),
+      entitlements: [
+        { code: "PMAY", name: "PM आवास", department: "ग्रामीण विकास", since: "2026-10-01" },
+      ],
+    }
   if (path === "/recommendations") return surveyedFixture
   if (path.startsWith("/recommendations/")) return recommendationsFixture
   if (path === "/dpr") return dprBoardFixture

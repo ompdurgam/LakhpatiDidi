@@ -10,6 +10,7 @@ import { useTr } from "@/i18n/tr"
 import { ApplicationActionBar, type FormAction } from "./ApplicationActionBar"
 import { ApplicationActionForm } from "./ApplicationActionForm"
 import { ApplicationComments } from "./ApplicationComments"
+import { PrintableApplication } from "./ApplicationDocument"
 import { ApplicationOverview } from "./ApplicationOverview"
 import { ApplicationPdfModal } from "./ApplicationPdfModal"
 
@@ -120,6 +121,7 @@ export function ApplicationDrawer({
         />
       </Drawer>
       {pdfOpen && detail && <ApplicationPdfModal item={detail} onClose={() => setPdfOpen(false)} />}
+      {detail && <PrintableApplication item={detail} />}
     </>
   )
 }

@@ -6,7 +6,7 @@ import { badRequest, notFound } from "../../shared/errors.ts"
 import { sha256 } from "../../shared/format.ts"
 import { msg } from "../../shared/i18n.ts"
 import type { Row } from "../../shared/types.ts"
-import { type InterestAnswer, onSchemeAnswer } from "../recommendations/suggestions.ts"
+import { type InterestAnswer, onSchemeAnswer } from "../recommendations/interest.ts"
 import { actionsFor } from "./notifications.model.ts"
 
 type Via = "app" | "push"

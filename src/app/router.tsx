@@ -108,6 +108,7 @@ export const routes: RouteObject[] = [
       guarded("didi", [
         { path: "didi", ...page(didi, (m) => m.DidiProfilePage) },
         { path: "didi/tasks", ...page(didi, (m) => m.DidiTasksPage) },
+        { path: "didi/schemes", ...page(didi, (m) => m.DidiSchemesPage) },
         { path: "didi/applications", ...page(didi, (m) => m.DidiApplicationsPage) },
       ]),
       guarded("admin", [

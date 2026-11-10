@@ -87,6 +87,7 @@ export const roleNav: Record<Role, NavItem[]> = {
   didi: [
     { icon: "user", label: "didi.profile", path: "/didi", end: true },
     { icon: "check", label: "didi.tasks", path: "/didi/tasks" },
+    { icon: "scheme", label: "didi.schemes", path: "/didi/schemes" },
     { icon: "file", label: "didi.applications", path: "/didi/applications" },
   ],
   admin: [
