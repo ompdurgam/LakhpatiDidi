@@ -305,3 +305,4 @@ These are known gaps in the current code, not deployment steps:
 | `npm run build` killed with no message | Out of memory. Add swap (step 2) |
 | App won't install, or push doesn't work, on phones | The site must be opened over `https://` with a valid certificate |
 | Hindi text shows as `???` | The database was not created with `utf8mb4` (step 4) |
+| `migrate failed: Table '…' already exists` | An earlier run failed partway: MySQL auto-commits each `CREATE TABLE`, but the file is only recorded once all of it succeeds. Scroll up to the **first** error and fix that. Then either drop the leftover tables (`npm run db:status` shows the last applied file; drop the tables the next file had already created) or, on a database with no real data yet, drop and recreate the database (step 4) and run `npm run db:migrate` again. |
