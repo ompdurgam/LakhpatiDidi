@@ -32,7 +32,7 @@ CREATE TABLE master_notification_types (
 CREATE TABLE tbl_notifications (
   id            BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   type_id       SMALLINT UNSIGNED NOT NULL,
-  payload       LONGTEXT     NOT NULL DEFAULT '{}' CHECK (JSON_VALID(payload)),
+  payload       LONGTEXT     NOT NULL DEFAULT ('{}') CHECK (JSON_VALID(payload)),
   entity_type   VARCHAR(30)  NULL COMMENT 'e.g. application',
   entity_ref    VARCHAR(40)  NULL COMMENT 'e.g. APP-2026-0012',
   actor_user_id INT UNSIGNED NULL,

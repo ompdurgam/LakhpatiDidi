@@ -37,7 +37,7 @@ CREATE TABLE tbl_surveys (
   surveyor_id      INT UNSIGNED NOT NULL,
   status           ENUM('draft','submitted') NOT NULL DEFAULT 'draft',
   enabled_sections VARCHAR(30)  NOT NULL DEFAULT 'ABCDEFGHIJK',
-  responses        LONGTEXT     NOT NULL DEFAULT '{}' CHECK (JSON_VALID(responses)),
+  responses        LONGTEXT     NOT NULL DEFAULT ('{}') CHECK (JSON_VALID(responses)),
   consent_method   ENUM('OTP','thumb','sign') NULL,
   submitted_at     DATETIME     NULL,
   created_at       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
