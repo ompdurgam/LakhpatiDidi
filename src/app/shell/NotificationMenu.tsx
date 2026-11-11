@@ -120,6 +120,11 @@ export function NotificationMenu() {
               {tr("अलर्ट ब्लॉक हैं — ब्राउज़र सेटिंग में अनुमति दें")}
             </p>
           )}
+          {push === "insecure" && (
+            <p className="notification-hint">
+              {tr("फ़ोन अलर्ट के लिए ऐप को https:// पते से खोलें")}
+            </p>
+          )}
           <div className="notification-list">
             {notices.map((notice) => (
               <NotificationItem
