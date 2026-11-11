@@ -68,6 +68,11 @@
 }
 .geo-map {
   background: #f3f6f2;
+  /* Leaflet's panes and controls use z-index 400–1000; keep them inside the map so
+     the mobile menu, drawers and header stay on top. */
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
 }
 .geo-map-empty {
   display: grid;
