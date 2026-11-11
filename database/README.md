@@ -60,11 +60,12 @@ erDiagram
 | Geography | `master_states` → `master_districts` → `master_blocks` → `master_gram_panchayats` → `master_villages` | Codes are unique and stable (`BST`, `JGD`, `V-BADANJI`). |
 | SHG federation | `master_clfs` → `master_village_organisations` → `master_shgs` | `lokos_code` holds the LokOS ID for imports. |
 | Masters | `master_departments`, `master_schemes`, `master_survey_sections`, `master_option_lists` | A scheme has a category (livelihood / entitlement / credit / skill), a subsidy % and an SLA in days. |
-| Access | `master_users`, `master_officer_mappings`, `tbl_otp_requests`, `tbl_user_sessions` | One role per user; scope is set by department / district / block / village. OTPs and session tokens are stored only as SHA-256 hashes. |
+| Access | `master_users`, `master_user_assignments`, `master_officer_mappings`, `tbl_otp_requests`, `tbl_user_sessions` | A user holds one or more role × area assignments (state, district, block, GP or village; department roles also name the department). `master_users.role` and its area columns mirror the first (primary) assignment. A session records the role it works as. OTPs and session tokens are stored only as SHA-256 hashes. |
 | Households | `tbl_households`, `tbl_surveys`, `tbl_household_income_sources`, `tbl_monthly_income_entries`, `tbl_household_loans`, `tbl_entitlement_gaps` | `current_annual_income`, `active_income_sources` and `lifecycle_status` on `tbl_households` are cached from the latest survey. `tbl_surveys.responses` holds the full form as JSON. |
 | Applications | `tbl_applications`, `tbl_application_events`, `tbl_application_documents`, `tbl_application_comments` | `department_id` is copied from the scheme so department inboxes can filter quickly. Every status change writes an event row. |
 | Audit | `tbl_audit_logs` | The API writes a row for every change and every login. |
 | Notifications | `master_notification_types`, `tbl_notifications`, `tbl_notification_recipients`, `tbl_push_subscriptions`, `tbl_notification_deliveries` | See *Notifications* below. |
+| Village profiles | `tbl_village_profiles` | One per village (survey D3–D5 and resources), filled by a CRP. `responses` holds the answers as JSON. |
 | Scheme interest | `tbl_scheme_interests` | A Didi's answer (asked / interested / not interested) when asked on her phone about a recommended scheme. One row per household and scheme, so she is never asked twice. |
 
 ### Application status lifecycle
@@ -100,6 +101,36 @@ npm run db:status     # ✓ applied / · pending
 To add a change, create the next file (for example `006_add_village_facilities.sql`) with both sections, and follow the naming convention above. Never edit a migration that has already run on a shared database.
 
 There is no seed step. The Bastar / Jagdalpur demo data from the Figma design (17 households, 20 applications, 15 users) lives in `e2e/fixtures/` and is loaded only into `*_test` databases by the e2e server (`migrate.ts fixtures` refuses any other database).
+
+## Loading the real data (fresh database)
+
+The app shows only real data, so a new database needs these steps, in order. Every step is safe to re-run.
+
+```bash
+# 1. Tables (also creates the database if it is missing)
+npm run db:migrate
+
+# 2. Chhattisgarh geography from LGD: 33 districts, 146 blocks, GPs, ~20,000 villages
+npm run geo:lgd
+
+# 3. The state's Potential Lakhpati Didi list: one household per Didi, plus her SHG
+#    (needs step 2; takes a few minutes for 6.27 lakh rows)
+npm run pld:import -- "Potential Lakhpati Didi 2026-27 (6.27 Lakh).xlsx"
+
+# 4. Map boundaries (optional; without them the maps are empty)
+S="LGD via indian_admin_boundaries (CC0)"; D=database/data/boundaries
+npm run geo:boundaries -- --level district       --file $D/chhattisgarh-districts.geojson  --code-field DIST_LGD    --source "$S"
+npm run geo:boundaries -- --level block          --file $D/chhattisgarh-blocks.geojson     --code-field BLOCK_LGD   --source "$S"
+npm run geo:boundaries -- --level gram_panchayat --file $D/chhattisgarh-panchayats.geojson --code-field GP_LGD      --source "$S"
+npm run geo:boundaries -- --level village        --file $D/chhattisgarh-villages.geojson   --code-field VILLAGE_LGD --source "$S"
+
+# 5. The first admin login; the admin then adds everyone else under Admin → Users
+npm run db:admin -- 9XXXXXXXXX "Admin name"
+```
+
+Check with `npm run db:status` (every migration ✓). After step 3 the dashboards show every Didi on record with 0 surveyed. Survey, application and income figures fill in as CRPs work in the app.
+
+Each user gets one or more **role × area** assignments (`master_user_assignments`, migration 016): for example, a DPM for two districts, or a CRP for a few villages. At login the person picks one of their own roles, and data is limited to that role's areas.
 
 ### Potential Lakhpati Didi list
 
