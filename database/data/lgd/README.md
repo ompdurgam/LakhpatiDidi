@@ -42,7 +42,7 @@ They are keyed by the same LGD codes as the hierarchy above.
 |---|---|---|
 | `chhattisgarh-blocks.geojson` — 146 blocks | yes | extracted from `LGD_Blocks.parquet` |
 | `chhattisgarh-districts.geojson` — 33 districts | yes | union of each district's LGD blocks (current block → district mapping from the CSV above) |
-| `chhattisgarh-panchayats.geojson` — 11,232 gram panchayats, `chhattisgarh-villages.geojson` — 17,981 villages | no (≈17–19 MB each) | extracted from `LGD_panchayats.parquet` / `LGD_Villages.parquet`; pieces sharing a code are collected into one multi-part shape |
+| `chhattisgarh-panchayats.geojson` — 11,232 gram panchayats, `chhattisgarh-villages.geojson` — 17,981 villages | yes (≈17–19 MB each) | extracted from `LGD_panchayats.parquet` / `LGD_Villages.parquet`; pieces sharing a code are collected into one multi-part shape |
 
 Not every area has an outline: towns and municipalities have no gram panchayat shape, and about 2,800 villages have no shape in the source file (the reason isn't recorded there). Those still appear in the list.
 
