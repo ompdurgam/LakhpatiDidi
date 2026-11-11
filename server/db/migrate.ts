@@ -1,19 +1,21 @@
 // Minimal SQL migration runner.
 //   node server/db/migrate.ts migrate    apply pending migrations
 //   node server/db/migrate.ts rollback   undo the most recent migration
-//   node server/db/migrate.ts seed       load database/seeds/*.sql (only into an empty DB)
-//   node server/db/migrate.ts reset      drop the database, migrate and seed
+//   node server/db/migrate.ts reset      drop the database and migrate (empty, no demo data)
 //   node server/db/migrate.ts status     list applied / pending migrations
+//   node server/db/migrate.ts admin <mobile> [name]   add an admin login to an empty install
+//   node server/db/migrate.ts fixtures   load e2e/fixtures/*.sql (test databases only)
 import mysql from "mysql2/promise"
 import fs from "node:fs"
 import path from "node:path"
 
 import { config } from "../config.ts"
+import { mobile } from "../shared/validation.ts"
 import { STRICT_SQL_MODE } from "./pool.ts"
 
-const root = path.resolve(import.meta.dirname, "..", "..", "database")
-const migrationsDir = path.join(root, "migrations")
-const seedsDir = path.join(root, "seeds")
+const projectRoot = path.resolve(import.meta.dirname, "..", "..")
+const migrationsDir = path.join(projectRoot, "database", "migrations")
+const fixturesDir = path.join(projectRoot, "e2e", "fixtures")
 const { database, ...server } = config.db
 
 function sqlFiles(dir: string) {
@@ -97,20 +99,33 @@ async function rollback() {
   await db.end()
 }
 
-async function seed() {
+// Demo records (Bastar households, applications, logins) exist only for the
+// e2e suite, so they can never be loaded into a dev or production database.
+async function fixtures() {
+  if (!database.endsWith("_test")) {
+    throw new Error(`refusing to load e2e fixtures into "${database}" (name must end in _test)`)
+  }
   const db = await connect()
-  const [[{ n }]] = await db.query<mysql.RowDataPacket[]>("SELECT COUNT(*) AS n FROM master_users")
-  if (n > 0) {
-    console.log("Seed skipped: database already has data (use `npm run db:reset` to start over)")
-  } else {
-    for (const file of sqlFiles(seedsDir)) {
-      await db.query("START TRANSACTION")
-      await db.query(fs.readFileSync(path.join(seedsDir, file), "utf8"))
-      await db.query("COMMIT")
-      console.log(`● seeded ${file}`)
-    }
+  for (const file of sqlFiles(fixturesDir)) {
+    await db.query("START TRANSACTION")
+    await db.query(fs.readFileSync(path.join(fixturesDir, file), "utf8"))
+    await db.query("COMMIT")
+    console.log(`● loaded ${file}`)
   }
   await db.end()
+}
+
+async function admin() {
+  const parsed = mobile.safeParse(process.argv[3])
+  if (!parsed.success) throw new Error("usage: admin <10-digit mobile> [name]")
+  const name = process.argv[4] ?? "State Admin"
+  const db = await connect()
+  await db.query(
+    "INSERT INTO master_users (name, mobile, role, designation) VALUES (?, ?, 'admin', 'Administrator')",
+    [name, parsed.data],
+  )
+  await db.end()
+  console.log(`✓ admin ${name} can now log in with ${parsed.data}`)
 }
 
 async function reset() {
@@ -119,7 +134,6 @@ async function reset() {
   await conn.end()
   console.log(`✗ dropped ${database}`)
   await migrate()
-  await seed()
 }
 
 async function status() {
@@ -129,7 +143,14 @@ async function status() {
   await db.end()
 }
 
-const commands: Record<string, () => Promise<void>> = { migrate, rollback, seed, reset, status }
+const commands: Record<string, () => Promise<void>> = {
+  migrate,
+  rollback,
+  reset,
+  status,
+  admin,
+  fixtures,
+}
 const command = process.argv[2] ?? "migrate"
 if (!commands[command]) {
   console.error(`Unknown command "${command}". Use: ${Object.keys(commands).join(", ")}`)

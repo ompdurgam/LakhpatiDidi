@@ -10,7 +10,6 @@ import { TextSizeControl } from "@/components/ui/TextSizeControl"
 import { useIsMobile } from "@/lib/useMediaQuery"
 import { type Role, useSession } from "@/stores/session"
 
-import { demoMobile } from "./demoAccounts"
 import { LoginHero } from "./LoginHero"
 import { MobileStep, OtpStep, SelectedRole } from "./LoginSteps"
 import { RolePicker } from "./RolePicker"
@@ -47,7 +46,6 @@ export function LoginScreen() {
   const step = !role ? "role" : login.otpSent ? "otp" : "mobile"
   const pickRole = (picked: Role) => {
     setRole(picked)
-    if (import.meta.env.DEV && !login.mobile) login.setMobile(demoMobile[picked])
   }
   const changeRole = () => {
     login.reset()

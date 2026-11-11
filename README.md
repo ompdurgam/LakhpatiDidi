@@ -24,7 +24,7 @@ server/
                 users, admin, meta, audit — each split into
                 *.routes.ts → *.service.ts → *.repository.ts, plus schemas/mappers/labels
                 (applications.workflow.ts holds one entry per workflow action)
-database/       migrations/, seeds/, README.md (schema design + ER diagram)
+database/       migrations/, README.md (schema design + ER diagram)
 e2e/            Playwright tests (run against the real API + MySQL)
 scripts/        one-off codemods used for the Phase 1 refactor
 ```
@@ -36,13 +36,15 @@ Requires Node 22.18+ (it runs the server's `.ts` files directly) and MySQL 8 or 
 ```bash
 npm install
 cp .env.example .env        # edit DB_* if your MySQL is not root with no password
-npm run db:reset            # create database, run migrations, load demo data
+npm run db:migrate          # create database and run migrations (no demo data)
+npm run db:admin -- 9XXXXXXXXX "Your Name"   # first admin login
+npm run geo:lgd             # Chhattisgarh districts, blocks, GPs, villages
 npm run dev                 # API on :4000 + Vite on :5173 (proxies /api)
 ```
 
-Open http://localhost:5173 and log in with **9826143412**. While `OTP_DEV_MODE=true`, the OTP is shown on screen, because no SMS gateway is connected yet.
+Open http://localhost:5173 and log in with the admin mobile. While `OTP_DEV_MODE=true`, the OTP is shown on screen, because no SMS gateway is connected yet. Add other staff from the Admin screen.
 
-Other demo mobile numbers: `9752314412` (CRP), `9425118881` (fisheries officer), `9301245176` (DPM), `9993000001` (admin). `9752300099` is a locked account.
+The app ships with no demo data. The Bastar demo records in `e2e/fixtures/` are loaded only into the e2e test database.
 
 ## Quality checks
 
@@ -51,8 +53,8 @@ npm run typecheck   # TypeScript
 npm run lint        # ESLint (typescript-eslint, react-hooks, import order)
 npm run format      # Prettier
 npm test            # Vitest: client (jsdom) + server (node) projects, no server needed
-npm run e2e         # Playwright UI + API contract tests on a separate, freshly seeded
-                    # `lakhpati_didi_test` database (ports 4100/5273); needs MySQL running
+npm run e2e         # Playwright UI + API contract tests on a separate, fresh
+                    # `lakhpati_didi_test` database + e2e/fixtures (ports 4100/5273); needs MySQL running
 ```
 
 ## Production

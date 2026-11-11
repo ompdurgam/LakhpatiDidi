@@ -12,11 +12,14 @@ const env = {
 const node = process.execPath
 const run = (args) => spawn(node, args, { env, stdio: "inherit" })
 
-const reset = spawnSync(node, ["--env-file-if-exists=.env", "server/db/migrate.ts", "reset"], {
-  env,
-  stdio: "inherit",
-})
-if (reset.status !== 0) process.exit(reset.status ?? 1)
+// Fresh schema, then the demo records in e2e/fixtures (only ever loaded here).
+for (const step of ["reset", "fixtures"]) {
+  const result = spawnSync(node, ["--env-file-if-exists=.env", "server/db/migrate.ts", step], {
+    env,
+    stdio: "inherit",
+  })
+  if (result.status !== 0) process.exit(result.status ?? 1)
+}
 
 // --env-file values never override variables that are already set, so the test overrides win.
 const children = [

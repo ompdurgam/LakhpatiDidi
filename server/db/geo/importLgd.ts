@@ -1,6 +1,6 @@
 // Imports the Chhattisgarh LGD hierarchy (district → block → GP → village)
 // into the master tables. Safe to re-run: rows are matched by LGD code, and
-// existing rows without one (the Hindi demo data) are linked by name.
+// existing rows without an LGD code are linked by name.
 //
 //   npm run geo:lgd                       (default file)
 //   npm run geo:lgd -- path/to/file.csv
@@ -136,7 +136,7 @@ async function main() {
       [],
       db,
     )
-    if (!state.length) throw new Error("State CG missing — run the seeds first")
+    if (!state.length) throw new Error("State CG missing — run `npm run db:migrate` first")
     const districtIds = await upsertLevel(db, {
       table: "master_districts",
       parentColumn: "state_id",
