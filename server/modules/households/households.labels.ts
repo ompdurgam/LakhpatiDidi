@@ -8,7 +8,13 @@ export const lifecycleHi: Record<LifecycleStatus, string> = {
   gap: "गैप",
 }
 
-export const categoryHi: Record<string, string> = { ST: "ST", SC: "SC", OBC: "OBC", GEN: "सामान्य" }
+export const categoryHi: Record<string, string> = {
+  ST: "ST",
+  SC: "SC",
+  OBC: "OBC",
+  GEN: "सामान्य",
+  OTHER: "अन्य",
+}
 
 /** Survey answer → stored category code. */
 export const categoryCode: Record<string, string> = {

@@ -6,7 +6,11 @@ dev-dist
 coverage
 playwright-report
 test-results
+.github
 *.log
 # Large generated boundary files (see database/data/lgd/README.md)
 database/data/boundaries/*-panchayats.geojson
 database/data/boundaries/*-villages.geojson
+# Beneficiary lists (personal data) and the reports the PLD import writes beside them
+/*.xlsx
+/* - new places.csv

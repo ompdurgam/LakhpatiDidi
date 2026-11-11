@@ -92,14 +92,20 @@ Files in `migrations/` run in name order. Each has a `-- migrate:up` and a `-- m
 ```bash
 npm run db:migrate    # apply pending migrations (creates the database if missing)
 npm run db:rollback   # undo the most recent migration
-npm run db:seed       # load seeds/*.sql (only if master_users is empty)
-npm run db:reset      # drop database → migrate → seed
+npm run db:reset      # drop database → migrate (empty, no demo data)
+npm run db:admin -- <mobile> [name]   # add an admin login
 npm run db:status     # ✓ applied / · pending
 ```
 
 To add a change, create the next file (for example `006_add_village_facilities.sql`) with both sections, and follow the naming convention above. Never edit a migration that has already run on a shared database.
 
-`seeds/001_demo_data.sql` loads the Bastar / Jagdalpur demo data from the Figma design: 17 households, 20 applications, 15 users, officer mappings, gaps and audit history. Seed dates are relative to `CURDATE()`, so "days pending" stays realistic.
+There is no seed step. The Bastar / Jagdalpur demo data from the Figma design (17 households, 20 applications, 15 users) lives in `e2e/fixtures/` and is loaded only into `*_test` databases by the e2e server (`migrate.ts fixtures` refuses any other database).
+
+### Potential Lakhpati Didi list
+
+`npm run pld:import -- "<file>.xlsx"` loads the state's PLD workbook (columns: District, Block, Panchayat Name, Village Name, Potential Lakhpati Didi Name / Code, SHG Name / Code, Father / Spouse Name, Social Category) after `geo:lgd`. Each Didi becomes a `tbl_households` row keyed on `lokos_member_code`, and each SHG a `master_shgs` row keyed on `lokos_code`, with no VO yet. Re-running with a newer list updates rows in place.
+
+LokOS spellings differ from LGD, so places are matched by name: districts by name or alias, and blocks by how many panchayat names they share. Panchayats and villages match exactly, then by a clearly-best close spelling (≥ 0.8 similarity), then by a unique village name elsewhere in the block. Anything still unmatched is added with no LGD code (codes `PGP…` / `PV…`) and listed in `<file> - new places.csv` for review. In the 2026-27 list (6,27,930 Didis), 91% matched an LGD village and 1,092 places were added.
 
 ### Notifications
 
