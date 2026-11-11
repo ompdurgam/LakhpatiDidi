@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router"
+
 import { DprWorkspace } from "@/features/dpr/DprWorkspace"
 import { HouseholdTracker } from "@/features/households/HouseholdTracker"
 import { SchemeRecommendations } from "@/features/recommendations/SchemeRecommendations"
@@ -11,6 +13,11 @@ import type { FieldState } from "./fieldState"
 /** The field-app screen for the current route (compact / app-style variant). */
 export function FieldScreen(s: FieldState) {
   const tr = useTr()
+  const navigate = useNavigate()
+  const openSurvey = (code?: string) => {
+    s.setSurveyStep(0)
+    navigate(code ? `/field/survey/${encodeURIComponent(code)}` : "/field/survey")
+  }
   switch (s.screen) {
     case "village":
       return <VillageProfile setScreen={s.setScreen} />
@@ -38,6 +45,6 @@ export function FieldScreen(s: FieldState) {
     case "tracker":
       return <HouseholdTracker />
     default:
-      return <SurveyHome setScreen={s.setScreen} />
+      return <SurveyHome setScreen={s.setScreen} onOpenSurvey={openSurvey} />
   }
 }

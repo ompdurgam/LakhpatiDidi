@@ -21,7 +21,14 @@ export const FIELD = {
   category: "सामाजिक वर्ग",
 } as const
 
+export const householdCode = z
+  .string()
+  .trim()
+  .regex(/^[A-Za-z0-9-]{1,30}$/)
+
 export const surveyBody = z.object({
+  // Set when completing the survey of a Didi already on record (e.g. the PLD list).
+  householdCode: householdCode.optional().catch(undefined),
   responses: z.record(z.string(), z.coerce.string()).catch({}),
   incomeEntries: z.array(incomeEntry).catch([]),
   sections: z

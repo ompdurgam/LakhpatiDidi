@@ -1,7 +1,8 @@
 import { useState } from "react"
+import { useParams } from "react-router"
 
 import { api } from "@/api/client"
-import { useData } from "@/api/hooks"
+import { useRefreshData } from "@/api/hooks"
 import { SurveyDraftContext } from "@/components/ui/FormDraftContext"
 import { Icon } from "@/components/ui/Icon"
 import { IdentificationForm } from "@/features/survey/sections/IdentificationForm"
@@ -9,21 +10,18 @@ import { IncomeBaselineForm } from "@/features/survey/sections/IncomeBaselineFor
 import { LivelihoodSection } from "@/features/survey/sections/livelihood/LivelihoodSection"
 import { LoansForm } from "@/features/survey/sections/LoansForm"
 import { SchemeSaturationForm } from "@/features/survey/sections/schemes/SchemeSaturationForm"
+import {
+  prefillDraft,
+  type SurveyHousehold,
+  useRefreshSurveyList,
+  useSurveyHousehold,
+} from "@/features/survey/surveyHouseholds"
 import { SurveyReview } from "@/features/survey/SurveyReview"
 import { SurveySuccess } from "@/features/survey/SurveySuccess"
 import type { IncomeEntry, SurveyResult } from "@/features/survey/types"
 import { useTr } from "@/i18n/tr"
 
-export function SurveyForm({
-  step,
-  setStep,
-  sections,
-  selectedLivelihoods,
-  setSelectedLivelihoods,
-  onNotify,
-  onSeeRecommendations,
-  onNextFamily,
-}: {
+type SurveyFormProps = {
   step: number
   setStep: (step: number) => void
   sections: string[]
@@ -32,18 +30,51 @@ export function SurveyForm({
   onNotify: (message: string) => void
   onSeeRecommendations: () => void
   onNextFamily: () => void
-}) {
+}
+
+/** /field/survey/:householdId opens a Didi on record prefilled; /field/survey a new one. */
+export function SurveyForm(props: SurveyFormProps) {
+  const tr = useTr()
+  const { householdId } = useParams()
+  const household = useSurveyHousehold(householdId)
+  if (householdId && !household.data)
+    return (
+      <div className="phone-content survey-form">
+        <p className="home-empty" role={household.isError ? "alert" : undefined}>
+          {household.isError
+            ? (household.error as Error).message
+            : tr("दीदी का रिकॉर्ड लोड हो रहा है…")}
+        </p>
+      </div>
+    )
+  return <SurveyFormBody key={householdId ?? "new"} {...props} household={household.data} />
+}
+
+function SurveyFormBody({
+  household,
+  step,
+  setStep,
+  sections,
+  selectedLivelihoods,
+  setSelectedLivelihoods,
+  onNotify,
+  onSeeRecommendations,
+  onNextFamily,
+}: SurveyFormProps & { household?: SurveyHousehold }) {
   const tr = useTr()
   const [submitted, setSubmitted] = useState<SurveyResult | null>(null)
   const [submitError, setSubmitError] = useState("")
   // Every TextControl / SelectControl in the form writes its value here (keyed by label).
-  const [draft] = useState<Record<string, string>>(() => ({}))
-  const { refresh } = useData()
+  // A Didi on record starts from her details (name, place, SHG…).
+  const [draft] = useState<Record<string, string>>(() => (household ? prefillDraft(household) : {}))
+  const refreshData = useRefreshData()
+  const refreshList = useRefreshSurveyList()
   const submitSurvey = async (consentMethod: string) => {
     setSubmitError("")
     try {
       const result = await api<SurveyResult>("/surveys", {
         body: {
+          householdCode: household?.code,
           responses: draft,
           incomeEntries,
           sections: sections.map((name) => name.trim().charAt(0)),
@@ -56,7 +87,8 @@ export function SurveyForm({
           ? tr("सर्वे जमा • नया परिवार {{code}}", { code: result.hhCode })
           : tr("सर्वे जमा • {{code}} अपडेट हुआ", { code: result.hhCode }),
       )
-      refresh()
+      void refreshData()
+      void refreshList()
     } catch (e) {
       setSubmitError((e as Error).message)
       onNotify((e as Error).message)
@@ -158,7 +190,9 @@ export function SurveyForm({
           <button onClick={previousStep}>‹</button>
           <div>
             <strong>{tr("परिवार सर्वे")}</strong>
-            <span>{tr("ड्राफ्ट स्वतः सुरक्षित")}</span>
+            <span>
+              {household ? `${household.name} • ${household.code}` : tr("ड्राफ्ट स्वतः सुरक्षित")}
+            </span>
           </div>
           <b>
             {step + 1}/{sections.length}
@@ -182,6 +216,7 @@ export function SurveyForm({
         <h3>{heading}</h3>
         {step === 0 ? (
           <IdentificationForm
+            household={household}
             selectedLivelihoods={selectedLivelihoods}
             setSelectedLivelihoods={setSelectedLivelihoods}
             onNotify={onNotify}

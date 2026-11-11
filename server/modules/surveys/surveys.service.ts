@@ -1,7 +1,7 @@
 import type { PoolConnection } from "mysql2/promise"
 
 import { exec, one, transaction } from "../../db/pool.ts"
-import { badRequest } from "../../shared/errors.ts"
+import { badRequest, notFound } from "../../shared/errors.ts"
 import { financialYear } from "../../shared/format.ts"
 import { msg } from "../../shared/i18n.ts"
 import type { Row } from "../../shared/types.ts"
@@ -23,41 +23,59 @@ async function nextHouseholdCode(db: PoolConnection) {
 }
 
 /**
- * Saves a submitted survey. The Didi is matched by mobile: a re-survey
- * updates her household, otherwise a new household is created.
+ * Saves a submitted survey. A Didi already on record (householdCode, e.g. from
+ * the PLD list) or matched by mobile has her household updated; otherwise a
+ * new household is created.
  */
 export async function submitSurvey(body: unknown, surveyorId: number) {
-  const { responses, incomeEntries, sections, consentMethod } = parse(surveyBody, body)
+  const { householdCode, responses, incomeEntries, sections, consentMethod } = parse(
+    surveyBody,
+    body,
+  )
   const fields = parse(householdFields, responses)
   const name = fields[FIELD.name]
   const mobile = fields[FIELD.mobile] ?? null
   const villageName = fields[FIELD.village]
-  const category = categoryCode[fields[FIELD.category] ?? ""] ?? "ST"
+  const category: string | undefined = categoryCode[fields[FIELD.category] ?? ""]
 
   const active = incomeEntries.filter((e) => net(e) > 0)
   const income = active.reduce((sum, e) => sum + net(e), 0)
   const status = lifecycleFor(income, active.length)
 
   return transaction(async (db) => {
+    const onRecord = householdCode
+      ? await one<Row>(
+          "SELECT id, hh_code, village_id FROM tbl_households WHERE hh_code = ? FOR UPDATE",
+          [householdCode],
+          db,
+        )
+      : undefined
+    if (householdCode && !onRecord) throw notFound(msg("परिवार नहीं मिला"))
+    // A Didi on record stays in her village; a new one is placed by the village chosen.
     const village = await one<Row>(
-      "SELECT id, name_hi FROM master_villages WHERE name_hi = ?",
-      [villageName],
+      onRecord
+        ? "SELECT id, name_hi FROM master_villages WHERE id = ?"
+        : "SELECT id, name_hi FROM master_villages WHERE name_hi = ?",
+      [onRecord ? onRecord.village_id : villageName],
       db,
     )
     if (!village)
       throw badRequest(msg('गाँव "{{village}}" भूगोल मास्टर में नहीं है', { village: villageName }))
+    // SHG names repeat across the state, so only an SHG of her village counts.
     const shg = await one<Row>(
-      "SELECT id FROM master_shgs WHERE name = ?",
-      [fields[FIELD.shg] ?? null],
+      "SELECT id FROM master_shgs WHERE name = ? AND village_id = ?",
+      [fields[FIELD.shg] ?? null, village.id],
       db,
     )
-    const existing = mobile
-      ? await one<Row>(
-          "SELECT id, hh_code FROM tbl_households WHERE mobile = ? FOR UPDATE",
-          [mobile],
-          db,
-        )
-      : undefined
+    const existing =
+      onRecord ??
+      (mobile
+        ? await one<Row>(
+            "SELECT id, hh_code FROM tbl_households WHERE mobile = ? FOR UPDATE",
+            [mobile],
+            db,
+          )
+        : undefined)
 
     let householdId: number
     let hhCode: string
@@ -67,10 +85,21 @@ export async function submitSurvey(body: unknown, surveyorId: number) {
       hhCode = existing.hh_code
       await exec(
         `UPDATE tbl_households SET didi_name = ?, guardian_name = ?, age = ?, village_id = ?,
-           shg_id = COALESCE(?, shg_id), current_annual_income = ?, active_income_sources = ?,
-           lifecycle_status = ?, surveyed_by = ?, surveyed_at = NOW()
+           mobile = COALESCE(?, mobile), shg_id = COALESCE(?, shg_id),
+           social_category = COALESCE(?, social_category), current_annual_income = ?,
+           active_income_sources = ?, lifecycle_status = ?, surveyed_by = ?, surveyed_at = NOW()
          WHERE id = ?`,
-        [...common, shg?.id ?? null, income, active.length, status, surveyorId, householdId],
+        [
+          ...common,
+          mobile,
+          shg?.id ?? null,
+          category ?? null,
+          income,
+          active.length,
+          status,
+          surveyorId,
+          householdId,
+        ],
         db,
       )
     } else {
@@ -84,7 +113,7 @@ export async function submitSurvey(body: unknown, surveyorId: number) {
           ...common,
           mobile,
           shg?.id ?? null,
-          category,
+          category ?? "ST",
           income,
           active.length,
           status,

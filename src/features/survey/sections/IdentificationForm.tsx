@@ -8,17 +8,27 @@ import { SelectControl } from "@/components/ui/Select"
 import { TextControl } from "@/components/ui/TextControl"
 import { useTr } from "@/i18n/tr"
 
+import { categoryLabel, type SurveyHousehold } from "../surveyHouseholds"
+
 export function IdentificationForm({
+  household,
   selectedLivelihoods,
   setSelectedLivelihoods,
   onNotify,
 }: {
+  /** A Didi on record: her place, SHG and LokOS code replace the sample values. */
+  household?: SurveyHousehold
   selectedLivelihoods: string[]
   setSelectedLivelihoods: (items: string[]) => void
   onNotify: (message: string) => void
 }) {
   const tr = useTr()
-  const [organizations, setOrganizations] = useState(["CLF", "VO", "SHG"])
+  const [organizations, setOrganizations] = useState(
+    household ? [household.shg ? "SHG" : "कोई नहीं"] : ["CLF", "VO", "SHG"],
+  )
+  // Her own place / SHG when on record; the sample choices for a new Didi.
+  const only = (value: string | null | undefined, sample: string[]) =>
+    household ? [value ?? ""] : sample
   const [shgMember, setShgMember] = useState("हाँ")
   const [pld, setPld] = useState("हाँ")
   const [disability, setDisability] = useState("नहीं")
@@ -63,13 +73,31 @@ export function IdentificationForm({
           </button>
         </div>
         <div className="control-grid">
-          <SelectControl label="जिला" value="बस्तर" options={["बस्तर"]} />
-          <SelectControl label="ब्लॉक" value="जगदलपुर" options={["जगदलपुर"]} />
-          <SelectControl label="ग्राम पंचायत" value="बड़ांजी" options={["बड़ांजी", "नानगुर"]} />
+          <SelectControl
+            label="जिला"
+            value="बस्तर"
+            options={only(household?.district, ["बस्तर"])}
+          />
+          <SelectControl
+            label="ब्लॉक"
+            value="जगदलपुर"
+            options={only(household?.block, ["जगदलपुर"])}
+          />
+          <SelectControl
+            label="ग्राम पंचायत"
+            value="बड़ांजी"
+            options={only(household?.panchayat, ["बड़ांजी", "नानगुर"])}
+          />
           <SelectControl
             label="गाँव"
             value="बड़ांजी"
-            options={["बड़ांजी", "नानगुर", "धुरगुड़ा", "आड़ावाल", "कुम्हरावंड"]}
+            options={only(household?.village, [
+              "बड़ांजी",
+              "नानगुर",
+              "धुरगुड़ा",
+              "आड़ावाल",
+              "कुम्हरावंड",
+            ])}
           />
         </div>
       </FormGroup>
@@ -104,14 +132,14 @@ export function IdentificationForm({
             <SelectControl
               label="SHG नाम"
               value="स्वावलंबी SHG"
-              options={["स्वावलंबी SHG", "माँ बमलेश्वरी SHG"]}
+              options={only(household?.shg, ["स्वावलंबी SHG", "माँ बमलेश्वरी SHG"])}
             />
           )}
         </div>
         <label className="verified-input">
           <span>{tr("सदस्य ID / LokOS ID")}</span>
           <div>
-            <input defaultValue="LK-BST-440921" />
+            <input defaultValue={household ? (household.memberCode ?? "") : "LK-BST-440921"} />
             <button onClick={() => onNotify(tr("LokOS ID सत्यापित है"))}>
               {tr("सत्यापित करें")}
             </button>
@@ -161,7 +189,11 @@ export function IdentificationForm({
           <TextControl label="दिव्यांगता विवरण" value={tr("चलने में कठिनाई")} />
         )}
         <ChipField label="सामाजिक वर्ग">
-          <ChipGroup options={["सामान्य", "ST", "SC", "OBC"]} selected={["ST"]} single />
+          <ChipGroup
+            options={["सामान्य", "ST", "SC", "OBC", "अन्य"]}
+            selected={[household ? categoryLabel(household.category) : "ST"]}
+            single
+          />
         </ChipField>
         <ChipField label="विशेष समुदाय">
           <ChipGroup

@@ -46,5 +46,17 @@
   "सुझावों के बाद": "After the suggestions",
   "स्वयं अंश": "Own share",
   "स्वीकृति समय": "Approval time",
-  "अधिकतम": "Max"
+  "अधिकतम": "Max",
+  "मेरे क्षेत्र की दीदी": "Didis in my area",
+  "नाम, गाँव, Household ID या LokOS कोड खोजें": "Search name, village, Household ID or LokOS code",
+  "सर्वे बाकी": "Survey pending",
+  "सर्वे पूरा करें": "Complete survey",
+  "पिछला": "Previous",
+  "अगला": "Next",
+  "पृष्ठ {{n}}": "Page {{n}}",
+  "नमस्ते, {{name}}": "Hello, {{name}}",
+  "{{n}} दीदी का सर्वे बाकी है": "{{n}} Didis still to survey",
+  "कुल दीदी": "Total Didis",
+  "नई दीदी का सर्वे शुरू करें": "Survey a new Didi",
+  "दीदी का रिकॉर्ड लोड हो रहा है…": "Loading Didi’s record…"
 }

@@ -1968,3 +1968,34 @@
     display: none;
   }
 }
+.mobile-stats.three {
+  grid-template-columns: repeat(3, 1fr);
+}
+.household-row .complete-survey {
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--ld-green-700);
+  color: white;
+  font-size: calc(12px * var(--font-scale));
+  font-weight: 600;
+}
+.worklist-pager {
+  margin: 4px 13px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: calc(13px * var(--font-scale));
+  color: #6d766f;
+}
+.worklist-pager button {
+  padding: 6px 12px;
+  border: 1px solid #dfe6e0;
+  border-radius: 8px;
+  background: white;
+  color: var(--ld-green-700);
+}
+.worklist-pager button:disabled {
+  opacity: 0.45;
+}
