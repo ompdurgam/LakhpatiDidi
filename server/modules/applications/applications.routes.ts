@@ -15,7 +15,7 @@ import {
 export const applicationsRouter = Router()
 
 applicationsRouter.get("/", async (_req, res) => {
-  res.json(await listApplications())
+  res.json(await listApplications(currentUser(res)))
 })
 
 // Registered before "/:code" so "bulk-sanction" isn't read as a code.

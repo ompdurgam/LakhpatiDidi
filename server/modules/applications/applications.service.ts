@@ -2,15 +2,18 @@ import { transaction } from "../../db/pool.ts"
 import { badRequest, notFound } from "../../shared/errors.ts"
 import { today } from "../../shared/format.ts"
 import { msg } from "../../shared/i18n.ts"
+import type { SessionUser } from "../../shared/types.ts"
 import { parse } from "../../shared/validation.ts"
+import { sessionCondition } from "../auth/assignments.ts"
 import { notifyApplication } from "../notifications/notifications.applications.ts"
 import { type ApplicationStatus, OPEN_STATUSES } from "./applications.labels.ts"
 import { toApplicationDetail, toApplicationRow } from "./applications.mapper.ts"
 import * as repo from "./applications.repository.ts"
 import { actions, assertAllowed, isActionName } from "./applications.workflow.ts"
 
-export async function listApplications() {
-  return (await repo.listApplications()).map(toApplicationRow)
+/** Applications of households inside the areas of the session's role (all for statewide roles). */
+export async function listApplications(user: SessionUser) {
+  return (await repo.listApplications(await sessionCondition(user))).map(toApplicationRow)
 }
 
 export async function getApplicationDetail(code: string) {

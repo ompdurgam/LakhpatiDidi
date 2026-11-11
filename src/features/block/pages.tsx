@@ -22,22 +22,15 @@ export type BlockSection = keyof typeof sectionLabel
 export function BlockOverviewPage() {
   const navigate = useNavigate()
   const user = useSession((s) => s.user)
-  const setRole = useSession((s) => s.setRole)
   const rows = useFilteredApplications()
   const openApplication = useUi((s) => s.openApplication)
-  const notify = useUi((s) => s.notify)
   if (!user) return null
   return (
     <BlockDashboard
       user={user}
       rows={rows}
       onSelect={openApplication}
-      onNotify={notify}
       go={(section) => navigate(`/block/${section}`)}
-      openDepartments={() => {
-        setRole("department")
-        navigate("/dept")
-      }}
     />
   )
 }

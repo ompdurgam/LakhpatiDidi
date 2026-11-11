@@ -632,3 +632,14 @@
   color: var(--ld-text-muted);
   font-size: calc(11px * var(--font-scale));
 }
+
+/* Live LGD map inside the district / state dashboard. */
+.area-map-card {
+  padding: 17px;
+}
+.area-map-card .geo-map,
+.area-map-card .geo-map-empty {
+  height: 380px;
+  min-height: 0;
+  border-radius: 10px;
+}

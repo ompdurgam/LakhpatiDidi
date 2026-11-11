@@ -1,12 +1,13 @@
 import type { ApplicationRow } from "@/api/types"
-import { Icon } from "@/components/ui/Icon"
-import { MiniStat } from "@/components/ui/MiniStat"
 import { ApplicationTable } from "@/features/applications/ApplicationTable"
 import { Blcc } from "@/features/blcc/BlccRegister"
 import { SchemeConvergence } from "@/features/block/SchemeConvergence"
 import { HouseholdRegister } from "@/features/households/HouseholdRegister"
+import { useAreaLabel } from "@/features/monitoring/useAreaLabel"
 import { BlockReports } from "@/features/reports/BlockReports"
 import { useTr } from "@/i18n/tr"
+
+const OPEN = new Set(["submitted", "under_review", "info_requested"])
 
 export function ModulePage({
   active,
@@ -20,6 +21,7 @@ export function ModulePage({
   onNotify: (s: string) => void
 }) {
   const tr = useTr()
+  const area = useAreaLabel()
   const titleMap: Record<string, string> = {
     परिवार: "परिवार और दीदी रजिस्टर",
     आवेदन: "आवेदन एवं DPR ट्रैकर",
@@ -33,15 +35,7 @@ export function ModulePage({
       <section className="welcome">
         <div>
           <h2>{tr(titleMap[active] || active)}</h2>
-          <p>{tr("जगदलपुर ब्लॉक • अंतिम अपडेट आज, 10:42 AM")}</p>
-        </div>
-        <div className="welcome-actions">
-          <button className="secondary">
-            <Icon name="download" size={17} /> {tr("एक्सपोर्ट")}
-          </button>
-          <button className="primary" onClick={() => onNotify(tr("नया रिकॉर्ड फॉर्म खोला गया"))}>
-            <Icon name="plus" size={17} /> {tr("नया जोड़ें")}
-          </button>
+          <p>{area}</p>
         </div>
       </section>
       {active === "परिवार" ? (
@@ -51,66 +45,23 @@ export function ModulePage({
           <div className="card-head">
             <div>
               <h3>{tr("सभी आवेदन")}</h3>
-              <p>{tr("कुल 1,847 आवेदन • 24 पर कार्यवाही बाकी")}</p>
+              <p>
+                {tr("कुल {{n}} आवेदन • {{p}} पर कार्यवाही बाकी", {
+                  n: rows.length,
+                  p: rows.filter((r) => OPEN.has(r.statusCode)).length,
+                })}
+              </p>
             </div>
-            <button className="filter-button">
-              <Icon name="filter" size={15} /> {tr("स्थिति फ़िल्टर")}
-            </button>
           </div>
           <ApplicationTable rows={rows} onSelect={onSelect} />
         </section>
       ) : active === "BLCC कार्यवाही" ? (
-        <Blcc onNotify={onNotify} />
+        <Blcc rows={rows} onSelect={onSelect} />
       ) : active === "योजनाएँ" ? (
         <SchemeConvergence />
       ) : active === "रिपोर्ट" ? (
-        <BlockReports onNotify={onNotify} />
-      ) : (
-        <>
-          <section className="module-kpis">
-            <MiniStat value={active === "परिवार" ? "8,426" : "42"} label="कुल रिकॉर्ड" />
-            <MiniStat value="1,392" label="इस माह सक्रिय" />
-            <MiniStat value="86%" label="पूर्णता दर" />
-            <MiniStat value="24" label="कार्यवाही बाकी" alert />
-          </section>
-          <section className="card generic-list">
-            <div className="card-head">
-              <div>
-                <h3>{tr(titleMap[active])}</h3>
-                <p>{tr("प्राथमिकता और हाल के अपडेट")}</p>
-              </div>
-              <button className="filter-button">
-                <Icon name="filter" size={15} /> {tr("फ़िल्टर")}
-              </button>
-            </div>
-            {[
-              "माँ दंतेश्वरी CLF • बड़ांजी",
-              "इंद्रावती CLF • नानगुर",
-              "शक्ति महिला CLF • आड़ावाल",
-              "माँ बमलेश्वरी CLF • धुरगुड़ा",
-            ].map((x, i) => (
-              <div className="generic-row" key={x}>
-                <div className="generic-icon">
-                  <Icon
-                    name={active === "परिवार" ? "people" : active === "योजनाएँ" ? "scheme" : "file"}
-                  />
-                </div>
-                <div>
-                  <strong>{tr(x)}</strong>
-                  <span>
-                    {tr("रिकॉर्ड #")}
-                    {260140 - i} {tr("• आज अपडेट किया")}
-                  </span>
-                </div>
-                <span className={`status ${i === 2 ? "amber" : "green"}`}>
-                  {i === 2 ? tr("ध्यान दें") : tr("सक्रिय")}
-                </span>
-                <Icon name="chevron" size={17} />
-              </div>
-            ))}
-          </section>
-        </>
-      )}
+        <BlockReports rows={rows} />
+      ) : null}
     </div>
   )
 }

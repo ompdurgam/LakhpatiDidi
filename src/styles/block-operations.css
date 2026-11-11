@@ -15,7 +15,7 @@
   grid-template-columns: 1.4fr repeat(3, 0.6fr);
 }
 .surveyor-table > div {
-  grid-template-columns: 1.3fr repeat(5, 0.65fr);
+  grid-template-columns: 1.3fr repeat(4, 0.65fr);
 }
 .pendency-table .head,
 .surveyor-table .head {

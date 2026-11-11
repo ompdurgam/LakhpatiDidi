@@ -1,34 +1,51 @@
+import { useState } from "react"
+
 import type { ApplicationRow, User } from "@/api/types"
 import { Legend } from "@/components/charts/Legend"
+import { EmptyState } from "@/components/ui/EmptyState"
 import { Icon } from "@/components/ui/Icon"
 import { Kpi } from "@/components/ui/Kpi"
 import { ApplicationTable } from "@/features/applications/ApplicationTable"
 import { useTr } from "@/i18n/tr"
 
+import { AreaPicker, type PickedArea } from "./AreaPicker"
 import { BlockOverviewLower } from "./BlockOverviewLower"
+import { donutGradient, num, pct } from "./format"
+import { useOverview } from "./useOverview"
 import { OverviewStat } from "./widgets/OverviewStat"
 
 export type BlockSection = "households" | "applications" | "blcc" | "reports"
 
-/** Block overview (ported 1:1 from the Figma prototype). */
+const FUNNEL_COLORS = ["green", "sage", "saffron", "blue", "emerald", "teal", "deep"]
+
+/** Block overview, every figure computed from live data for the user's block. */
 export function BlockDashboard({
   user,
   rows,
   onSelect,
-  onNotify: notify,
   go,
-  openDepartments,
 }: {
   user: User
   rows: ApplicationRow[]
   onSelect: (item: ApplicationRow) => void
-  onNotify: (message: string) => void
   go: (section: BlockSection) => void
-  openDepartments: () => void
 }) {
   const tr = useTr()
-  const filtered = rows
-  const setSelected = onSelect
+  const [picked, setPicked] = useState<PickedArea>()
+  const { data, isLoading, error } = useOverview(picked)
+  if (isLoading) return <EmptyState>{tr("लोड हो रहा है…")}</EmptyState>
+  if (error || !data) return <EmptyState>{error?.message ?? tr("डेटा नहीं मिला")}</EmptyState>
+  const { totals, funnel, gaps } = data
+  const stages: [string, number][] = [
+    ["सर्वे पूरा", totals.surveyed],
+    ["योजना सुझाव", funnel.asked],
+    ["योजना सहमति", funnel.interested],
+    ["DPR भेजा", funnel.dpr],
+    ["स्वीकृत", funnel.sanctioned],
+    ["आय सक्रिय", funnel.incomeActive],
+    ["लखपति", totals.lakhpati],
+  ]
+  const inProgress = totals.surveyed - totals.lakhpati - totals.threshold
   return (
     <div className="page">
       <section className="welcome">
@@ -36,15 +53,10 @@ export function BlockDashboard({
           <h2>
             {tr("नमस्ते")}, {tr(user.name).split(" ")[0]} {tr("जी")} <span>—</span>
           </h2>
-          <p>{tr("आज तक जगदलपुर ब्लॉक की प्रगति यहाँ है।")}</p>
+          <p>{tr("आज तक {{block}} ब्लॉक की प्रगति यहाँ है।", { block: data.area.name })}</p>
         </div>
         <div className="welcome-actions">
-          <button
-            className="secondary"
-            onClick={() => notify(tr("रिपोर्ट डाउनलोड के लिए तैयार है"))}
-          >
-            <Icon name="download" size={17} /> {tr("रिपोर्ट डाउनलोड")}
-          </button>
+          <AreaPicker data={data} onPick={setPicked} />
           <button className="primary" onClick={() => go("blcc")}>
             <Icon name="plus" size={17} /> {tr("BLCC बैठक मोड")}
           </button>
@@ -55,32 +67,34 @@ export function BlockDashboard({
           icon="people"
           color="green"
           label="सर्वेक्षित परिवार"
-          value="8,426"
-          meta="12,000 लक्ष्य का 70.2%"
-          progress={70}
+          value={num(totals.surveyed)}
+          meta={tr("{{n}} PLD का {{p}}%", {
+            n: num(totals.pld),
+            p: pct(totals.surveyed, totals.pld),
+          })}
+          progress={pct(totals.surveyed, totals.pld)}
         />
         <Kpi
           icon="trend"
           color="saffron"
           label="पहचानी गई PLD"
-          value="3,218"
-          meta="इस माह +284"
-          trend
+          value={num(totals.pld)}
+          meta={tr("राज्य PLD सूची से")}
         />
         <Kpi
           icon="file"
           color="blue"
           label="DPR विभाग को भेजे"
-          value="1,847"
-          meta="57.4% PLD कवरेज"
+          value={num(funnel.applications)}
+          meta={tr("{{n}}% PLD कवरेज", { n: pct(funnel.dpr, totals.pld) })}
         />
         <Kpi
           icon="check"
           color="emerald"
           label="लखपति दीदी"
-          value="936"
-          meta="1,400 लक्ष्य का 66.9%"
-          progress={67}
+          value={num(totals.lakhpati)}
+          meta={tr("सर्वेक्षित का {{n}}%", { n: pct(totals.lakhpati, totals.surveyed) })}
+          progress={pct(totals.lakhpati, totals.surveyed)}
         />
       </section>
       <section className="overview-secondary-kpis">
@@ -88,23 +102,25 @@ export function BlockDashboard({
           icon="alert"
           tone="red"
           label="हकदारी गैप"
-          value="1,240 खुले"
-          meta="2,860 बंद"
+          value={tr("{{n}} खुले", { n: num(gaps.open) })}
+          meta={tr("{{n}} बंद", { n: num(gaps.closed) })}
         />
         <OverviewStat
           icon="check"
           tone="green"
           label="वितरित"
-          value="1,210"
-          meta="87% स्वीकृत आवेदन"
+          value={num(funnel.deliveredApplications)}
+          meta={tr("{{n}}% स्वीकृत आवेदन", {
+            n: pct(funnel.deliveredApplications, funnel.sanctionedApplications),
+          })}
         />
         <OverviewStat
           icon="trend"
           tone="blue"
           label="मासिक आय अपडेट"
-          value="64%"
-          meta="नवंबर 2026"
-          progress={64}
+          value={`${pct(totals.monthlyUpdated, funnel.incomeActive)}%`}
+          meta={tr("इस माह {{n}} परिवार", { n: num(totals.monthlyUpdated) })}
+          progress={pct(totals.monthlyUpdated, funnel.incomeActive)}
         />
       </section>
       <section className="content-grid">
@@ -114,25 +130,20 @@ export function BlockDashboard({
               <h3>{tr("लखपति यात्रा")}</h3>
               <p>{tr("सर्वे से आय उपलब्धि तक परिवारों की स्थिति")}</p>
             </div>
-            <button className="text-button">
-              {tr("विस्तृत देखें")} <Icon name="arrow" size={16} />
-            </button>
           </div>
+          {totals.surveyed === 0 && (
+            <p className="empty-note">{tr("अभी तक कोई सर्वे जमा नहीं हुआ है")}</p>
+          )}
           <div className="funnel">
-            {[
-              ["सर्वे पूरा", "8,426", 100, "green"],
-              ["PLD चिन्हित", "3,218", 82, "sage"],
-              ["योजना सहमति", "2,644", 68, "saffron"],
-              ["DPR भेजा", "1,847", 53, "blue"],
-              ["स्वीकृत", "1,392", 41, "emerald"],
-              ["आय सक्रिय", "1,147", 33, "teal"],
-              ["लखपति", "936", 26, "deep"],
-            ].map(([label, value, width, color]) => (
+            {stages.map(([label, value], index) => (
               <div className="funnel-row" key={label}>
-                <span>{tr(String(label))}</span>
+                <span>{tr(label)}</span>
                 <div className="funnel-track">
-                  <i className={String(color)} style={{ width: `${width}%` }}>
-                    <b>{value}</b>
+                  <i
+                    className={FUNNEL_COLORS[index]}
+                    style={{ width: `${Math.max(pct(value, stages[0][1]), value ? 4 : 0)}%` }}
+                  >
+                    <b>{num(value)}</b>
                   </i>
                 </div>
               </div>
@@ -141,8 +152,14 @@ export function BlockDashboard({
           <div className="funnel-note">
             <Icon name="trend" size={19} />
             <div>
-              <strong>{tr("29.1% PLD परिवार लखपति बने")}</strong>
-              <span>{tr("पिछले माह से 3.4% बेहतर")}</span>
+              <strong>
+                {tr("{{n}}% सर्वेक्षित परिवार लखपति बने", {
+                  n: pct(totals.lakhpati, totals.surveyed),
+                })}
+              </strong>
+              <span>
+                {tr("औसत वार्षिक आय {{amount}}", { amount: `₹${num(totals.avgIncome)}` })}
+              </span>
             </div>
           </div>
         </div>
@@ -150,33 +167,41 @@ export function BlockDashboard({
           <div className="card-head">
             <div>
               <h3>{tr("आय स्थिति")}</h3>
-              <p>{tr("PLD परिवारों का वार्षिक आय स्तर")}</p>
+              <p>{tr("सर्वेक्षित परिवारों का वार्षिक आय स्तर")}</p>
             </div>
-            <button className="filter-button">
-              {tr("सभी CLF")} <Icon name="chevron" size={14} />
-            </button>
           </div>
           <div className="donut-wrap">
-            <div className="donut">
+            <div
+              className="donut"
+              style={{
+                background: donutGradient([
+                  { value: totals.lakhpati, color: "#287349" },
+                  { value: totals.threshold, color: "#e6a51c" },
+                  { value: Math.max(0, inProgress), color: "#7da6a0" },
+                ]),
+              }}
+            >
               <div>
-                <strong>3,218</strong>
-                <span>{tr("कुल PLD")}</span>
+                <strong>{num(totals.surveyed)}</strong>
+                <span>{tr("सर्वेक्षित")}</span>
               </div>
             </div>
             <div className="legend">
-              <Legend color="#287349" value="936" label="लखपति (₹1 लाख+)" />
-              <Legend color="#e6a51c" value="614" label="थ्रेशोल्ड (₹80K+)" />
-              <Legend color="#7da6a0" value="1,668" label="प्रगति पर" />
+              <Legend color="#287349" value={num(totals.lakhpati)} label="लखपति (₹1 लाख+)" />
+              <Legend color="#e6a51c" value={num(totals.threshold)} label="थ्रेशोल्ड (₹80K+)" />
+              <Legend color="#7da6a0" value={num(Math.max(0, inProgress))} label="प्रगति पर" />
             </div>
           </div>
-          <div className="alert-strip">
-            <Icon name="alert" size={19} />
-            <div>
-              <strong>{tr("428 सिंगल-स्ट्रीम PLD")}</strong>
-              <span>{tr("आय का दूसरा स्रोत जोड़ना जरूरी है")}</span>
+          {totals.singleSource > 0 && (
+            <div className="alert-strip">
+              <Icon name="alert" size={19} />
+              <div>
+                <strong>{tr("{{n}} सिंगल-स्ट्रीम PLD", { n: num(totals.singleSource) })}</strong>
+                <span>{tr("आय का दूसरा स्रोत जोड़ना जरूरी है")}</span>
+              </div>
+              <button onClick={() => go("households")}>{tr("देखें")}</button>
             </div>
-            <button onClick={() => go("households")}>{tr("देखें")}</button>
-          </div>
+          )}
         </div>
       </section>
       <section className="card applications-card">
@@ -186,17 +211,14 @@ export function BlockDashboard({
             <p>{tr("विभागीय कार्यवाही के लिए भेजे गए DPR")}</p>
           </div>
           <div className="table-actions">
-            <button className="filter-button">
-              <Icon name="filter" size={15} /> {tr("फ़िल्टर")}
-            </button>
             <button className="text-button" onClick={() => go("applications")}>
               {tr("सभी आवेदन")} <Icon name="arrow" size={16} />
             </button>
           </div>
         </div>
-        <ApplicationTable rows={filtered} onSelect={setSelected} />
+        <ApplicationTable rows={rows} onSelect={onSelect} />
       </section>
-      <BlockOverviewLower onNotify={notify} go={go} openDepartments={openDepartments} />
+      <BlockOverviewLower data={data} go={go} />
     </div>
   )
 }

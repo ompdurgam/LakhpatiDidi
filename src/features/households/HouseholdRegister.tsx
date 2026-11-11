@@ -6,9 +6,13 @@ import { Icon } from "@/components/ui/Icon"
 import { FilterSelect } from "@/components/ui/Select"
 import { HouseholdTracker } from "@/features/households/HouseholdTracker"
 import type { HouseholdRecord } from "@/features/households/types"
+import { useAreaLabel } from "@/features/monitoring/useAreaLabel"
 import { useTr } from "@/i18n/tr"
 
 import { downloadHouseholdsCsv } from "./householdCsv"
+
+/** The API sends at most this many rows (most recent codes first). */
+const REGISTER_LIMIT = 5000
 
 export function HouseholdRegister({ onNotify }: { onNotify: (message: string) => void }) {
   const tr = useTr()
@@ -23,6 +27,7 @@ export function HouseholdRegister({ onNotify }: { onNotify: (message: string) =>
   const [special, setSpecial] = useState("सभी")
   const [singleOnly, setSingleOnly] = useState(false)
   const { households, meta, loading } = useData()
+  const area = useAreaLabel()
   const visible = households.filter((row) => {
     const clfMatch = clf === "सभी" || row.clf === clf
     const voMatch = vo === "सभी" || row.vo === vo
@@ -147,8 +152,9 @@ export function HouseholdRegister({ onNotify }: { onNotify: (message: string) =>
           <div>
             <h3>{tr("परिवार और दीदी रजिस्टर")}</h3>
             <p>
-              {loading ? tr("लोड हो रहा है…") : tr("{{n}} रिकॉर्ड", { n: visible.length })}{" "}
-              {tr("• जगदलपुर ब्लॉक • MySQL लाइव डेटा")}
+              {loading ? tr("लोड हो रहा है…") : tr("{{n}} रिकॉर्ड", { n: visible.length })} • {area}
+              {households.length >= REGISTER_LIMIT &&
+                ` • ${tr("सबसे हाल के {{n}} दिखाए गए", { n: REGISTER_LIMIT.toLocaleString("en-IN") })}`}
             </p>
           </div>
           <span className="status blue">{tr("PLD रजिस्टर")}</span>

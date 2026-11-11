@@ -52,7 +52,7 @@ export function useGeoArea(level: GeoLevel, code: string) {
   return useQuery({
     queryKey: ["geo", "area", level, code],
     queryFn: () => api<AreaResponse>(`/geo/areas/${level}/${encodeURIComponent(code)}`),
-    enabled: signedIn && level !== "village",
+    enabled: signedIn && level !== "village" && Boolean(code),
     staleTime: 5 * 60_000,
   })
 }

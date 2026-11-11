@@ -7,6 +7,7 @@ import type { ApplicationRow } from "@/api/types"
 import { Icon } from "@/components/ui/Icon"
 import { departmentByCode, departmentByHindiName, departments } from "@/data/departments"
 import { DepartmentInboxTable } from "@/features/department/DepartmentInboxTable"
+import { useAreaLabel } from "@/features/monitoring/useAreaLabel"
 import { useTr } from "@/i18n/tr"
 
 import { DepartmentAnalytics } from "./DepartmentAnalytics"
@@ -31,6 +32,7 @@ export function DepartmentWorkspace({
   const [blockFilter, setBlockFilter] = useState("सभी")
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const { meta, refresh } = useData()
+  const area = useAreaLabel()
   const [bulkBusy, setBulkBusy] = useState(false)
   const fallbackDepartments = [
     "मत्स्य विभाग",
@@ -78,7 +80,7 @@ export function DepartmentWorkspace({
   const schemeOptions = ["सभी", ...Array.from(new Set(scopedRows.map((row) => row.scheme)))]
   const filteredRows = scopedRows.filter(
     (row) =>
-      (!overdueOnly || row.days > 15) &&
+      (!overdueOnly || row.overdue) &&
       (schemeFilter === "सभी" || row.scheme === schemeFilter) &&
       (blockFilter === "सभी" || row.block === blockFilter),
   )
@@ -92,7 +94,7 @@ export function DepartmentWorkspace({
         <div>
           <span className="eyebrow">{tr("लाइन विभाग डैशबोर्ड")}</span>
           <h2>{tr(dept)}</h2>
-          <p>{tr("जगदलपुर ब्लॉक • सहायक संचालक कार्यालय")}</p>
+          <p>{area}</p>
         </div>
         <select className="workspace-select" value={dept} onChange={(e) => setDept(e.target.value)}>
           {departmentOptions.map((x) => (
@@ -219,7 +221,7 @@ export function DepartmentWorkspace({
           )}
         </section>
       </div>
-      <DepartmentAnalytics />
+      <DepartmentAnalytics rows={scopedRows} />
     </div>
   )
 }

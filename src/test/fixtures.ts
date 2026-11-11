@@ -6,6 +6,7 @@ import {
   recommendationsFixture,
   surveyedFixture,
 } from "./fieldFixtures"
+import { overviewFixture } from "./monitoringFixtures"
 
 export const applicationFixture: ApplicationRow = {
   id: "APP-260142",
@@ -176,6 +177,7 @@ export function fakeApi(url: string): unknown {
   if (path.startsWith("/dpr/")) return dprFixture
   if (path.startsWith("/geo/areas/")) return geoAreaFixture
   if (path.startsWith("/geo/villages/")) return geoVillageFixture
+  if (path === "/monitoring/overview") return overviewFixture
   return []
 }
 
@@ -202,6 +204,10 @@ const englishData: Record<string, string> = {
   बस्तर: "Bastar",
   बकावंड: "Bakawand",
   धुरगुड़ा: "Dhurguda",
+  नानगुर: "Nangur",
+  "गीता नेताम": "Geeta Netam",
+  "PM आवास": "PM Awas",
+  कृषि: "Agriculture",
   "सहायक संचालक मत्स्य, जगदलपुर": "Assistant Director Fisheries, Jagdalpur",
   "PMMSY से तालाब बनाकर मत्स्य पालन शुरू कर सकती हैं":
     "Can start fish farming by building a pond under PMMSY",

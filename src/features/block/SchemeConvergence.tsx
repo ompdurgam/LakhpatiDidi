@@ -1,120 +1,110 @@
-import { Icon } from "@/components/ui/Icon"
-import { useTr } from "@/i18n/tr"
+import { useQuery } from "@tanstack/react-query"
 
+import { api } from "@/api/client"
+import { EmptyState } from "@/components/ui/EmptyState"
+import { money, num, pct } from "@/features/monitoring/format"
+import { useTr } from "@/i18n/tr"
+import { useSession } from "@/stores/session"
+
+type SchemeRow = {
+  code: string
+  name: string
+  department: string
+  asked: number
+  interested: number
+  dpr: number
+  sanctioned: number
+  delivered: number
+  sanctionedAmount: number
+  gapsOpen: number
+  gapsClosed: number
+}
+
+/** Scheme-wise progress from suggestion to delivery, and entitlement gaps, for the user's area. */
 export function SchemeConvergence() {
   const tr = useTr()
-  const rows = [
-    ["PMMSY तालाब", "मत्स्य", 284, 198, 142, 96, 58, "₹69.6L"],
-    ["बैकयार्ड पोल्ट्री", "पशुपालन", 362, 274, 186, 144, 112, "₹53.8L"],
-    ["NHM सूक्ष्म सिंचाई", "उद्यानिकी", 218, 156, 118, 82, 61, "₹32.4L"],
-    ["वन धन / लाख", "वन", 196, 142, 96, 72, 54, "₹18.9L"],
-    ["PM फसल बीमा", "कृषि", 442, 318, 224, 186, 0, "₹21.2L"],
-  ]
-  const clusters = [
-    ["धान", 42, 680, "₹1.84 Cr"],
-    ["NTFP", 28, 410, "₹92L"],
-    ["मशरूम", 18, 216, "₹54L"],
-    ["पोल्ट्री", 32, 480, "₹1.26 Cr"],
-    ["मत्स्य", 16, 74, "₹88L"],
-    ["बकरी", 24, 192, "₹1.08 Cr"],
-    ["कौशल", 14, 286, "₹36L"],
-    ["गैर-कृषि", 19, 128, "₹74L"],
-    ["उद्यानिकी", 26, 312, "₹96L"],
-  ]
+  const signedIn = useSession((s) => Boolean(s.token))
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["monitoring", "schemes"],
+    queryFn: () => api<SchemeRow[]>("/monitoring/schemes"),
+    enabled: signedIn,
+  })
+  if (isLoading) return <EmptyState>{tr("लोड हो रहा है…")}</EmptyState>
+  if (error || !data) return <EmptyState>{error?.message ?? tr("डेटा नहीं मिला")}</EmptyState>
+  const withGaps = data.filter((r) => r.gapsOpen + r.gapsClosed > 0)
   return (
     <div className="scheme-convergence-page">
       <section className="card convergence-table-card">
         <div className="card-head">
           <div>
             <h3>{tr("योजना अभिसरण")}</h3>
-            <p>{tr("सुझाव से वितरण तक • नवंबर 2026")}</p>
+            <p>{tr("सुझाव से वितरण तक")}</p>
           </div>
-          <button className="filter-button">
-            <Icon name="download" size={14} /> {tr("निर्यात")}
-          </button>
         </div>
-        <div className="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>{tr("योजना")}</th>
-                <th>{tr("विभाग")}</th>
-                <th>{tr("सुझाए")}</th>
-                <th>{tr("सहमति")}</th>
-                <th>DPR</th>
-                <th>{tr("स्वीकृत")}</th>
-                <th>{tr("वितरित")}</th>
-                <th>{tr("₹ स्वीकृत")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => (
-                <tr key={String(row[0])}>
-                  {row.map((cell, index) => (
-                    <td key={index}>
-                      {index === 0 || index === 7 ? (
-                        <strong>{tr(String(cell))}</strong>
-                      ) : (
-                        tr(String(cell))
-                      )}
-                    </td>
-                  ))}
+        {data.length ? (
+          <div className="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>{tr("योजना")}</th>
+                  <th>{tr("विभाग")}</th>
+                  <th>{tr("सुझाए")}</th>
+                  <th>{tr("सहमति")}</th>
+                  <th>DPR</th>
+                  <th>{tr("स्वीकृत")}</th>
+                  <th>{tr("वितरित")}</th>
+                  <th>{tr("₹ स्वीकृत")}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {data.map((row) => (
+                  <tr key={row.code}>
+                    <td>
+                      <strong>{row.name}</strong>
+                    </td>
+                    <td>{row.department}</td>
+                    <td>{num(row.asked)}</td>
+                    <td>{num(row.interested)}</td>
+                    <td>{num(row.dpr)}</td>
+                    <td>{num(row.sanctioned)}</td>
+                    <td>{num(row.delivered)}</td>
+                    <td>
+                      <strong>{money(row.sanctionedAmount)}</strong>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="empty-note">{tr("अभी तक किसी योजना पर कोई गतिविधि नहीं")}</p>
+        )}
       </section>
-      <section className="scheme-analysis-grid">
-        <div className="card block-awareness-chart">
-          <div className="card-head">
-            <div>
-              <h3>{tr("जागरूकता बनाम लाभ अंतर")}</h3>
-              <p>{tr("परिवार सर्वे के आधार पर")}</p>
-            </div>
+      <section className="card block-awareness-chart">
+        <div className="card-head">
+          <div>
+            <h3>{tr("हकदारी गैप")}</h3>
+            <p>{tr("सर्वे में पात्र पर लाभ न पाने वाले परिवार • बंद गैप का अनुपात")}</p>
           </div>
-          {[
-            ["PMMSY", 76, 34],
-            ["पोल्ट्री", 68, 41],
-            ["सूक्ष्म सिंचाई", 59, 28],
-            ["वन धन", 72, 46],
-            ["फसल बीमा", 84, 52],
-          ].map(([name, aware, benefit]) => (
-            <div key={String(name)}>
-              <strong>{tr(String(name))}</strong>
-              <span>
-                {tr("जागरूक")} {aware}%
-              </span>
-              <i>
-                <b className="aware" style={{ width: `${aware}%` }} />
-                <b className="benefit" style={{ width: `${benefit}%` }} />
-              </i>
-              <small>
-                {tr("लाभ")} {benefit}%
-              </small>
-            </div>
-          ))}
         </div>
-        <div className="card cluster-demand">
-          <div className="card-head">
-            <div>
-              <h3>{tr("क्लस्टर मांग")}</h3>
-              <p>{tr("SHG, इकाई और अनुमानित निवेश")}</p>
-            </div>
-          </div>
-          {clusters.map(([name, shg, units, cost]) => (
-            <div key={String(name)}>
-              <span className="cluster-icon">
-                <Icon name="scheme" size={14} />
-              </span>
-              <strong>{tr(String(name))}</strong>
-              <p>
-                <b>{shg}</b> SHG <b>{units}</b> {tr("इकाई")}
-              </p>
-              <em>{cost}</em>
-            </div>
-          ))}
-        </div>
+        {withGaps.length ? (
+          withGaps.map((row) => {
+            const total = row.gapsOpen + row.gapsClosed
+            return (
+              <div key={row.code}>
+                <strong>{row.name}</strong>
+                <span>{tr("{{n}} खुले", { n: num(row.gapsOpen) })}</span>
+                <i>
+                  <b className="aware" style={{ width: "100%" }} />
+                  <b className="benefit" style={{ width: `${pct(row.gapsClosed, total)}%` }} />
+                </i>
+                <small>{tr("{{n}}% बंद", { n: pct(row.gapsClosed, total) })}</small>
+              </div>
+            )
+          })
+        ) : (
+          <p className="empty-note">{tr("सर्वे में अभी कोई हकदारी गैप दर्ज नहीं")}</p>
+        )}
       </section>
     </div>
   )

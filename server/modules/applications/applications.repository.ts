@@ -4,8 +4,27 @@ import { notFound } from "../../shared/errors.ts"
 import { msg } from "../../shared/i18n.ts"
 import type { Row } from "../../shared/types.ts"
 
-export const listApplications = () =>
-  query<Row>("SELECT * FROM v_application_list ORDER BY received_on DESC, app_code DESC")
+/**
+ * Applications, optionally only those inside `area`: district / block areas by the
+ * routing block (b, as on the dashboards), GP / village areas by the Didi's village (gp / v).
+ */
+export const listApplications = (area?: { sql: string; params: unknown[] } | null) =>
+  query<Row>(
+    `SELECT * FROM v_application_list
+     ${
+       area
+         ? `WHERE app_code IN (
+              SELECT a.app_code FROM tbl_applications a
+              JOIN tbl_households h          ON h.id  = a.household_id
+              JOIN master_villages v         ON v.id  = h.village_id
+              JOIN master_gram_panchayats gp ON gp.id = v.gram_panchayat_id
+              JOIN master_blocks b           ON b.id  = a.block_id
+              WHERE ${area.sql})`
+         : ""
+     }
+     ORDER BY received_on DESC, app_code DESC`,
+    area?.params ?? [],
+  )
 
 export const findListRow = (code: string) =>
   one<Row>("SELECT * FROM v_application_list WHERE app_code = ?", [code])
