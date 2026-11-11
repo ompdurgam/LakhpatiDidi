@@ -49,11 +49,12 @@ export type DidiTask = {
 
 /** The signed-in Didi's own profile (the API finds it from her verified mobile). */
 export function useDidi() {
-  const signedIn = useSession((s) => Boolean(s.token))
+  // Only a Didi session has a profile; staff pages (e.g. the shell's tab bar) must not ask.
+  const isDidi = useSession((s) => Boolean(s.token) && s.role === "didi")
   return useQuery({
     queryKey: ["didi", "me"],
     queryFn: () => api<DidiProfileData>("/didi/me"),
-    enabled: signedIn,
+    enabled: isDidi,
     staleTime: 60_000,
     retry: false,
   })
