@@ -10,7 +10,7 @@ const otpBox = (index: number) =>
 const EMPTY_OTP = ["", "", "", "", "", ""]
 
 /** OTP request / verify flow against /api/auth. */
-export function useOtpLogin(initialMobile = "") {
+export function useOtpLogin(initialMobile = "", role?: string | null) {
   const [mobile, setMobileValue] = useState(initialMobile)
   const [otpSent, setOtpSent] = useState(false)
   const [otp, setOtp] = useState(EMPTY_OTP)
@@ -87,7 +87,8 @@ export function useOtpLogin(initialMobile = "") {
     try {
       setAuth(
         await api<{ token: string; user: User }>("/auth/verify", {
-          body: { mobile, otp: digits.join("") },
+          // The server checks the chosen role is one this account holds.
+          body: { mobile, otp: digits.join(""), role: role ?? undefined },
         }),
       )
     } catch (e) {

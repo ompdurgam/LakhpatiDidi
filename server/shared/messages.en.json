@@ -230,5 +230,21 @@
   "सूचना {{n}} लोगों को भेजी गई": "Notice sent to {{n}} people",
   "यह योजना आपके लिए सुझाई नहीं गई है": "This scheme was not suggested for you",
   "आपकी रुचि CRP को भेजी गई — वे आवेदन में मदद करेंगी": "Your interest was sent to your CRP — she will help you apply",
-  "ठीक है, आप बाद में भी आवेदन कर सकती हैं": "Okay, you can still apply later"
+  "ठीक है, आप बाद में भी आवेदन कर सकती हैं": "Okay, you can still apply later",
+  "गाँव चुनें": "Choose a village",
+  "आपके खाते में कोई क्षेत्र नहीं जुड़ा है": "No area is linked to your account",
+  "यह क्षेत्र आपके दायरे से बाहर है": "This area is outside your jurisdiction",
+  "आय स्रोत चुनें": "Choose an income source",
+  "मान्य राशि दर्ज करें": "Enter a valid amount",
+  "आय दर्ज हुई": "Income recorded",
+  "गाँव नहीं मिला": "Village not found",
+  "ग्राम प्रोफ़ाइल सहेजी गई": "Village profile saved",
+  "आपको यह भूमिका नहीं दी गई है। एडमिन से संपर्क करें।": "You have not been given this role. Contact the admin.",
+  "मान्य क्षेत्र स्तर चुनें": "Choose a valid area level",
+  "कम से कम एक भूमिका और क्षेत्र चुनें": "Choose at least one role and area",
+  "यह भूमिका इस क्षेत्र स्तर पर नहीं दी जा सकती": "This role cannot be given at this area level",
+  "क्षेत्र चुनें": "Choose an area",
+  "विभाग चुनें": "Choose a department",
+  "विभाग नहीं मिला": "Department not found",
+  "{{name}} की भूमिकाएँ और क्षेत्र अपडेट हुए": "{{name}}'s roles and areas updated"
 }

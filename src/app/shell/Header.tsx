@@ -1,6 +1,9 @@
+import { useQueryClient } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { useLocation, useMatch, useNavigate } from "react-router"
 
+import { api } from "@/api/client"
+import type { User } from "@/api/types"
 import { BrandMark } from "@/components/ui/BrandMark"
 import { Icon } from "@/components/ui/Icon"
 import { LanguageMenu } from "@/components/ui/LanguageMenu"
@@ -48,6 +51,10 @@ export function Header() {
   const scope = useScope()
   // A Didi sees only her own profile: no role switcher and no staff search.
   const isDidi = useSession((s) => s.user?.role === "didi")
+  // Only the roles this account holds (older sessions without the list keep every staff role).
+  const myRoles = useSession((s) => s.user?.roles)?.filter(isRole) ?? STAFF_ROLES
+  const queryClient = useQueryClient()
+  const notify = useUi((s) => s.notify)
 
   return (
     <header>
@@ -64,20 +71,30 @@ export function Header() {
         <h1>{title}</h1>
       </div>
       <div className="header-actions">
-        {!isDidi && (
+        {!isDidi && myRoles.length > 1 && (
           <label className="role-switcher">
             <span>{t("header.role")}</span>
             <select
               value={role}
-              onChange={(event) => {
+              onChange={async (event) => {
                 const next = event.target.value
                 if (!isRole(next)) return
-                setRole(next)
-                navigate(roleHome(next))
+                // The server checks the role is one of the user's own and scopes data to it.
+                try {
+                  const { user: updated } = await api<{ user: User }>("/auth/role", {
+                    body: { role: next },
+                  })
+                  useSession.setState({ user: updated })
+                  setRole(next)
+                  await queryClient.invalidateQueries()
+                  navigate(roleHome(next))
+                } catch (e) {
+                  notify((e as Error).message)
+                }
               }}
               aria-label={t("header.changeRole")}
             >
-              {STAFF_ROLES.map((value) => (
+              {myRoles.map((value) => (
                 <option key={value} value={value}>
                   {t(`roles.${value}`)}
                 </option>

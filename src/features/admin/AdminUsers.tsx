@@ -1,35 +1,36 @@
 import { useState } from "react"
 
 import { api } from "@/api/client"
-import { useData, useResource } from "@/api/hooks"
+import { useResource } from "@/api/hooks"
 import { Icon } from "@/components/ui/Icon"
 import { useTr } from "@/i18n/tr"
 
-export type AdminUserRow = {
-  id: number
-  name: string
-  mobile: string
-  role: string
-  designation: string
-  scope: string
-  status: "active" | "locked"
-  lastLogin: string
-}
+import { type AdminUserRow, AdminUsersTable } from "./AdminUsersTable"
+import { AssignmentEditor } from "./AssignmentEditor"
+import { type AssignmentDraft, isComplete, toAssignment } from "./assignmentRules"
+
+const NEW_ASSIGNMENT: AssignmentDraft = { role: "field", level: "block" }
+
+/** A saved assignment as an editable draft (its area path fills the pickers). */
+const toDraft = (a: AdminUserRow["assignments"][number]): AssignmentDraft => ({
+  role: a.role,
+  level: a.level,
+  ...a.path,
+  department: a.departmentCode ?? undefined,
+})
 
 export function AdminUsers({ onNotify }: { onNotify: (message: string) => void }) {
   const tr = useTr()
   const { data: users, error, reload } = useResource<AdminUserRow[]>("/users")
-  const { meta } = useData()
   const [adding, setAdding] = useState(false)
   const [busy, setBusy] = useState(false)
   const [formError, setFormError] = useState("")
-  const [form, setForm] = useState({
-    name: "",
-    mobile: "",
-    role: "field",
-    designation: "",
-    block: "JGD",
-  })
+  const [form, setForm] = useState({ name: "", mobile: "", designation: "" })
+  const [drafts, setDrafts] = useState<AssignmentDraft[]>([NEW_ASSIGNMENT])
+  /** The user whose roles / areas are being changed. */
+  const [editing, setEditing] = useState<AdminUserRow | null>(null)
+  const [editDrafts, setEditDrafts] = useState<AssignmentDraft[]>([])
+
   const call = async (path: string, body: unknown, method = "POST") => {
     setBusy(true)
     try {
@@ -48,9 +49,12 @@ export function AdminUsers({ onNotify }: { onNotify: (message: string) => void }
     setFormError("")
     setBusy(true)
     try {
-      const { message } = await api<{ message: string }>("/users", { body: form })
+      const { message } = await api<{ message: string }>("/users", {
+        body: { ...form, assignments: drafts.map(toAssignment) },
+      })
       onNotify(message)
-      setForm({ name: "", mobile: "", role: "field", designation: "", block: "JGD" })
+      setForm({ name: "", mobile: "", designation: "" })
+      setDrafts([NEW_ASSIGNMENT])
       setAdding(false)
       await reload()
     } catch (e) {
@@ -58,6 +62,15 @@ export function AdminUsers({ onNotify }: { onNotify: (message: string) => void }
     } finally {
       setBusy(false)
     }
+  }
+  const saveEdit = async () => {
+    if (!editing) return
+    const ok = await call(
+      `/users/${editing.id}/assignments`,
+      { assignments: editDrafts.map(toAssignment) },
+      "PUT",
+    )
+    if (ok) setEditing(null)
   }
   return (
     <section className="card admin-data-table">
@@ -87,18 +100,6 @@ export function AdminUsers({ onNotify }: { onNotify: (message: string) => void }
             />
           </label>
           <label className="text-control">
-            <span>{tr("भूमिका")}</span>
-            <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}>
-              <option value="field">CRP / Surveyor</option>
-              <option value="block">Block Manager</option>
-              <option value="department">{tr("विभाग अधिकारी")}</option>
-              <option value="district">DPM</option>
-              <option value="state">SMMU</option>
-              <option value="admin">Admin</option>
-              <option value="didi">Didi (PLD)</option>
-            </select>
-          </label>
-          <label className="text-control">
             <span>{tr("पदनाम")}</span>
             <input
               value={form.designation}
@@ -106,22 +107,12 @@ export function AdminUsers({ onNotify }: { onNotify: (message: string) => void }
               onChange={(e) => setForm({ ...form, designation: e.target.value })}
             />
           </label>
-          <label className="text-control">
-            <span>{tr("ब्लॉक")}</span>
-            <select
-              value={form.block}
-              onChange={(e) => setForm({ ...form, block: e.target.value })}
-            >
-              {(meta?.blocks ?? []).map((b) => (
-                <option key={b.code} value={b.code}>
-                  {tr(b.name)}
-                </option>
-              ))}
-            </select>
-          </label>
+          <AssignmentEditor value={drafts} onChange={setDrafts} />
           <button
             className="primary"
-            disabled={busy || !form.name.trim() || form.mobile.length !== 10}
+            disabled={
+              busy || !form.name.trim() || form.mobile.length !== 10 || !drafts.every(isComplete)
+            }
             onClick={addUser}
           >
             {tr("सहेजें")}
@@ -129,59 +120,46 @@ export function AdminUsers({ onNotify }: { onNotify: (message: string) => void }
           {formError && <p className="form-error">{tr(formError)}</p>}
         </div>
       )}
+      {editing && (
+        <div className="admin-inline-form">
+          <strong>
+            {tr("भूमिकाएँ और क्षेत्र बदलें")}: {tr(editing.name)} • {editing.mobile}
+          </strong>
+          <AssignmentEditor value={editDrafts} onChange={setEditDrafts} />
+          <button
+            className="primary"
+            disabled={busy || !editDrafts.length || !editDrafts.every(isComplete)}
+            onClick={saveEdit}
+          >
+            {tr("सहेजें")}
+          </button>
+          <button className="secondary" onClick={() => setEditing(null)}>
+            {tr("रद्द करें")}
+          </button>
+          <p className="empty-note">{tr("सहेजने पर यूज़र को फिर से लॉगिन करना होगा।")}</p>
+        </div>
+      )}
       {error && <p className="form-error">{tr(error)}</p>}
-      <div className="table-scroll">
-        <table>
-          <thead>
-            <tr>
-              <th>{tr("नाम")}</th>
-              <th>{tr("मोबाइल")}</th>
-              <th>{tr("भूमिका")}</th>
-              <th>{tr("कार्यक्षेत्र")}</th>
-              <th>{tr("स्थिति")}</th>
-              <th>{tr("अंतिम लॉगिन")}</th>
-              <th>{tr("रीसेट")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(users ?? []).map((row) => (
-              <tr key={row.id}>
-                <td>{tr(row.name)}</td>
-                <td>{tr(row.mobile)}</td>
-                <td>{tr(row.designation)}</td>
-                <td>{tr(row.scope)}</td>
-                <td>
-                  <button
-                    className={`status ${row.status === "active" ? "green" : "red"} status-toggle`}
-                    disabled={busy}
-                    title={tr("स्थिति बदलें")}
-                    onClick={() =>
-                      call(
-                        `/users/${row.id}`,
-                        { status: row.status === "active" ? "locked" : "active" },
-                        "PATCH",
-                      )
-                    }
-                  >
-                    {row.status === "active" ? tr("सक्रिय") : tr("लॉक")}
-                  </button>
-                </td>
-                <td>{tr(row.lastLogin)}</td>
-                <td>
-                  <button
-                    className="table-reset"
-                    disabled={busy}
-                    onClick={() => call(`/users/${row.id}/otp-reset`, {})}
-                  >
-                    {tr("OTP रीसेट")}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {!users && !error && <div className="empty">{tr("लोड हो रहा है…")}</div>}
-      </div>
+      {users ? (
+        <AdminUsersTable
+          users={users}
+          busy={busy}
+          onToggle={(row) =>
+            call(
+              `/users/${row.id}`,
+              { status: row.status === "active" ? "locked" : "active" },
+              "PATCH",
+            )
+          }
+          onReset={(row) => call(`/users/${row.id}/otp-reset`, {})}
+          onEdit={(row) => {
+            setEditing(row)
+            setEditDrafts(row.assignments.length ? row.assignments.map(toDraft) : [NEW_ASSIGNMENT])
+          }}
+        />
+      ) : (
+        !error && <div className="empty">{tr("लोड हो रहा है…")}</div>
+      )}
     </section>
   )
 }

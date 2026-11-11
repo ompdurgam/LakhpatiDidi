@@ -115,3 +115,38 @@ button.profile {
   opacity: 0.45;
   cursor: not-allowed;
 }
+
+/* Admin: role × area assignment rows. */
+.assignment-editor {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 8px;
+}
+.assignment-editor-title {
+  font-weight: 600;
+}
+.assignment-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  align-items: end;
+  padding: 10px;
+  border: 1px dashed #d5ddd4;
+  border-radius: 8px;
+  background: white;
+}
+.assignment-editor > .secondary {
+  justify-self: start;
+}
+.assignment-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.assignment-chips span {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #eef4ee;
+  font-size: calc(12.5px * var(--font-scale));
+  white-space: nowrap;
+}

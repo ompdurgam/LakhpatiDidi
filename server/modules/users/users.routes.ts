@@ -5,16 +5,45 @@ import { currentUser } from "../../middleware/auth.ts"
 import { msg } from "../../shared/i18n.ts"
 import { mobile, parse, text } from "../../shared/validation.ts"
 import { audit } from "../audit/audit.service.ts"
-import { createUser, listUsers, resetUserOtp, setUserStatus } from "./users.service.ts"
+import { assignmentInput, ROLES } from "./users.assignments.ts"
+import {
+  createUser,
+  listUsers,
+  resetUserOtp,
+  setUserStatus,
+  updateAssignments,
+} from "./users.service.ts"
 
-const ROLES = ["field", "block", "department", "district", "state", "admin", "didi"] as const
+const legacyRole = z.enum(ROLES, { error: () => msg("मान्य भूमिका चुनें") })
 
-const createBody = z.object({
-  name: text("नाम", 120),
-  mobile,
-  role: z.enum(ROLES, { error: () => msg("मान्य भूमिका चुनें") }),
+/**
+ * New account: `assignments` (role × area, several allowed). The older form
+ * `{ role, block }` (one role, optionally one block) is still accepted.
+ */
+const createBody = z
+  .object({
+    name: text("नाम", 120),
+    mobile,
+    designation: z.string().trim().max(120).optional(),
+    assignments: z.array(assignmentInput).max(50).optional(),
+    role: legacyRole.optional(),
+    block: z.string().trim().optional(),
+  })
+  .transform(({ assignments, role, block, ...rest }) => ({
+    ...rest,
+    assignments:
+      assignments ??
+      (role
+        ? [
+            role === "state" || role === "admin" || !block
+              ? { role, level: "state" as const }
+              : { role, level: "block" as const, area: block },
+          ]
+        : []),
+  }))
+const assignmentsBody = z.object({
+  assignments: z.array(assignmentInput).max(50),
   designation: z.string().trim().max(120).optional(),
-  block: z.string().trim().optional(),
 })
 const statusBody = z.object({
   status: z.enum(["active", "locked"], { error: () => msg("मान्य स्थिति चुनें") }),
@@ -37,6 +66,20 @@ usersRouter.post("/", async (req, res) => {
     entityId: input.mobile,
   })
   res.status(201).json({ message: msg("{{name}} जोड़ा गया", { name }) })
+})
+
+/** Replaces a user's roles and areas. */
+usersRouter.put("/:id/assignments", async (req, res) => {
+  const id = parse(idParam, req.params.id)
+  const { assignments, designation } = parse(assignmentsBody, req.body)
+  const message = await updateAssignments(id, assignments, designation)
+  await audit(req, {
+    action: "यूज़र भूमिका",
+    details: `${message}: ${assignments.map((x) => `${x.role}@${x.level}${x.area ? `:${x.area}` : ""}`).join(", ")}`,
+    entityType: "user",
+    entityId: String(id),
+  })
+  res.json({ message })
 })
 
 usersRouter.patch("/:id", async (req, res) => {

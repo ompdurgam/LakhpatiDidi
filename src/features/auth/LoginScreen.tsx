@@ -8,7 +8,7 @@ import { LanguageChooser } from "@/components/ui/LanguageChooser"
 import { LanguageMenu } from "@/components/ui/LanguageMenu"
 import { TextSizeControl } from "@/components/ui/TextSizeControl"
 import { useIsMobile } from "@/lib/useMediaQuery"
-import { type Role, useSession } from "@/stores/session"
+import { isRole, type Role, useSession } from "@/stores/session"
 
 import { LoginHero } from "./LoginHero"
 import { MobileStep, OtpStep, SelectedRole } from "./LoginSteps"
@@ -28,15 +28,15 @@ export function LoginScreen() {
   const token = useSession((s) => s.token)
   const currentRole = useSession((s) => s.role)
   const signIn = useSession((s) => s.signIn)
-  const login = useOtpLogin()
   const [introDone, setIntroDone] = useState(false)
   const [role, setRole] = useState<Role | null>(null)
+  const login = useOtpLogin("", role)
 
   // OTP verified: sign in with the chosen role and go to its home.
   useEffect(() => {
     if (!login.auth || !role) return
-    // A Didi account is always a Didi, whichever card was picked.
-    const effective: Role = login.auth.user.role === "didi" ? "didi" : role
+    // The server confirms the role (a Didi account is always a Didi).
+    const effective: Role = isRole(login.auth.user.role) ? login.auth.user.role : role
     signIn(login.auth.token, login.auth.user, effective)
     navigate(roleHome(effective), { replace: true })
   }, [login.auth, role, signIn, navigate])

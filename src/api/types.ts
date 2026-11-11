@@ -91,4 +91,17 @@ export type User = {
   initials: string
   /** Missing for sessions saved before scopes existed (they fall back to the whole state). */
   scope?: UserScope
+  /** Every role this account holds (missing for sessions saved before multi-role accounts). */
+  roles?: string[]
+  assignments?: UserAssignment[]
+}
+
+/** One role over one area (the state, or a district / block / GP / village). */
+export type UserAssignment = {
+  role: string
+  level: string
+  areaCode: string | null
+  areaName: string
+  departmentCode: string | null
+  departmentName: string | null
 }

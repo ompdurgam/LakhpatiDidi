@@ -14,7 +14,8 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
   const token = bearerToken(req)
   if (!token) return next(new HttpError(401, msg("लॉगिन आवश्यक है")))
   const user = await one<SessionUser & { [key: string]: unknown }>(
-    `SELECT u.id, u.name, u.role, u.designation, u.mobile
+    // The session's chosen role (older sessions use the primary one).
+    `SELECT u.id, u.name, COALESCE(s.role, u.role) AS role, u.designation, u.mobile
      FROM tbl_user_sessions s JOIN master_users u ON u.id = s.user_id
      WHERE s.token_hash = ? AND s.revoked_at IS NULL AND s.expires_at > NOW() AND u.status = 'active'`,
     [sha256(token)],
@@ -26,3 +27,11 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
 
 /** The signed-in user for a route behind requireAuth. */
 export const currentUser = (res: Response) => res.locals.user as SessionUser
+
+/** Lets only these roles through (after requireAuth); others get 403. */
+export const requireRole =
+  (...roles: string[]) =>
+  (_req: Request, res: Response, next: NextFunction) =>
+    roles.includes(currentUser(res).role)
+      ? next()
+      : next(new HttpError(403, msg("यह जानकारी आपकी भूमिका के लिए उपलब्ध नहीं है")))

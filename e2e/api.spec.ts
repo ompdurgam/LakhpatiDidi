@@ -46,8 +46,10 @@ test.describe("auth", () => {
 
 test.describe("applications", () => {
   test("lists and details", async ({ request }) => {
+    // A block manager sees only her own block's applications (15 of the 20 in the fixtures).
     const list = await (await request.get("/api/applications", { headers })).json()
-    expect(list).toHaveLength(20)
+    expect(list).toHaveLength(15)
+    for (const app of list) expect(app.block).toBe("जगदलपुर")
     const detail = await (await request.get("/api/applications/APP-260142", { headers })).json()
     expect(detail).toMatchObject({
       status: "अतिदेय",
@@ -196,16 +198,30 @@ test.describe("households & surveys", () => {
 test.describe("admin", () => {
   test("users", async ({ request }) => {
     const user = { name: "नई CRP", mobile: "9876543210", role: "field", block: "JGD" }
-    expect((await post(request, "/api/users", user)).status()).toBe(201)
-    expect((await post(request, "/api/users", user)).status()).toBe(409)
-    expect(
-      (await post(request, "/api/users", { ...user, mobile: "9876543211", role: "boss" })).status(),
-    ).toBe(400)
-    const self = await request.patch("/api/users/1", { headers, data: { status: "locked" } })
-    expect(self.status()).toBe(400)
-    const lock = await request.patch("/api/users/2", { headers, data: { status: "locked" } })
+    // Full contact details are for admins only.
+    expect((await request.get("/api/users", { headers })).status()).toBe(403)
+    expect((await post(request, "/api/users", user)).status()).toBe(403)
+
+    const admin = await signIn(request, "9993000001")
+    const asAdmin = (data: unknown) => request.post("/api/users", { headers: admin, data })
+    const list = await (await request.get("/api/users", { headers: admin })).json()
+    expect(list.find((u: { name: string }) => u.name === "गीता नेताम")).toMatchObject({
+      mobile: "9752314412",
+      role: "field",
+      block: "जगदलपुर",
+    })
+    expect((await asAdmin(user)).status()).toBe(201)
+    expect((await asAdmin(user)).status()).toBe(409)
+    expect((await asAdmin({ ...user, mobile: "9876543211", role: "boss" })).status()).toBe(400)
+    const self = list.find((u: { mobile: string }) => u.mobile === "9993000001")
+    const lockSelf = await request.patch(`/api/users/${self.id}`, {
+      headers: admin,
+      data: { status: "locked" },
+    })
+    expect(lockSelf.status()).toBe(400)
+    const lock = await request.patch("/api/users/2", { headers: admin, data: { status: "locked" } })
     expect((await lock.json()).message).toBe("गीता नेताम लॉक किया गया")
-    await request.patch("/api/users/2", { headers, data: { status: "active" } })
+    await request.patch("/api/users/2", { headers: admin, data: { status: "active" } })
   })
 
   test("survey sections keep A on", async ({ request }) => {

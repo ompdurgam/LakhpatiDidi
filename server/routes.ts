@@ -1,8 +1,13 @@
 import { Router } from "express"
 
 import { query } from "./db/pool.ts"
-import { requireAuth } from "./middleware/auth.ts"
+import { requireAuth, requireRole } from "./middleware/auth.ts"
 import { auditLogsRouter } from "./modules/admin/auditLogs.routes.ts"
+import {
+  officerMappingsRouter,
+  schemesRouter,
+  villageProfilesRouter,
+} from "./modules/admin/masters.routes.ts"
 import { surveySectionsRouter } from "./modules/admin/surveySections.routes.ts"
 import { applicationsRouter } from "./modules/applications/applications.routes.ts"
 import { authRouter, publicAuthRouter } from "./modules/auth/auth.routes.ts"
@@ -11,6 +16,7 @@ import { dprRouter } from "./modules/dpr/dpr.routes.ts"
 import { geoRouter } from "./modules/geo/geo.routes.ts"
 import { householdsRouter } from "./modules/households/households.routes.ts"
 import { metaRouter } from "./modules/meta/meta.routes.ts"
+import { monitoringRouter } from "./modules/monitoring/monitoring.routes.ts"
 import { broadcastsRouter } from "./modules/notifications/broadcasts.routes.ts"
 import {
   notificationsRouter,
@@ -48,14 +54,19 @@ export function apiRouter() {
   )
   api.use("/meta", metaRouter)
   api.use("/geo", geoRouter)
+  api.use("/monitoring", monitoringRouter)
   api.use("/recommendations", recommendationsRouter)
   api.use("/dpr", dprRouter)
   api.use("/applications", applicationsRouter)
   api.use("/households", householdsRouter)
   api.use("/surveys", surveysRouter)
-  api.use("/users", usersRouter)
+  // Full contact details of every account: admins only.
+  api.use("/users", requireRole("admin"), usersRouter)
   api.use("/survey-sections", surveySectionsRouter)
   api.use("/audit-logs", auditLogsRouter)
+  api.use("/schemes", schemesRouter)
+  api.use("/officer-mappings", officerMappingsRouter)
+  api.use("/village-profiles", villageProfilesRouter)
   api.use("/broadcasts", broadcastsRouter)
 
   api.use((_req, _res, next) => next(new HttpError(404, msg("API endpoint नहीं मिला"))))

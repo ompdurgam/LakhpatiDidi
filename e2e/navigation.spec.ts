@@ -18,18 +18,25 @@ async function login(page: Page, roleLabel: string, mobile: string) {
 }
 
 async function switchRole(page: Page, role: string) {
-  await page.locator(".role-switcher select").selectOption(role)
+  // The switcher offers only the user's own roles; the server confirms the switch.
+  const select = page.locator(".role-switcher select")
+  if ((await select.inputValue()) === role) return
+  await Promise.all([
+    page.waitForResponse((r) => r.url().endsWith("/api/auth/role") && r.ok()),
+    select.selectOption(role),
+  ])
 }
 
+// 9993000001 is the demo admin, who also holds every other role (fixture 004).
 test("login lands on the block overview", async ({ page }) => {
-  await login(page, "ब्लॉक", "9752314412")
+  await login(page, "ब्लॉक", "9993000001")
   await expect(page).toHaveURL(/\/block$/)
   await expect(page.locator(".kpi-grid")).toBeVisible()
   await expect(page.locator("header h1")).toHaveText("ब्लॉक अवलोकन")
 })
 
 test("every role's screens are reachable by URL", async ({ page }) => {
-  await login(page, "ब्लॉक", "9425118881")
+  await login(page, "ब्लॉक", "9993000001")
   const visits: [string, string, string][] = [
     ["block", "/block/households", ".household-register-table"],
     ["block", "/block/applications", ".applications-card"],
@@ -49,7 +56,7 @@ test("every role's screens are reachable by URL", async ({ page }) => {
 })
 
 test("department inbox opens an application by URL and closes back", async ({ page }) => {
-  await login(page, "विभाग", "9301245176")
+  await login(page, "विभाग", "9425118881")
   await page.goto("/dept/FISH/applications/APP-260142")
   await expect(page.locator(".drawer h2")).toHaveText("APP-260142")
   await page.locator(".drawer-head .icon-button").click()
@@ -66,4 +73,17 @@ test("language toggle switches the shell to English", async ({ page }) => {
   await page.locator("header .lang-menu-button").click()
   await page.getByRole("menuitemradio", { name: "हिन्दी" }).click()
   await expect(page.locator("html")).toHaveAttribute("lang", "hi")
+})
+
+test("a role the account does not hold is refused at login", async ({ page }) => {
+  await page.goto("/login")
+  await page.locator(".language-chooser button[lang=hi]").click()
+  await page.locator(".role-card-grid button", { hasText: "राज्य" }).click()
+  await page.locator(".login-field input").fill("9752314412")
+  await page.getByRole("button", { name: /OTP भेजें/ }).click()
+  const otp = (await page.locator(".dev-otp-hint b").textContent())!.trim()
+  const boxes = page.locator(".otp-boxes input")
+  for (let i = 0; i < 6; i++) await boxes.nth(i).fill(otp[i])
+  await expect(page.getByRole("alert")).toContainText("आपको यह भूमिका नहीं दी गई है")
+  await expect(page).toHaveURL(/\/login$/)
 })
