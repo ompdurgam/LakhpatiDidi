@@ -43,7 +43,7 @@ export function NeedsBlock({
           <p>{tr("बाजार, सहायता, संपत्ति, प्रशिक्षण और ऋण")}</p>
         </div>
       </div>
-      <TextControl label="बाजार में बेचे उत्पाद/सेवाएँ" value={tr("स्थानीय उत्पाद और सेवाएँ")} />
+      <TextControl label="बाजार में बेचे उत्पाद/सेवाएँ" value="" />
       <ChipField label="कहाँ बेचते हैं">
         <ChipGroup
           options={["स्थानीय हाट", "मंडी", "बिचौलिया", "अन्य", "लागू नहीं"]}

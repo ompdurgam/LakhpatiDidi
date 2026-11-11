@@ -8,44 +8,18 @@ import { useTr } from "@/i18n/tr"
 export function LoansForm() {
   const tr = useTr()
   const [expanded, setExpanded] = useState(0)
-  const [loans, setLoans] = useState<LoanEntry[]>([
-    {
-      source: "SHG/VO/CLF (CIF/CEF)",
-      taken: "हाँ",
-      purpose: "कृषि निवेश",
-      principal: 30000,
-      outstanding: 12000,
-      rate: 12,
-      year: 2025,
-    },
-    {
-      source: "बैंक/PACS",
-      taken: "हाँ",
-      purpose: "KCC फसल ऋण",
-      principal: 50000,
-      outstanding: 28000,
-      rate: 7,
-      year: 2026,
-    },
-    {
-      source: "MFI/NBFC",
+  // One row per lender type, unanswered until the Didi says otherwise.
+  const [loans, setLoans] = useState<LoanEntry[]>(
+    ["SHG/VO/CLF (CIF/CEF)", "बैंक/PACS", "MFI/NBFC", "साहूकार/अनौपचारिक"].map((source) => ({
+      source,
       taken: "नहीं",
       purpose: "",
       principal: 0,
       outstanding: 0,
       rate: 0,
-      year: 2026,
-    },
-    {
-      source: "साहूकार/अनौपचारिक",
-      taken: "हाँ",
-      purpose: "चिकित्सा व्यय",
-      principal: 15000,
-      outstanding: 10000,
-      rate: 30,
-      year: 2026,
-    },
-  ])
+      year: new Date().getFullYear(),
+    })),
+  )
   const updateLoan = (index: number, patch: Partial<LoanEntry>) =>
     setLoans(loans.map((loan, loanIndex) => (loanIndex === index ? { ...loan, ...patch } : loan)))
   const total = loans.reduce((sum, loan) => sum + loan.outstanding, 0)

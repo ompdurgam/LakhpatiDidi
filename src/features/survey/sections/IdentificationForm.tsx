@@ -1,5 +1,6 @@
 import { useState } from "react"
 
+import { useMeta } from "@/api/hooks"
 import { ChipField, ChipGroup } from "@/components/ui/ChipGroup"
 import { FormGroup } from "@/components/ui/FormGroup"
 import { Icon } from "@/components/ui/Icon"
@@ -9,6 +10,7 @@ import { TextControl } from "@/components/ui/TextControl"
 import { useTr } from "@/i18n/tr"
 
 import { categoryLabel, type SurveyHousehold } from "../surveyHouseholds"
+import { LocationFields } from "./LocationFields"
 
 export function IdentificationForm({
   household,
@@ -23,26 +25,24 @@ export function IdentificationForm({
   onNotify: (message: string) => void
 }) {
   const tr = useTr()
-  const [organizations, setOrganizations] = useState(
-    household ? [household.shg ? "SHG" : "कोई नहीं"] : ["CLF", "VO", "SHG"],
+  const [organizations, setOrganizations] = useState<string[]>(
+    household ? [household.shg ? "SHG" : "कोई नहीं"] : [],
   )
-  // Her own place / SHG when on record; the sample choices for a new Didi.
-  const only = (value: string | null | undefined, sample: string[]) =>
-    household ? [value ?? ""] : sample
-  const [shgMember, setShgMember] = useState("हाँ")
-  const [pld, setPld] = useState("हाँ")
-  const [disability, setDisability] = useState("नहीं")
-  const [landStatus, setLandStatus] = useState("स्वामित्व")
-  const [familyTypes, setFamilyTypes] = useState(["महिला मुखिया"])
-  const [ciRoles, setCiRoles] = useState(["अध्यक्ष"])
+  const meta = useMeta().data
+  const [shgMember, setShgMember] = useState(household?.shg ? "हाँ" : "")
+  const [pld, setPld] = useState(household ? "हाँ" : "")
+  const [disability, setDisability] = useState("")
+  const [landStatus, setLandStatus] = useState("")
+  const [familyTypes, setFamilyTypes] = useState<string[]>([])
+  const [ciRoles, setCiRoles] = useState<string[]>([])
   const [counts, setCounts] = useState({
-    total: 5,
-    male: 2,
-    female: 2,
-    earners: 2,
-    youth: 2,
-    children: 1,
-    elderly: 1,
+    total: 0,
+    male: 0,
+    female: 0,
+    earners: 0,
+    youth: 0,
+    children: 0,
+    elderly: 0,
     disabled: 0,
   })
   const toggle = (items: string[], item: string, setter: (next: string[]) => void) =>
@@ -61,46 +61,7 @@ export function IdentificationForm({
   ]
   return (
     <div className="identification-form">
-      <FormGroup title={tr("स्थान")}>
-        <div className="gps-control">
-          <Icon name="map" size={18} />
-          <div>
-            <strong>{tr("GPS स्वतः कैप्चर हुआ")}</strong>
-            <span>19.0748, 82.0080 • ±8m</span>
-          </div>
-          <button onClick={() => onNotify(tr("GPS स्थान दोबारा लिया गया"))}>
-            {tr("पुनः लें")}
-          </button>
-        </div>
-        <div className="control-grid">
-          <SelectControl
-            label="जिला"
-            value="बस्तर"
-            options={only(household?.district, ["बस्तर"])}
-          />
-          <SelectControl
-            label="ब्लॉक"
-            value="जगदलपुर"
-            options={only(household?.block, ["जगदलपुर"])}
-          />
-          <SelectControl
-            label="ग्राम पंचायत"
-            value="बड़ांजी"
-            options={only(household?.panchayat, ["बड़ांजी", "नानगुर"])}
-          />
-          <SelectControl
-            label="गाँव"
-            value="बड़ांजी"
-            options={only(household?.village, [
-              "बड़ांजी",
-              "नानगुर",
-              "धुरगुड़ा",
-              "आड़ावाल",
-              "कुम्हरावंड",
-            ])}
-          />
-        </div>
-      </FormGroup>
+      <LocationFields household={household} onNotify={onNotify} />
       <FormGroup title={tr("संगठन")}>
         <ChipField label="क्या महिला SHG सदस्य है?">
           <ChipGroup
@@ -119,30 +80,22 @@ export function IdentificationForm({
         </ChipField>
         <div className="control-grid">
           {organizations.includes("CLF") && (
-            <SelectControl
-              label="CLF नाम"
-              value="माँ दंतेश्वरी CLF"
-              options={["माँ दंतेश्वरी CLF", "इंद्रावती CLF"]}
-            />
+            <SelectControl label="CLF नाम" value="" options={["", ...(meta?.clfs ?? [])]} />
           )}
           {organizations.includes("VO") && (
-            <SelectControl label="VO नाम" value="शक्ति VO" options={["शक्ति VO", "नई दिशा VO"]} />
+            <SelectControl label="VO नाम" value="" options={["", ...(meta?.vos ?? [])]} />
           )}
-          {organizations.includes("SHG") && (
-            <SelectControl
-              label="SHG नाम"
-              value="स्वावलंबी SHG"
-              options={only(household?.shg, ["स्वावलंबी SHG", "माँ बमलेश्वरी SHG"])}
-            />
-          )}
+          {organizations.includes("SHG") &&
+            (household?.shg ? (
+              <SelectControl label="SHG नाम" value={household.shg} options={[household.shg]} />
+            ) : (
+              <TextControl label="SHG नाम" value="" />
+            ))}
         </div>
         <label className="verified-input">
           <span>{tr("सदस्य ID / LokOS ID")}</span>
           <div>
-            <input defaultValue={household ? (household.memberCode ?? "") : "LK-BST-440921"} />
-            <button onClick={() => onNotify(tr("LokOS ID सत्यापित है"))}>
-              {tr("सत्यापित करें")}
-            </button>
+            <input defaultValue={household?.memberCode ?? ""} />
           </div>
         </label>
         <ChipField label="क्या संभावित लखपति दीदी (PLD) हैं?">
@@ -151,10 +104,10 @@ export function IdentificationForm({
       </FormGroup>
       <FormGroup title={tr("व्यक्तिगत")}>
         <div className="control-grid">
-          <TextControl label="SHG सदस्य का नाम" value="सुनीता कश्यप" />
-          <TextControl label="माता-पिता/पति का नाम" value="राम कश्यप" />
-          <TextControl label="आयु" value="34" type="number" />
-          <TextControl label="मोबाइल (10 अंक)" value="9826143412" type="tel" />
+          <TextControl label="SHG सदस्य का नाम" value="" />
+          <TextControl label="माता-पिता/पति का नाम" value="" />
+          <TextControl label="आयु" value="" type="number" />
+          <TextControl label="मोबाइल (10 अंक)" value="" type="tel" />
         </div>
         <ChipField label="वैवाहिक स्थिति">
           <ChipGroup
@@ -185,9 +138,7 @@ export function IdentificationForm({
             single
           />
         </ChipField>
-        {disability === "हाँ" && (
-          <TextControl label="दिव्यांगता विवरण" value={tr("चलने में कठिनाई")} />
-        )}
+        {disability === "हाँ" && <TextControl label="दिव्यांगता विवरण" value="" />}
         <ChipField label="सामाजिक वर्ग">
           <ChipGroup
             options={["सामान्य", "ST", "SC", "OBC", "अन्य"]}
@@ -285,16 +236,16 @@ export function IdentificationForm({
         {landStatus !== "भूमिहीन" && (
           <>
             <div className="control-grid acreage">
-              <TextControl label="स्वामित्व एकड़" value="1.5" type="number" />
-              <TextControl label="पट्टा एकड़" value="0" type="number" />
-              <TextControl label="बटाई एकड़" value="0.5" type="number" />
-              <TextControl label="FRA एकड़" value="1" type="number" />
+              <TextControl label="स्वामित्व एकड़" value="" type="number" />
+              <TextControl label="पट्टा एकड़" value="" type="number" />
+              <TextControl label="बटाई एकड़" value="" type="number" />
+              <TextControl label="FRA एकड़" value="" type="number" />
               <label className="auto-control">
                 <span>{tr("कुल एकड़ (स्वतः)")}</span>
                 <div>3.0</div>
               </label>
-              <TextControl label="सिंचित एकड़" value="1" type="number" />
-              <TextControl label="असिंचित एकड़" value="2" type="number" />
+              <TextControl label="सिंचित एकड़" value="" type="number" />
+              <TextControl label="असिंचित एकड़" value="" type="number" />
             </div>
           </>
         )}

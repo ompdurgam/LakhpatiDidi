@@ -8,7 +8,7 @@ import { useTr } from "@/i18n/tr"
 
 export function NonFarmSection({ baseline }: { baseline: number }) {
   const tr = useTr()
-  const [income, setIncome] = useState(12000)
+  const [income, setIncome] = useState(0)
   return (
     <div className="section-form livelihood-form">
       <IncomeMismatch income={income} baseline={baseline} />
@@ -16,7 +16,7 @@ export function NonFarmSection({ baseline }: { baseline: number }) {
         <ChipField label="प्रकार">
           <ChipGroup options={["सेवा", "विनिर्माण", "व्यापार"]} selected={["विनिर्माण"]} single />
         </ChipField>
-        <TextControl label="गतिविधि विवरण" value={tr("बाँस शिल्प और स्थानीय बिक्री")} />
+        <TextControl label="गतिविधि विवरण" value="" />
         <div className="income-chip-grid">
           {[
             "ढोकरा/बेल मेटल",
@@ -29,10 +29,10 @@ export function NonFarmSection({ baseline }: { baseline: number }) {
             "पेवर ब्लॉक",
             "बायोचार",
             "सौर उद्यम",
-          ].map((item, index) => (
+          ].map((item) => (
             <label key={item}>
               <span>{tr(item)}</span>
-              <input type="number" defaultValue={index === 3 ? 12000 : 0} />
+              <input type="number" defaultValue={0} />
             </label>
           ))}
         </div>
@@ -44,7 +44,7 @@ export function NonFarmSection({ baseline }: { baseline: number }) {
             onChange={(event) => setIncome(Number(event.target.value))}
           />
         </label>
-        <TextControl label="FPO/PG बिक्री आय ₹" value="4,500" type="number" />
+        <TextControl label="FPO/PG बिक्री आय ₹" value="" type="number" />
       </FormGroup>
       <NeedsBlock
         received={["डिज़ाइन प्रशिक्षण", "प्रमाणन", "बाजार जुड़ाव", "कार्यशील पूँजी"]}

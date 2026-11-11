@@ -45,7 +45,8 @@ export const householdFields = z.object({
   [FIELD.mobile]: z.preprocess((v) => (v === "" ? undefined : v), mobile.optional()),
   [FIELD.age]: z.coerce.number().int().positive().max(120).optional().catch(undefined),
   [FIELD.guardian]: z.string().trim().optional().catch(undefined),
-  [FIELD.village]: z.string().trim().min(1).catch("बड़ांजी"),
+  // Required only for a new household (a Didi on record keeps her village).
+  [FIELD.village]: z.string().trim().max(100).optional().catch(undefined),
   [FIELD.shg]: z.string().trim().optional().catch(undefined),
   [FIELD.category]: z.string().optional().catch(undefined),
 })

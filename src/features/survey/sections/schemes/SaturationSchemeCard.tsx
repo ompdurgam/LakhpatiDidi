@@ -70,11 +70,11 @@ export function SaturationSchemeCard({
       </div>
       {scheme === "मनरेगा जॉब कार्ड" && (
         <div className="mgnrega-extra">
-          <TextControl label="जॉब कार्ड नंबर" value="CG-04-006-021-00123" />
+          <TextControl label="जॉब कार्ड नंबर" value="" />
           <div className="quarter-wages">
-            <TextControl label="Q1 मजदूरी ₹" value="8,400" type="number" />
-            <TextControl label="Q2 मजदूरी ₹" value="6,800" type="number" />
-            <TextControl label="Q3 मजदूरी ₹" value="7,200" type="number" />
+            <TextControl label="Q1 मजदूरी ₹" value="" type="number" />
+            <TextControl label="Q2 मजदूरी ₹" value="" type="number" />
+            <TextControl label="Q3 मजदूरी ₹" value="" type="number" />
           </div>
         </div>
       )}

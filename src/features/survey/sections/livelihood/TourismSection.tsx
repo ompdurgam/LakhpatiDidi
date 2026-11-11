@@ -8,7 +8,7 @@ import { useTr } from "@/i18n/tr"
 export function TourismSection({ baseline }: { baseline: number }) {
   const tr = useTr()
   const [engaged, setEngaged] = useState("हाँ")
-  const [income, setIncome] = useState(8000)
+  const [income, setIncome] = useState(0)
   return (
     <div className="section-form livelihood-form">
       <IncomeMismatch income={engaged === "हाँ" ? income : 0} baseline={baseline} />

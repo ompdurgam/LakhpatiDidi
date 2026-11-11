@@ -10,20 +10,13 @@ import { useTr } from "@/i18n/tr"
 
 export function AgricultureSection({ baseline }: { baseline: number }) {
   const tr = useTr()
-  const [irrigationMonths, setIrrigationMonths] = useState(6)
+  const [irrigationMonths, setIrrigationMonths] = useState(0)
   const [crops, setCrops] = useState<CropRow[]>([
-    {
-      crop: "धान",
-      season: "खरीफ",
-      acres: 1.5,
-      production: 18,
-      sold: 12,
-      consumed: 6,
-    },
+    { crop: "धान", season: "खरीफ", acres: 0, production: 0, sold: 0, consumed: 0 },
   ])
   const [income, setIncome] = useState({
-    kharif: 25000,
-    rabi: 7000,
+    kharif: 0,
+    rabi: 0,
     horticulture: 0,
   })
   const total = income.kharif + income.rabi + income.horticulture

@@ -1,6 +1,7 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 
 import { ChipField, ChipGroup } from "@/components/ui/ChipGroup"
+import { SurveyDraftContext } from "@/components/ui/FormDraftContext"
 import { FormGroup } from "@/components/ui/FormGroup"
 import { Icon } from "@/components/ui/Icon"
 import { TextControl } from "@/components/ui/TextControl"
@@ -10,11 +11,10 @@ import { useTr } from "@/i18n/tr"
 
 export function WageSection({ baseline }: { baseline: number }) {
   const tr = useTr()
-  const [rows, setRows] = useState<WageRow[]>([
-    { member: "राम कश्यप", skill: "राजमिस्त्री", months: 6 },
-    { member: "सुनीता कश्यप", skill: "मनरेगा श्रमिक", months: 4 },
-  ])
-  const [income, setIncome] = useState(28000)
+  const [rows, setRows] = useState<WageRow[]>([{ member: "", skill: "", months: 0 }])
+  const [income, setIncome] = useState(0)
+  // Section D's job card number, when entered there.
+  const jobCard = useContext(SurveyDraftContext)?.["जॉब कार्ड नंबर"]
   const update = (index: number, patch: Partial<WageRow>) =>
     setRows(rows.map((row, rowIndex) => (rowIndex === index ? { ...row, ...patch } : row)))
   return (
@@ -72,10 +72,10 @@ export function WageSection({ baseline }: { baseline: number }) {
           <span>
             {tr("मनरेगा जॉब कार्ड")} <b>{tr("खंड D से स्वतः")}</b>
           </span>
-          <strong>CG-04-006-021-00123</strong>
+          <strong>{jobCard || "—"}</strong>
         </div>
         <div className="control-grid">
-          <TextControl label="कार्य दिवस" value="68" type="number" />
+          <TextControl label="कार्य दिवस" value="" type="number" />
           <label className="text-control">
             <span>{tr("मजदूरी स्थिति")}</span>
             <select defaultValue="समय पर">

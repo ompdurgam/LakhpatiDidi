@@ -1,70 +1,89 @@
 import { useState } from "react"
 
 import { Icon } from "@/components/ui/Icon"
+import { type GeoLevel, useGeoArea } from "@/features/geo/useGeo"
 import { useTr } from "@/i18n/tr"
 
-export function AdminGeography({ onNotify }: { onNotify: (message: string) => void }) {
+const CHILD_LABEL: Record<string, string> = {
+  district: "ब्लॉक",
+  block: "GP",
+  gram_panchayat: "गाँव",
+}
+
+/** The LGD geography master (state → district → block → GP → village), loaded level by level. */
+export function AdminGeography() {
   const tr = useTr()
-  const [open, setOpen] = useState(["बस्तर", "जगदलपुर", "बड़ांजी GP"])
-  const toggle = (item: string) =>
-    setOpen(open.includes(item) ? open.filter((value) => value !== item) : [...open, item])
   return (
     <section className="card geography-admin">
       <div className="card-head">
         <div>
           <h3>{tr("भूगोल मास्टर")}</h3>
-          <p>{tr("जिला → ब्लॉक → GP → गाँव")}</p>
+          <p>{tr("जिला → ब्लॉक → GP → गाँव • LGD कोड सहित")}</p>
         </div>
-        <button className="primary" onClick={() => onNotify(tr("LokOS आयात शुरू हुआ"))}>
-          <Icon name="download" size={14} /> {tr("LokOS से SHG/VO/CLF आयात")}
-        </button>
       </div>
       <div className="geo-tree">
-        <button className="level district" onClick={() => toggle("बस्तर")}>
-          <Icon name="chevron" size={14} />
-          <strong>{tr("बस्तर जिला")}</strong>
-          <span>{tr("7 ब्लॉक")}</span>
-        </button>
-        {open.includes("बस्तर") && (
-          <div>
-            <button className="level block" onClick={() => toggle("जगदलपुर")}>
-              <Icon name="chevron" size={14} />
-              <strong>{tr("जगदलपुर ब्लॉक")}</strong>
-              <span>68 GP</span>
-            </button>
-            {open.includes("जगदलपुर") && (
-              <div>
-                <button className="level gp" onClick={() => toggle("बड़ांजी GP")}>
-                  <Icon name="chevron" size={14} />
-                  <strong>{tr("बड़ांजी GP")}</strong>
-                  <span>{tr("5 गाँव")}</span>
-                </button>
-                {open.includes("बड़ांजी GP") && (
-                  <div>
-                    {["बड़ांजी", "नानगुर", "धुरगुड़ा", "आड़ावाल", "कुम्हरावंड"].map((village) => (
-                      <button className="level village" key={village}>
-                        <Icon name="map" size={13} />
-                        <strong>{tr(village)}</strong>
-                        <span>12 SHG • 2 VO</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-            <button className="level block">
-              <Icon name="chevron" size={14} />
-              <strong>{tr("बकावंड ब्लॉक")}</strong>
-              <span>52 GP</span>
-            </button>
-            <button className="level block">
-              <Icon name="chevron" size={14} />
-              <strong>{tr("तोकापाल ब्लॉक")}</strong>
-              <span>43 GP</span>
-            </button>
-          </div>
-        )}
+        <Children level="state" code="CG" />
       </div>
     </section>
+  )
+}
+
+/** The child areas of one area; each can be expanded in turn. */
+function Children({ level, code }: { level: GeoLevel; code: string }) {
+  const tr = useTr()
+  const { data, isLoading, error } = useGeoArea(level, code)
+  if (isLoading) return <p className="empty-note">{tr("लोड हो रहा है…")}</p>
+  if (error || !data) return <p className="empty-note">{error?.message ?? tr("डेटा नहीं मिला")}</p>
+  return (
+    <div>
+      {data.children.map((child) => (
+        <Node
+          key={child.code ?? child.name}
+          level={data.childLevel}
+          code={child.code}
+          name={child.name}
+          childCount={child.childCount}
+          households={child.households}
+        />
+      ))}
+    </div>
+  )
+}
+
+function Node({
+  level,
+  code,
+  name,
+  childCount,
+  households,
+}: {
+  level: GeoLevel
+  code: string | null
+  name: string
+  childCount: number
+  households: number
+}) {
+  const tr = useTr()
+  const [open, setOpen] = useState(false)
+  const expandable = Boolean(code) && level !== "village"
+  const levelClass = level === "gram_panchayat" ? "gp" : level
+  return (
+    <>
+      <button
+        className={`level ${levelClass}`}
+        onClick={() => expandable && code && setOpen(!open)}
+      >
+        <Icon name={level === "village" ? "map" : "chevron"} size={level === "village" ? 13 : 14} />
+        <strong>{name}</strong>
+        <span>
+          {code ? `LGD ${code}` : tr("LGD कोड नहीं")}
+          {CHILD_LABEL[level]
+            ? ` • ${childCount.toLocaleString("en-IN")} ${tr(CHILD_LABEL[level])}`
+            : ""}
+          {` • ${households.toLocaleString("en-IN")} ${tr("दीदी")}`}
+        </span>
+      </button>
+      {open && code && <Children level={level} code={code} />}
+    </>
   )
 }

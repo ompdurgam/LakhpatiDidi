@@ -47,14 +47,6 @@ export function SurveyCompanion({
           </button>
         ))}
       </div>
-      <div className="card gps-card">
-        <Icon name="map" />
-        <div>
-          <strong>{tr("GPS कैप्चर हुआ")}</strong>
-          <span>19.0748° N, 82.0080° E • ±8m</span>
-        </div>
-        <span className="status green">{tr("सत्यापित")}</span>
-      </div>
       <button className="primary companion-cta" onClick={() => setScreen("recommend")}>
         {tr("सर्वे जमा कर योजना सुझाव देखें")} <Icon name="arrow" size={17} />
       </button>

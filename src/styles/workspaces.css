@@ -1999,3 +1999,25 @@
 .worklist-pager button:disabled {
   opacity: 0.45;
 }
+
+/* Read-only scheme terms (admin scheme master). */
+dl.editor-fields {
+  margin: 0;
+}
+dl.editor-fields dt {
+  color: #879189;
+  font-size: calc(13px * var(--font-scale));
+}
+dl.editor-fields dd {
+  margin: 2px 0 0;
+  font-weight: 600;
+}
+
+/* Dashboard area picker (users covering several districts / blocks). */
+.workspace-select-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #6d776f;
+  font-size: calc(14px * var(--font-scale));
+}

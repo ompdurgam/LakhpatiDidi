@@ -1,7 +1,8 @@
 // The surveyor's work list: Didis already on record (e.g. from the state PLD
 // list) in her area, and the details that prefill a survey for one of them.
 import { one, query } from "../../db/pool.ts"
-import type { Row } from "../../shared/types.ts"
+import type { Row, SessionUser } from "../../shared/types.ts"
+import { sessionCondition } from "../auth/assignments.ts"
 
 export const PAGE_SIZE = 20
 
@@ -12,25 +13,18 @@ const PLACE_JOINS = `
   JOIN master_districts d        ON d.id  = b.district_id
   LEFT JOIN master_shgs s        ON s.id  = h.shg_id`
 
-/** A user's area: her village, else block, else district; state staff see everything. */
-async function areaOf(userId: number) {
-  const u = await one<Row>(
-    "SELECT village_id, block_id, district_id FROM master_users WHERE id = ?",
-    [userId],
-  )
-  if (u?.village_id) return { sql: "h.village_id = ?", params: [u.village_id] }
-  if (u?.block_id) return { sql: "gp.block_id = ?", params: [u.block_id] }
-  if (u?.district_id) return { sql: "b.district_id = ?", params: [u.district_id] }
-  return { sql: "TRUE", params: [] as unknown[] }
+/** The session's areas as a condition over v / gp / b ("TRUE" when statewide). */
+export async function areaOf(user: SessionUser) {
+  return (await sessionCondition(user)) ?? { sql: "TRUE", params: [] as unknown[] }
 }
 
 export type SurveyStatus = "pending" | "done" | "all"
 
 export async function listForSurvey(
-  userId: number,
+  user: SessionUser,
   opts: { q: string; status: SurveyStatus; page: number },
 ) {
-  const area = await areaOf(userId)
+  const area = await areaOf(user)
   const [counts] = await query<Row>(
     `SELECT COUNT(*) AS total, COALESCE(SUM(h.surveyed_at IS NULL), 0) AS pending
      FROM tbl_households h ${PLACE_JOINS} WHERE ${area.sql}`,
@@ -77,8 +71,8 @@ export async function listForSurvey(
 }
 
 /** One Didi's record, to prefill her survey. Undefined outside the user's area. */
-export async function householdForSurvey(userId: number, code: string) {
-  const area = await areaOf(userId)
+export async function householdForSurvey(user: SessionUser, code: string) {
+  const area = await areaOf(user)
   const r = await one<Row>(
     `SELECT h.hh_code, h.lokos_member_code, h.didi_name, h.guardian_name, h.age, h.mobile,
             h.social_category, h.surveyed_at, d.name_hi AS district, b.name_hi AS block,

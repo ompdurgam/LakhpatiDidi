@@ -12,7 +12,7 @@ export function ForestProduceSection({ baseline }: { baseline: number }) {
   const [rows, setRows] = useState<NtfpRow[]>([
     { produce: "महुआ", months: "मार्च–मई", days: 45, gap: "भंडारण" },
   ])
-  const [income, setIncome] = useState(18500)
+  const [income, setIncome] = useState(0)
   const update = (index: number, patch: Partial<NtfpRow>) =>
     setRows(rows.map((row, rowIndex) => (rowIndex === index ? { ...row, ...patch } : row)))
   return (
@@ -87,10 +87,10 @@ export function ForestProduceSection({ baseline }: { baseline: number }) {
             "कोसा",
             "शहद",
             "सीताफल",
-          ].map((item, index) => (
+          ].map((item) => (
             <label key={item}>
               <span>{tr(item)}</span>
-              <input type="number" defaultValue={index === 0 ? 18500 : 0} />
+              <input type="number" defaultValue={0} />
             </label>
           ))}
         </div>

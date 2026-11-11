@@ -6,6 +6,7 @@ import { useSession } from "@/stores/session"
 
 import { DidiWorklist } from "./DidiWorklist"
 import { type SurveyStatusFilter, useSurveyHouseholds } from "./surveyHouseholds"
+import { useVillageOptions } from "./village/useVillageProfile"
 
 export function SurveyHome({
   setScreen,
@@ -16,6 +17,8 @@ export function SurveyHome({
   onOpenSurvey: (code?: string) => void
 }) {
   const tr = useTr()
+  const { data: villages } = useVillageOptions("")
+  const profiled = villages?.filter((v) => v.savedAt).length ?? 0
   const userName = useSession((s) => s.user?.name ?? "")
   const [query, setQuery] = useState("")
   const [search, setSearch] = useState("")
@@ -38,7 +41,7 @@ export function SurveyHome({
         <span>{tr("ऑफलाइन मोड • डेटा फोन में सुरक्षित है")}</span>
       </div>
       <div className="mobile-greeting">
-        <small>{tr("नमस्ते, {{name}}", { name: userName })}</small>
+        <small>{tr("नमस्ते, {{name}}", { name: tr(userName) })}</small>
         <h3>{tr("आज का फील्ड कार्य")}</h3>
         <p>
           {tr("{{n}} दीदी का सर्वे बाकी है", { n: (stats?.pending ?? 0).toLocaleString("en-IN") })}
@@ -66,22 +69,22 @@ export function SurveyHome({
           <Icon name="building" size={19} />
         </span>
         <div>
-          <strong>{tr("ग्राम प्रोफ़ाइल – बड़ांजी")}</strong>
-          <small>{tr("अंतिम अपडेट: 12 नवंबर 2026")}</small>
-          <i>
-            <b />
-          </i>
+          <strong>{tr("ग्राम प्रोफ़ाइल")}</strong>
+          <small>
+            {profiled
+              ? tr("{{n}} गाँव की प्रोफ़ाइल सहेजी गई", { n: profiled })
+              : tr("अभी किसी गाँव की प्रोफ़ाइल नहीं")}
+          </small>
         </div>
-        <em>{tr("{{n}}% पूर्ण", { n: 70 })}</em>
         <Icon name="chevron" size={16} />
       </button>
-      <button className="monthly-income-card">
+      <button className="monthly-income-card" onClick={() => setScreen("tracker")}>
         <span>
           <Icon name="trend" size={19} />
         </span>
         <div>
           <strong>{tr("मासिक आय दर्ज करें")}</strong>
-          <small>{tr("12 PLD बाकी • नवंबर 2026")}</small>
+          <small>{tr("सर्वेक्षित दीदी की इस माह की आय")}</small>
         </div>
         <Icon name="chevron" size={16} />
       </button>

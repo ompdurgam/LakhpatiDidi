@@ -3,6 +3,18 @@ import { useState } from "react"
 import { Icon } from "@/components/ui/Icon"
 import type { IncomeEntry } from "@/features/survey/types"
 import { useTr } from "@/i18n/tr"
+import { useSession } from "@/stores/session"
+
+/** Income-baseline (section B) sources each livelihood section (E–K, by step index) covers. */
+const SECTION_SOURCES: Record<number, string[]> = {
+  4: ["फसल/खेती", "अन्य कृषि/बागवानी"],
+  5: ["पशुपालन"],
+  6: ["मत्स्य पालन"],
+  7: ["वन उपज"],
+  8: ["गैर-कृषि उद्यम"],
+  9: ["पर्यटन"],
+  10: ["स्थानीय मजदूरी", "प्रवासन/रोजगार"],
+}
 
 export function SurveyReview({
   sections,
@@ -21,17 +33,28 @@ export function SurveyReview({
   const [open, setOpen] = useState(0)
   const [photo, setPhoto] = useState(false)
   const [method, setMethod] = useState("OTP")
-  const [otp, setOtp] = useState(["4", "8", "2", "1", "9", "6"])
+  const [otp, setOtp] = useState(["", "", "", "", "", ""])
+  const [photoAt, setPhotoAt] = useState("")
+  const user = useSession((s) => s.user)
+  const today = new Date().toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  })
   const [declaration, setDeclaration] = useState(false)
   const net = incomeEntries.reduce((sum, entry) => sum + entry.gross - entry.cost, 0)
   const applicableSections = sections
     .map((name, index) => ({ name, index }))
     .filter((item) => item.index < 11 && isApplicable(item.index))
-  const warnings = [
-    { section: "F पशुधन", detail: "खंड B ₹0 • विवरण ₹18,000" },
-    { section: "G मत्स्य", detail: "खंड B ₹0 • विवरण ₹15,000" },
-    { section: "I गैर-कृषि", detail: "खंड B ₹0 • विवरण ₹12,000" },
-  ]
+  // A livelihood section filled in (E–K) whose income baseline (section B) is still ₹0.
+  const baseline = (names: string[]) =>
+    incomeEntries
+      .filter((e) => names.includes(e.name))
+      .reduce((sum, e) => sum + e.gross - e.cost, 0)
+  const warnings = Object.entries(SECTION_SOURCES)
+    .filter(([index, names]) => isApplicable(Number(index)) && baseline(names) <= 0)
+    .map(([index]) => ({ index: Number(index), section: sections[Number(index)] }))
+  const activeSources = incomeEntries.filter((e) => e.gross - e.cost > 0).length
   const updateOtp = (index: number, value: string) =>
     setOtp(otp.map((digit, digitIndex) => (digitIndex === index ? value.slice(-1) : digit)))
   return (
@@ -42,34 +65,25 @@ export function SurveyReview({
         </span>
         <div>
           <strong>{tr("जमा करने से पहले जाँचें")}</strong>
-          <p>{tr("अधूरे उत्तर और आय अंतर ठीक करें। अंतिम अपडेट: 18 नवंबर 2026")}</p>
+          <p>{tr("अधूरे उत्तर और आय अंतर ठीक करें।")}</p>
         </div>
       </div>
       <div className="review-accordion">
         {applicableSections.map(({ name, index }) => {
-          const incomplete = index === 2 || index === 6
           return (
             <section key={name} className={open === index ? "open" : ""}>
               <button
                 className="review-accordion-head"
                 onClick={() => setOpen(open === index ? -1 : index)}
               >
-                <span className={incomplete ? "warning" : "complete"}>
-                  {incomplete ? "!" : "✓"}
-                </span>
+                <span className="complete">{index + 1}</span>
                 <strong>{name}</strong>
-                <em className={incomplete ? "warning" : ""}>
-                  {incomplete ? tr("⚠ 2 अधूरे") : tr("पूर्ण")}
-                </em>
+                <em />
                 <b>{open === index ? "−" : "+"}</b>
               </button>
               {open === index && (
                 <div className="review-accordion-body">
-                  <p>
-                    {incomplete
-                      ? tr("2 उत्तरों पर ध्यान देना आवश्यक है।")
-                      : tr("सभी अनिवार्य उत्तर पूरे हैं।")}
-                  </p>
+                  <p>{tr("इस खंड के उत्तर बदलने के लिए संपादित करें।")}</p>
                   <button onClick={() => setStep(index)}>
                     {tr("संपादित करें")} <Icon name="arrow" size={13} />
                   </button>
@@ -83,20 +97,15 @@ export function SurveyReview({
         <h4>
           {tr("आय मिलान चेतावनी")} <span>{warnings.length}</span>
         </h4>
+        {warnings.length === 0 && <p className="empty-note">{tr("कोई आय अंतर नहीं")}</p>}
         {warnings.map((item) => (
-          <div key={item.section}>
+          <div key={item.index}>
             <Icon name="alert" size={14} />
             <p>
-              <strong>{tr(item.section)}</strong>
-              <span>{tr(item.detail)}</span>
+              <strong>{item.section}</strong>
+              <span>{tr("आजीविका चुनी गई पर खंड B में आय ₹0")}</span>
             </p>
-            <button
-              onClick={() =>
-                setStep(item.section.startsWith("F") ? 5 : item.section.startsWith("G") ? 6 : 8)
-              }
-            >
-              {tr("संपादित करें")}
-            </button>
+            <button onClick={() => setStep(1)}>{tr("संपादित करें")}</button>
           </div>
         ))}
       </section>
@@ -115,7 +124,8 @@ export function SurveyReview({
           </b>
         </div>
         <p>
-          {tr("सक्रिय आय स्रोत: 3 • लक्ष्य तक ₹{{amount}} बाकी", {
+          {tr("सक्रिय आय स्रोत: {{n}} • लक्ष्य तक ₹{{amount}} बाकी", {
+            n: activeSources,
             amount: Math.max(0, 100000 - net).toLocaleString("en-IN"),
           })}
         </p>
@@ -124,14 +134,21 @@ export function SurveyReview({
         <h4>{tr("दीदी की पहचान और सहमति")}</h4>
         <button
           className={`photo-capture ${photo ? "captured" : ""}`}
-          onClick={() => setPhoto(true)}
+          onClick={() => {
+            setPhoto(true)
+            setPhotoAt(
+              new Date().toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" }),
+            )
+          }}
         >
           {photo ? (
             <>
-              <span className="didi-photo">SK</span>
+              <span className="didi-photo">
+                <Icon name="check" size={16} />
+              </span>
               <div>
                 <strong>{tr("फोटो कैप्चर हुआ")}</strong>
-                <small>{tr("18 नवंबर 2026 • 11:42 AM")}</small>
+                <small>{photoAt}</small>
               </div>
               <Icon name="check" size={18} />
             </>
@@ -164,7 +181,7 @@ export function SurveyReview({
         </div>
         {method === "OTP" ? (
           <>
-            <p className="otp-note">{tr("98••• ••412 पर भेजा गया 6-अंकीय OTP")}</p>
+            <p className="otp-note">{tr("दीदी से प्राप्त 6-अंकीय OTP दर्ज करें")}</p>
             <div className="otp-boxes">
               {otp.map((digit, index) => (
                 <input
@@ -176,7 +193,6 @@ export function SurveyReview({
                 />
               ))}
             </div>
-            <button className="resend-otp">{tr("OTP दोबारा भेजें")}</button>
           </>
         ) : (
           <button className="thumb-capture">
@@ -196,7 +212,9 @@ export function SurveyReview({
         />
         <span>
           {tr("मैं घोषणा करता/करती हूँ कि यह जानकारी परिवार के समक्ष सत्यापित की गई है।")}
-          <small>{tr("गीता नेताम • CRP • 18 नवंबर 2026")}</small>
+          <small>
+            {tr(user?.name ?? "")} • {tr(user?.designation ?? "")} • {today}
+          </small>
         </span>
       </label>
       <button

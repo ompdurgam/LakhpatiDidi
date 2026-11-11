@@ -22,8 +22,8 @@ export function ConvergenceDetails() {
         </ChipField>
         {bankLoan === "हाँ" && (
           <div className="control-grid">
-            <TextControl label="राशि ₹" value="50,000" type="number" />
-            <TextControl label="वर्ष" value="2026" type="number" />
+            <TextControl label="राशि ₹" value="" type="number" />
+            <TextControl label="वर्ष" value="" type="number" />
           </div>
         )}
       </div>
@@ -38,8 +38,8 @@ export function ConvergenceDetails() {
         </ChipField>
         {nrlmLoan === "हाँ" && (
           <div className="control-grid">
-            <TextControl label="राशि ₹" value="30,000" type="number" />
-            <TextControl label="वर्ष" value="2025" type="number" />
+            <TextControl label="राशि ₹" value="" type="number" />
+            <TextControl label="वर्ष" value="" type="number" />
           </div>
         )}
       </div>

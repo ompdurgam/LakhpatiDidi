@@ -4,22 +4,37 @@ import { exec, one, transaction } from "../../db/pool.ts"
 import { badRequest, notFound } from "../../shared/errors.ts"
 import { financialYear } from "../../shared/format.ts"
 import { msg } from "../../shared/i18n.ts"
-import type { Row } from "../../shared/types.ts"
+import type { Row, SessionUser } from "../../shared/types.ts"
 import { parse } from "../../shared/validation.ts"
 import { categoryCode, lifecycleFor } from "../households/households.labels.ts"
+import { areaOf } from "./surveyList.ts"
 import { FIELD, householdFields, type IncomeEntry, surveyBody } from "./surveys.schemas.ts"
 
 const net = (e: IncomeEntry) => e.gross - e.cost
 
-/** Next HH-BST-JGD-###### code (locks the table for the transaction). */
-async function nextHouseholdCode(db: PoolConnection) {
+/**
+ * Next HH-<district LGD>-<block LGD>-###### code for a household in this village,
+ * continuing the state-wide sequence used by the PLD import (locks the table).
+ */
+async function nextHouseholdCode(db: PoolConnection, villageId: number) {
+  const place = await one<Row>(
+    // LGD codes; places without one (not from the LGD import) use their master code.
+    `SELECT COALESCE(d.lgd_code, d.code) AS district, COALESCE(b.lgd_code, b.code) AS block
+     FROM master_villages v
+     JOIN master_gram_panchayats gp ON gp.id = v.gram_panchayat_id
+     JOIN master_blocks b           ON b.id  = gp.block_id
+     JOIN master_districts d        ON d.id  = b.district_id
+     WHERE v.id = ?`,
+    [villageId],
+    db,
+  )
   const row = await one<Row>(
     `SELECT COALESCE(MAX(CAST(SUBSTRING_INDEX(hh_code, '-', -1) AS UNSIGNED)), 0) + 1 AS next
      FROM tbl_households FOR UPDATE`,
     [],
     db,
   )
-  return `HH-BST-JGD-${String(row?.next ?? 1).padStart(6, "0")}`
+  return `HH-${place?.district}-${place?.block}-${String(row?.next ?? 1).padStart(6, "0")}`
 }
 
 /**
@@ -27,7 +42,9 @@ async function nextHouseholdCode(db: PoolConnection) {
  * the PLD list) or matched by mobile has her household updated; otherwise a
  * new household is created.
  */
-export async function submitSurvey(body: unknown, surveyorId: number) {
+export async function submitSurvey(body: unknown, user: SessionUser) {
+  const surveyorId = user.id
+  const area = await areaOf(user)
   const { householdCode, responses, incomeEntries, sections, consentMethod } = parse(
     surveyBody,
     body,
@@ -51,16 +68,29 @@ export async function submitSurvey(body: unknown, surveyorId: number) {
         )
       : undefined
     if (householdCode && !onRecord) throw notFound(msg("परिवार नहीं मिला"))
-    // A Didi on record stays in her village; a new one is placed by the village chosen.
-    const village = await one<Row>(
-      onRecord
-        ? "SELECT id, name_hi FROM master_villages WHERE id = ?"
-        : "SELECT id, name_hi FROM master_villages WHERE name_hi = ?",
-      [onRecord ? onRecord.village_id : villageName],
-      db,
-    )
+    if (!onRecord && !villageName) throw badRequest(msg("गाँव चुनें"))
+    // A Didi on record stays in her village; a new one is placed in the village chosen,
+    // looked up inside the surveyor's own areas (village names repeat across the state).
+    const village = onRecord
+      ? await one<Row>(
+          "SELECT id, name_hi FROM master_villages WHERE id = ?",
+          [onRecord.village_id],
+          db,
+        )
+      : await one<Row>(
+          `SELECT v.id, v.name_hi
+           FROM master_villages v
+           JOIN master_gram_panchayats gp ON gp.id = v.gram_panchayat_id
+           JOIN master_blocks b           ON b.id  = gp.block_id
+           WHERE (v.name_hi = ? OR v.name_en = ?) AND ${area.sql}
+           LIMIT 1`,
+          [villageName, villageName, ...area.params],
+          db,
+        )
     if (!village)
-      throw badRequest(msg('गाँव "{{village}}" भूगोल मास्टर में नहीं है', { village: villageName }))
+      throw badRequest(
+        msg('गाँव "{{village}}" भूगोल मास्टर में नहीं है', { village: villageName ?? "" }),
+      )
     // SHG names repeat across the state, so only an SHG of her village counts.
     const shg = await one<Row>(
       "SELECT id FROM master_shgs WHERE name = ? AND village_id = ?",
@@ -103,7 +133,7 @@ export async function submitSurvey(body: unknown, surveyorId: number) {
         db,
       )
     } else {
-      hhCode = await nextHouseholdCode(db)
+      hhCode = await nextHouseholdCode(db, village.id)
       const insert = await exec(
         `INSERT INTO tbl_households (hh_code, didi_name, guardian_name, age, village_id, mobile, shg_id,
            social_category, current_annual_income, active_income_sources, lifecycle_status, surveyed_by, surveyed_at)

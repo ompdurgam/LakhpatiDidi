@@ -16,16 +16,16 @@ export function LivestockSection({ baseline }: { baseline: number }) {
     ["pig", "🐖", "सूअर/अन्य"],
   ]
   const [counts, setCounts] = useState<Record<string, number>>({
-    cattle: 2,
-    goat: 4,
-    poultry: 12,
+    cattle: 0,
+    goat: 0,
+    poultry: 0,
     duck: 0,
     pig: 0,
   })
   const [incomes, setIncomes] = useState<Record<string, number>>({
-    cattle: 8000,
-    goat: 6000,
-    poultry: 4000,
+    cattle: 0,
+    goat: 0,
+    poultry: 0,
     duck: 0,
     pig: 0,
   })

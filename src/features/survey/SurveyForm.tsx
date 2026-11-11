@@ -95,24 +95,14 @@ function SurveyFormBody({
     }
   }
   const [incomeEntries, setIncomeEntries] = useState<IncomeEntry[]>([
-    {
-      name: "फसल/खेती",
-      months: ["Jun", "Jul", "Aug", "Sep", "Oct", "Nov"],
-      gross: 42000,
-      cost: 10000,
-    },
+    { name: "फसल/खेती", months: [], gross: 0, cost: 0 },
     { name: "अन्य कृषि/बागवानी", months: [], gross: 0, cost: 0 },
     { name: "पशुपालन", months: [], gross: 0, cost: 0 },
     { name: "मत्स्य पालन", months: [], gross: 0, cost: 0 },
-    { name: "वन उपज", months: ["Mar", "Apr", "May"], gross: 24000, cost: 5500 },
+    { name: "वन उपज", months: [], gross: 0, cost: 0 },
     { name: "गैर-कृषि उद्यम", months: [], gross: 0, cost: 0 },
     { name: "पर्यटन", months: [], gross: 0, cost: 0 },
-    {
-      name: "स्थानीय मजदूरी",
-      months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
-      gross: 30000,
-      cost: 2000,
-    },
+    { name: "स्थानीय मजदूरी", months: [], gross: 0, cost: 0 },
     { name: "प्रवासन/रोजगार", months: [], gross: 0, cost: 0 },
     { name: "अन्य", months: [], gross: 0, cost: 0 },
   ])

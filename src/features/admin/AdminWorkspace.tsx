@@ -1,8 +1,7 @@
-import { useState } from "react"
 import { useNavigate, useParams } from "react-router"
 
-import { Icon } from "@/components/ui/Icon"
 import { AdminModule } from "@/features/admin/AdminModule"
+import { AdminSchemes } from "@/features/admin/AdminSchemes"
 import { useTr } from "@/i18n/tr"
 
 export function AdminWorkspace({ onNotify }: { onNotify: (message: string) => void }) {
@@ -12,7 +11,6 @@ export function AdminWorkspace({ onNotify }: { onNotify: (message: string) => vo
   // URL /admin/survey ↔ internal "forms" tab
   const activeAdmin = module === "survey" ? "forms" : module
   const setActiveAdmin = (key: string) => navigate(`/admin/${key === "forms" ? "survey" : key}`)
-  const [ruleResult, setRuleResult] = useState<null | boolean>(null)
   const adminTabs = [
     ["schemes", "योजना मास्टर"],
     ["mapping", "विभाग मैपिंग"],
@@ -30,9 +28,6 @@ export function AdminWorkspace({ onNotify }: { onNotify: (message: string) => vo
           <h2>{tr("पोर्टल कॉन्फ़िगरेशन")}</h2>
           <p>{tr("योजनाएँ, पात्रता नियम, उपयोगकर्ता और सर्वे फॉर्म प्रबंधित करें")}</p>
         </div>
-        <button className="primary" onClick={() => onNotify(tr("बदलाव प्रकाशित किए गए"))}>
-          <Icon name="check" size={17} /> {tr("बदलाव प्रकाशित करें")}
-        </button>
       </div>
       <div className="admin-tabs">
         {adminTabs.map(([key, label]) => (
@@ -46,189 +41,7 @@ export function AdminWorkspace({ onNotify }: { onNotify: (message: string) => vo
         ))}
       </div>
       {activeAdmin === "schemes" ? (
-        <div className="admin-grid">
-          <section className="card scheme-master">
-            <div className="card-head">
-              <div>
-                <h3>{tr("योजनाएँ")}</h3>
-                <p>{tr("148 सक्रिय • 14 विभाग")}</p>
-              </div>
-              <button className="primary">
-                <Icon name="plus" size={15} /> {tr("नई योजना")}
-              </button>
-            </div>
-            <label className="admin-search">
-              <Icon name="search" size={16} />
-              <input placeholder={tr("योजना खोजें...")} />
-            </label>
-            {[
-              "PMMSY",
-              "बैकयार्ड पोल्ट्री",
-              "NHM फल रोपण",
-              "PMEGP",
-              "वन धन / VDVK",
-              "CG Homestay Policy",
-            ].map((x, index) => (
-              <button key={x} className={index === 0 ? "active" : ""}>
-                <span className="scheme-glyph">
-                  <Icon name="scheme" size={17} />
-                </span>
-                <div>
-                  <strong>{tr(x)}</strong>
-                  <small>
-                    {tr(["मत्स्य", "पशुपालन", "उद्यानिकी", "उद्योग", "वन", "पर्यटन"][index])}{" "}
-                    {tr("विभाग")}
-                  </small>
-                </div>
-                <span className="status green">{tr("सक्रिय")}</span>
-                <Icon name="chevron" size={16} />
-              </button>
-            ))}
-          </section>
-          <section className="card scheme-editor">
-            <div className="card-head">
-              <div>
-                <h3>{tr("PMMSY संपादित करें")}</h3>
-                <p>{tr("अंतिम अपडेट 18 मई 2026")}</p>
-              </div>
-              <span className="toggle-on">
-                <i /> {tr("सक्रिय")}
-              </span>
-            </div>
-            <div className="editor-fields">
-              <label>
-                <span>{tr("योजना नाम (हिंदी)")}</span>
-                <input defaultValue="प्रधानमंत्री मत्स्य संपदा योजना" />
-              </label>
-              <label>
-                <span>Scheme name (English)</span>
-                <input defaultValue="Pradhan Mantri Matsya Sampada Yojana" />
-              </label>
-              <label>
-                <span>{tr("विभाग")}</span>
-                <select defaultValue="मत्स्य विभाग">
-                  <option value="मत्स्य विभाग">{tr("मत्स्य विभाग")}</option>
-                </select>
-              </label>
-              <label>
-                <span>{tr("SLA दिन")}</span>
-                <input defaultValue="15" />
-              </label>
-              <label className="full">
-                <span>{tr("लाभ / सब्सिडी")}</span>
-                <textarea defaultValue={tr("परियोजना लागत का 60% तक; अधिकतम ₹1,20,000")} />
-              </label>
-              <label className="full">
-                <span>{tr("उद्देश्य")}</span>
-                <textarea
-                  defaultValue={tr(
-                    "ग्रामीण मत्स्य पालक परिवारों की आय बढ़ाने हेतु तालाब निर्माण, उन्नयन और मत्स्य इनपुट सहायता।",
-                  )}
-                />
-              </label>
-              <div className="editor-chip-field full">
-                <span>{tr("लाभार्थी वर्ग")}</span>
-                <div>
-                  {["ST", "SC", "OBC", "महिला SHG", "FRA अधिकारधारी"].map((item) => (
-                    <button className="selected" key={item}>
-                      {tr(item)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="editor-chip-field full">
-                <span>{tr("आवश्यक दस्तावेज़")}</span>
-                <div>
-                  {[
-                    "आधार",
-                    "बैंक पासबुक",
-                    "फोटो",
-                    "तालाब पट्टा",
-                    "जाति प्रमाण",
-                    "SHG प्रस्ताव",
-                  ].map((item) => (
-                    <button className="selected" key={item}>
-                      {tr(item)}
-                      <Icon name="close" size={10} />
-                    </button>
-                  ))}
-                  <button>
-                    <Icon name="plus" size={11} /> {tr("जोड़ें")}
-                  </button>
-                </div>
-              </div>
-              <label className="full">
-                <span>{tr("कहाँ / कैसे आवेदन करें")}</span>
-                <textarea
-                  defaultValue={tr(
-                    "सहायक संचालक मत्स्य, संबंधित ब्लॉक कार्यालय। DPR और दस्तावेज़ पोर्टल से विभाग को भेजे जाएँ।",
-                  )}
-                />
-              </label>
-              <div className="editor-chip-field full">
-                <span>{tr("DPR टेम्पलेट फ़ील्ड")}</span>
-                <div>
-                  {[
-                    "तालाब क्षेत्रफल",
-                    "इकाई लागत",
-                    "फिंगरलिंग संख्या",
-                    "उत्पादन अनुमान",
-                    "बाजार दर",
-                    "संचालन लागत",
-                  ].map((item) => (
-                    <button className="selected" key={item}>
-                      {tr(item)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="subsidy-by-class full">
-                <span>{tr("वर्ग अनुसार अनुदान %")}</span>
-                <div>
-                  <label>
-                    {tr("SC/ST/महिला")}
-                    <input defaultValue="60%" />
-                  </label>
-                  <label>
-                    {tr("अन्य")}
-                    <input defaultValue="40%" />
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div className="rule-builder">
-              <div>
-                <h4>{tr("पात्रता नियम")}</h4>
-                <span>{tr("1 सक्रिय शर्त")}</span>
-              </div>
-              <div className="rule">
-                <span>survey.fisheries.pond_area</span>
-                <b>≥</b>
-                <span>0.25 acre</span>
-                <button>×</button>
-              </div>
-              <button className="test-rule-button" onClick={() => setRuleResult(true)}>
-                <Icon name="trend" size={14} /> {tr("नमूना परिवार पर नियम जाँचें")}
-              </button>
-              {ruleResult !== null && (
-                <div className={`rule-test-result ${ruleResult ? "matched" : "not-matched"}`}>
-                  <Icon name={ruleResult ? "check" : "close"} size={15} />
-                  <div>
-                    <strong>{ruleResult ? tr("नियम मिला") : tr("नियम नहीं मिला")}</strong>
-                    <span>{tr("सुनीता कश्यप • pond_area 0.50 acre ≥ 0.25 acre")}</span>
-                  </div>
-                  <button onClick={() => setRuleResult(false)}>{tr("Not-matched देखें")}</button>
-                </div>
-              )}
-            </div>
-            <div className="editor-footer">
-              <button className="secondary">{tr("पूर्वावलोकन")}</button>
-              <button className="primary" onClick={() => onNotify(tr("योजना मास्टर सुरक्षित हुआ"))}>
-                {tr("योजना सुरक्षित करें")}
-              </button>
-            </div>
-          </section>
-        </div>
+        <AdminSchemes />
       ) : (
         <AdminModule active={activeAdmin} onNotify={onNotify} />
       )}
