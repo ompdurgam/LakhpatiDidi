@@ -10,6 +10,7 @@ import { useAreaLabel } from "@/features/monitoring/useAreaLabel"
 import { useTr } from "@/i18n/tr"
 
 import { downloadHouseholdsCsv } from "./householdCsv"
+import { PldDownload } from "./PldDownload"
 
 /** The API sends at most this many rows (most recent codes first). */
 const REGISTER_LIMIT = 5000
@@ -157,7 +158,7 @@ export function HouseholdRegister({ onNotify }: { onNotify: (message: string) =>
                 ` • ${tr("सबसे हाल के {{n}} दिखाए गए", { n: REGISTER_LIMIT.toLocaleString("en-IN") })}`}
             </p>
           </div>
-          <span className="status blue">{tr("PLD रजिस्टर")}</span>
+          <PldDownload />
         </div>
         <div className="household-register-scroll">
           <table className="household-register-table">

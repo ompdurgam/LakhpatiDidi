@@ -2,7 +2,7 @@ import { Router } from "express"
 import { z } from "zod"
 
 import { query } from "../../db/pool.ts"
-import { currentUser } from "../../middleware/auth.ts"
+import { currentUser, requireRole } from "../../middleware/auth.ts"
 import { badRequest } from "../../shared/errors.ts"
 import { formatDate, initials } from "../../shared/format.ts"
 import { localized, msg } from "../../shared/i18n.ts"
@@ -12,6 +12,7 @@ import { audit } from "../audit/audit.service.ts"
 import { sessionCondition } from "../auth/assignments.ts"
 import { invalidateVillageStats } from "../monitoring/monitoring.area.ts"
 import { householdCode } from "../surveys/surveys.schemas.ts"
+import { exportHouseholds } from "./households.export.ts"
 import { categoryHi, lifecycleHi, type LifecycleStatus } from "./households.labels.ts"
 import { addMonthlyIncome, getTracker } from "./households.tracker.ts"
 
@@ -82,6 +83,16 @@ householdsRouter.post("/bulk", async (req, res) => {
   })
   res.json({ message: msg("{{n}} परिवार: {{action}}", { n: codes.length, action: msg(label) }) })
 })
+
+/** Excel of every Didi on record in the session's areas (block, district, state, admin). */
+householdsRouter.get(
+  "/export",
+  requireRole("block", "district", "state", "admin"),
+  async (req, res) => {
+    await audit(req, { action: "PLD सूची डाउनलोड", details: "Excel", entityType: "household" })
+    await exportHouseholds(currentUser(res), res)
+  },
+)
 
 /** One Didi's journey, applications, gaps and monthly income. */
 householdsRouter.get("/:code/tracker", async (req, res) => {

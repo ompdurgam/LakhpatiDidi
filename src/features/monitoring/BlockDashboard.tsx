@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState"
 import { Icon } from "@/components/ui/Icon"
 import { Kpi } from "@/components/ui/Kpi"
 import { ApplicationTable } from "@/features/applications/ApplicationTable"
+import { PldDownload } from "@/features/households/PldDownload"
 import { useTr } from "@/i18n/tr"
 
 import { AreaPicker, type PickedArea } from "./AreaPicker"
@@ -57,6 +58,7 @@ export function BlockDashboard({
         </div>
         <div className="welcome-actions">
           <AreaPicker data={data} onPick={setPicked} />
+          <PldDownload />
           <button className="primary" onClick={() => go("blcc")}>
             <Icon name="plus" size={17} /> {tr("BLCC बैठक मोड")}
           </button>

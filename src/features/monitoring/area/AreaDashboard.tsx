@@ -2,6 +2,7 @@ import { useState } from "react"
 
 import { EmptyState } from "@/components/ui/EmptyState"
 import { Kpi } from "@/components/ui/Kpi"
+import { PldDownload } from "@/features/households/PldDownload"
 import { useTr } from "@/i18n/tr"
 
 import { AreaPicker, type PickedArea } from "../AreaPicker"
@@ -40,7 +41,10 @@ export function AreaDashboard({ level }: { level: Exclude<DashLevel, "block"> })
             {tr("दीदी रिकॉर्ड में")}
           </p>
         </div>
-        <AreaPicker data={data} onPick={setPicked} />
+        <div className="welcome-actions">
+          <AreaPicker data={data} onPick={setPicked} />
+          <PldDownload />
+        </div>
       </div>
       <section className="monitor-kpis">
         <Kpi

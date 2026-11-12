@@ -387,5 +387,10 @@
   "सहेजा गया": "Saved",
   "सुझाव से वितरण तक": "From suggestion to delivery",
   "हर आवेदन खोलकर निर्णय दर्ज करें": "Open each application and record the decision",
-  "← दूसरी दीदी चुनें": "← Choose another Didi"
+  "← दूसरी दीदी चुनें": "← Choose another Didi",
+  "डाउनलोड नहीं हो सका": "Download failed",
+  "दीदी फोटो": "Didi photo",
+  "सर्वेयर घोषणा": "Surveyor declaration",
+  "PLD सूची (Excel)": "PLD list (Excel)",
+  "डाउनलोड हो रहा है… {{mb}} MB": "Downloading… {{mb}} MB"
 }
