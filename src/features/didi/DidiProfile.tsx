@@ -3,6 +3,7 @@ import { Link } from "react-router"
 import { Card } from "@/components/ui/Card"
 import { EmptyState } from "@/components/ui/EmptyState"
 import { Icon } from "@/components/ui/Icon"
+import { PageSkeleton } from "@/components/ui/PageSkeleton"
 import { StatusBadge } from "@/components/ui/StatusBadge"
 import { useTr } from "@/i18n/tr"
 
@@ -18,7 +19,7 @@ export function DidiProfile() {
   const tr = useTr()
   const { data, isLoading, error } = useDidi()
   if (error) return <EmptyState>{(error as Error).message}</EmptyState>
-  if (isLoading || !data) return <EmptyState>{tr("लोड हो रहा है…")}</EmptyState>
+  if (isLoading || !data) return <PageSkeleton />
   const { profile: p, meter, incomeSources, gaps, applications, tasks } = data
   const facts: [string, string | null][] = [
     ["पिता / पति", p.guardian],

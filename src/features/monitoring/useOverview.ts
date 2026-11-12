@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 
 import { api } from "@/api/client"
 import { LIVE_MS } from "@/api/hooks"
@@ -97,6 +97,8 @@ export function useOverview(area?: { level: DashLevel; code: string }, escalatio
     queryKey: ["monitoring", "overview", area?.level ?? "", area?.code ?? "", escalations],
     queryFn: () => api<Overview>(`/monitoring/overview${search}`),
     enabled: signedIn,
+    // Switching area keeps the current figures on screen until the new ones arrive.
+    placeholderData: keepPreviousData,
     // Live dashboards: re-read every 30 s and when the tab is opened again.
     refetchInterval: LIVE_MS,
     refetchOnWindowFocus: true,

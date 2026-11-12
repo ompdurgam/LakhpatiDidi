@@ -1,22 +1,21 @@
-import { Suspense } from "react"
-import { useTranslation } from "react-i18next"
+import { Suspense, useEffect } from "react"
 import { Outlet } from "react-router"
 
 import { useData } from "@/api/hooks"
-import { EmptyState } from "@/components/ui/EmptyState"
 import { Icon } from "@/components/ui/Icon"
+import { PageSkeleton } from "@/components/ui/PageSkeleton"
 import { Toast } from "@/components/ui/Toast"
 import { ApplicationDrawer } from "@/features/applications/ApplicationDrawer"
 import { useSession } from "@/stores/session"
 import { useUi } from "@/stores/ui"
 
+import { preloadRole } from "../featureChunks"
 import { BottomTabs } from "./BottomTabs"
 import { Header } from "./Header"
 import { Sidebar } from "./Sidebar"
 
 /** Sidebar + header frame around every signed-in page. */
 export function AppShell() {
-  const { t } = useTranslation()
   const { error } = useData()
   const role = useSession((s) => s.role)
   const selected = useUi((s) => s.selectedApplication)
@@ -25,6 +24,7 @@ export function AppShell() {
   const menuOpen = useUi((s) => s.menuOpen)
   const setMenuOpen = useUi((s) => s.setMenuOpen)
   const closeDrawer = () => openApplication(null)
+  useEffect(() => preloadRole(role), [role])
 
   return (
     <div className="app-shell">
@@ -36,7 +36,7 @@ export function AppShell() {
             <Icon name="alert" size={16} /> {error}
           </div>
         )}
-        <Suspense fallback={<EmptyState>{t("status.loading")}</EmptyState>}>
+        <Suspense fallback={<PageSkeleton />}>
           <Outlet />
         </Suspense>
       </main>

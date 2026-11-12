@@ -150,3 +150,57 @@ button.profile {
   font-size: calc(12.5px * var(--font-scale));
   white-space: nowrap;
 }
+
+/* Loading outline (PageSkeleton) */
+.skeleton-page {
+  display: grid;
+  gap: 14px;
+}
+.skeleton {
+  border-radius: 12px;
+  background: linear-gradient(90deg, #e9ece6 0%, #f4f6f1 50%, #e9ece6 100%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.3s ease-in-out infinite;
+}
+.skeleton-title {
+  width: min(320px, 70%);
+  height: 30px;
+}
+.skeleton-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+.skeleton-tile {
+  height: 92px;
+}
+.skeleton-panels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+.skeleton-panel {
+  height: 240px;
+}
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
+/* Read by screen readers, not shown. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

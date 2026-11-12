@@ -4,19 +4,11 @@ import { createBrowserRouter, Navigate, Outlet, type RouteObject } from "react-r
 import { type Role, useSession } from "@/stores/session"
 
 import { BootScreen } from "./BootScreen"
+import { admin, block, dept, didi, field, geo, monitoring } from "./featureChunks"
 import { roleHome } from "./navigation"
 import { RoleGuard } from "./RoleGuard"
 import { NotFound, RouteError } from "./RouteError"
 import { AppShell } from "./shell/AppShell"
-
-// Each feature's pages module is its own chunk, loaded on first visit.
-const block = () => import("@/features/block/pages")
-const field = () => import("@/features/survey/pages")
-const dept = () => import("@/features/department/pages")
-const monitoring = () => import("@/features/monitoring/pages")
-const admin = () => import("@/features/admin/pages")
-const geo = () => import("@/features/geo/pages")
-const didi = () => import("@/features/didi/pages")
 
 const page = <M,>(load: () => Promise<M>, pick: (m: M) => ComponentType) => ({
   lazy: async () => ({ Component: pick(await load()) }),

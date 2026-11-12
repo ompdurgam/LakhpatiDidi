@@ -2,6 +2,7 @@ import { useState } from "react"
 
 import { EmptyState } from "@/components/ui/EmptyState"
 import { Icon } from "@/components/ui/Icon"
+import { PageSkeleton } from "@/components/ui/PageSkeleton"
 import type { HouseholdRecord } from "@/features/households/types"
 import { useSurveyHouseholds } from "@/features/survey/surveyHouseholds"
 import { useTr } from "@/i18n/tr"
@@ -88,7 +89,7 @@ function TrackerPicker({ onPick }: { onPick: (code: string) => void }) {
 function TrackerBody({ code }: { code: string }) {
   const tr = useTr()
   const { data, isLoading, error } = useTracker(code)
-  if (isLoading) return <EmptyState>{tr("लोड हो रहा है…")}</EmptyState>
+  if (isLoading) return <PageSkeleton />
   if (error || !data) return <EmptyState>{error?.message ?? tr("डेटा नहीं मिला")}</EmptyState>
   return (
     <>

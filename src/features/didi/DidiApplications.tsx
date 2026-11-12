@@ -4,6 +4,7 @@ import type { ApplicationRow } from "@/api/types"
 import { Card } from "@/components/ui/Card"
 import { EmptyState } from "@/components/ui/EmptyState"
 import { Icon } from "@/components/ui/Icon"
+import { PageSkeleton } from "@/components/ui/PageSkeleton"
 import { StatusBadge, type StatusTone } from "@/components/ui/StatusBadge"
 import { type Column, Table } from "@/components/ui/Table"
 import { useTr } from "@/i18n/tr"
@@ -26,7 +27,7 @@ export function DidiApplications() {
   const { data, isLoading, error } = useDidi()
   const [open, setOpen] = useState<ApplicationRow | null>(null)
   if (error) return <EmptyState>{(error as Error).message}</EmptyState>
-  if (isLoading || !data) return <EmptyState>{tr("लोड हो रहा है…")}</EmptyState>
+  if (isLoading || !data) return <PageSkeleton />
 
   const columns: Column<ApplicationRow>[] = [
     { key: "id", header: tr("आवेदन ID"), render: (r) => <b className="app-id">{r.id}</b> },

@@ -1,6 +1,7 @@
 import type { ApplicationRow } from "@/api/types"
 import { EmptyState } from "@/components/ui/EmptyState"
 import { Icon } from "@/components/ui/Icon"
+import { PageSkeleton } from "@/components/ui/PageSkeleton"
 import { num, pct } from "@/features/monitoring/format"
 import { useOverview } from "@/features/monitoring/useOverview"
 import { useTr } from "@/i18n/tr"
@@ -19,7 +20,7 @@ function downloadCsv(fileName: string, header: string[], rows: (string | number)
 export function BlockReports({ rows }: { rows: ApplicationRow[] }) {
   const tr = useTr()
   const { data, isLoading, error } = useOverview()
-  if (isLoading) return <EmptyState>{tr("लोड हो रहा है…")}</EmptyState>
+  if (isLoading) return <PageSkeleton />
   if (error || !data) return <EmptyState>{error?.message ?? tr("डेटा नहीं मिला")}</EmptyState>
   const { totals, funnel } = data
   const month = new Date().toLocaleDateString("en-IN", { month: "long", year: "numeric" })

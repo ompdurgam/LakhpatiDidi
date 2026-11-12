@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/Card"
 import { EmptyState } from "@/components/ui/EmptyState"
+import { PageSkeleton } from "@/components/ui/PageSkeleton"
 import { ProgressBar } from "@/components/ui/ProgressBar"
 import { useTr } from "@/i18n/tr"
 
@@ -11,7 +12,7 @@ export function DidiTasks() {
   const tr = useTr()
   const { data, isLoading, error } = useDidi()
   if (error) return <EmptyState>{(error as Error).message}</EmptyState>
-  if (isLoading || !data) return <EmptyState>{tr("लोड हो रहा है…")}</EmptyState>
+  if (isLoading || !data) return <PageSkeleton />
   const { tasks } = data
   const pending = tasks.items.filter((t) => !t.done)
   const done = tasks.items.filter((t) => t.done)

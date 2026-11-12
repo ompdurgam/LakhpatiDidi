@@ -5,6 +5,7 @@ import { Legend } from "@/components/charts/Legend"
 import { EmptyState } from "@/components/ui/EmptyState"
 import { Icon } from "@/components/ui/Icon"
 import { Kpi } from "@/components/ui/Kpi"
+import { PageSkeleton } from "@/components/ui/PageSkeleton"
 import { ApplicationTable } from "@/features/applications/ApplicationTable"
 import { PldDownload } from "@/features/households/PldDownload"
 import { useTr } from "@/i18n/tr"
@@ -34,7 +35,7 @@ export function BlockDashboard({
   const tr = useTr()
   const [picked, setPicked] = useState<PickedArea>()
   const { data, isLoading, error } = useOverview(picked)
-  if (isLoading) return <EmptyState>{tr("लोड हो रहा है…")}</EmptyState>
+  if (isLoading) return <PageSkeleton />
   if (error || !data) return <EmptyState>{error?.message ?? tr("डेटा नहीं मिला")}</EmptyState>
   const { totals, funnel, gaps } = data
   const stages: [string, number][] = [

@@ -2,6 +2,7 @@ import { useState } from "react"
 
 import { EmptyState } from "@/components/ui/EmptyState"
 import { Kpi } from "@/components/ui/Kpi"
+import { PageSkeleton } from "@/components/ui/PageSkeleton"
 import { PldDownload } from "@/features/households/PldDownload"
 import { useTr } from "@/i18n/tr"
 
@@ -38,7 +39,7 @@ export function AreaDashboard({
   const [picked, setPicked] = useState<PickedArea>()
   // The escalations page lists every overdue application, not just the top few.
   const { data, isLoading, error } = useOverview(picked, section === "escalations" ? 200 : 8)
-  if (isLoading) return <EmptyState>{tr("लोड हो रहा है…")}</EmptyState>
+  if (isLoading) return <PageSkeleton />
   if (error || !data) return <EmptyState>{error?.message ?? tr("डेटा नहीं मिला")}</EmptyState>
   const copy = COPY[level]
   const { totals, funnel } = data

@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/Card"
 import { EmptyState } from "@/components/ui/EmptyState"
 import { Icon } from "@/components/ui/Icon"
+import { PageSkeleton } from "@/components/ui/PageSkeleton"
 import { useTr } from "@/i18n/tr"
 import { rupees } from "@/lib/money"
 import { useUi } from "@/stores/ui"
@@ -15,7 +16,7 @@ export function DidiSchemes() {
   const { data, isLoading, error } = useDidiSchemes()
   const answer = useAnswerScheme()
   if (error) return <EmptyState>{(error as Error).message}</EmptyState>
-  if (isLoading || !data) return <EmptyState>{tr("लोड हो रहा है…")}</EmptyState>
+  if (isLoading || !data) return <PageSkeleton />
 
   const { leverage, recommendations, entitlements } = data
   const onAnswer = (code: string, value: "yes" | "no") =>
