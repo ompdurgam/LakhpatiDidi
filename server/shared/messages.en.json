@@ -247,5 +247,9 @@
   "विभाग चुनें": "Choose a department",
   "विभाग नहीं मिला": "Department not found",
   "{{name}} की भूमिकाएँ और क्षेत्र अपडेट हुए": "{{name}}'s roles and areas updated",
-  "सामाजिक वर्ग चुनें": "Choose the social category"
+  "सामाजिक वर्ग चुनें": "Choose the social category",
+  "भविष्य की तिथि दर्ज नहीं की जा सकती": "A future date cannot be recorded",
+  "तिथि {{step}} ({{date}}) से पहले नहीं हो सकती": "The date cannot be before {{step}} ({{date}})",
+  "आवेदन प्राप्ति": "the application was received",
+  "स्वीकृति": "sanction"
 }

@@ -128,6 +128,8 @@ npm run geo:boundaries -- --level village        --file $D/chhattisgarh-villages
 npm run db:admin -- 9XXXXXXXXX "Admin name"
 ```
 
+On a server that already has surveys, run `npm run survey:backfill-gaps` once after migration 017. It turns the section D answers of saved surveys into entitlement gaps, and is safe to re-run.
+
 Check with `npm run db:status` (every migration ✓). After step 3 the dashboards show every Didi on record with 0 surveyed. Survey, application and income figures fill in as CRPs work in the app.
 
 Each user gets one or more **role × area** assignments (`master_user_assignments`, migration 016): for example, a DPM for two districts, or a CRP for a few villages. At login the person picks one of their own roles, and data is limited to that role's areas.

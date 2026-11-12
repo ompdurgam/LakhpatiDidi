@@ -70,6 +70,19 @@ const amount = z
 
 const coordinate = z.coerce.number().finite().nullable().catch(null)
 
+/** Today in India (YYYY-MM-DD). */
+const todayIst = () => new Date(Date.now() + 5.5 * 3_600_000).toISOString().slice(0, 10)
+
+/** A recorded date can't be in the future or before the step it follows. */
+function checkDate(date: string, notBefore: unknown, before: string) {
+  if (date > todayIst()) throw badRequest(msg("भविष्य की तिथि दर्ज नहीं की जा सकती"))
+  const earliest = notBefore ? String(notBefore).slice(0, 10) : ""
+  if (earliest && date < earliest)
+    throw badRequest(
+      msg("तिथि {{step}} ({{date}}) से पहले नहीं हो सकती", { step: msg(before), date: earliest }),
+    )
+}
+
 export const actions = {
   accept: define({
     schema: none,
@@ -94,6 +107,7 @@ export const actions = {
     schema: z.object({ orderNo: text("आदेश सं.", 60), date: isoDate("स्वीकृति दिनांक"), amount }),
     from: OPEN_STATUSES,
     run: async ({ orderNo, date, amount }, ctx) => {
+      checkDate(date, ctx.application.received_on, "आवेदन प्राप्ति")
       const cost = Number(ctx.application.project_cost)
       if (amount > cost)
         throw badRequest(
@@ -129,6 +143,7 @@ export const actions = {
     from: ["sanctioned"],
     fromError: "डिलीवरी से पहले आवेदन स्वीकृत होना चाहिए",
     run: async ({ date, asset, lat, lng }, ctx) => {
+      checkDate(date, ctx.application.sanction_date, "स्वीकृति")
       await record(ctx, "delivered", asset, "delivered", {
         delivered_on: date,
         asset_description: asset,

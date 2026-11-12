@@ -3,7 +3,7 @@
 // and the PLD flag. The full answers are also kept as JSON in tbl_surveys.
 import type { PoolConnection } from "mysql2/promise"
 
-import { exec, query } from "../../db/pool.ts"
+import { type Db, exec, query } from "../../db/pool.ts"
 import type { Row } from "../../shared/types.ts"
 import type { IncomeEntry } from "./surveys.schemas.ts"
 
@@ -11,6 +11,8 @@ import type { IncomeEntry } from "./surveys.schemas.ts"
 const LOANS_KEY = "ऋण विवरण"
 const PLD_KEY = "क्या संभावित लखपति दीदी (PLD) हैं?"
 const SCHEME_STATUS = /^D • (.+) • स्थिति$/
+/** Section D names that differ from the scheme master's Hindi name. */
+const SCHEME_ALIAS: Record<string, string> = { मुद्रा: "मुद्रा ऋण" }
 
 /** Loan source on the survey → tbl_household_loans.lender_type. */
 const LENDER: Record<string, string> = {
@@ -107,17 +109,17 @@ async function saveLoans(db: PoolConnection, householdId: number, loans: Loan[])
 
 /**
  * Section D: a scheme the household is not receiving ("आवेदन नहीं" / "आवेदन लंबित")
- * opens an entitlement gap; "प्राप्त" closes it. Only schemes in master_schemes
- * (matched by Hindi name) are tracked; the rest stay in the survey answers.
+ * opens an entitlement gap; "प्राप्त" closes it. Schemes are matched to master_schemes
+ * by Hindi name (migration 017 adds every section D entitlement).
  */
-async function saveEntitlementGaps(
-  db: PoolConnection,
+export async function saveEntitlementGaps(
+  db: Db,
   householdId: number,
   responses: Record<string, string>,
 ) {
   const answers = Object.entries(responses).flatMap(([key, status]) => {
     const match = SCHEME_STATUS.exec(key)
-    return match && status ? [{ scheme: match[1], status }] : []
+    return match && status ? [{ scheme: SCHEME_ALIAS[match[1]] ?? match[1], status }] : []
   })
   if (!answers.length) return
   const schemes = await query<Row>(

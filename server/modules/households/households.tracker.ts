@@ -88,7 +88,12 @@ export async function getTracker(code: string) {
       ["डिलीवरी", steps?.delivered],
       ["आय सक्रिय", steps?.income_active],
       ["लखपति", lakhpati ? h.updated_at : null],
-    ].map(([label, at]) => ({ label: label as string, date: date(at) })), // Hindi keys; the UI translates
+    ].map(([label, at]) => ({
+      label: label as string, // a Hindi key; the UI translates it
+      date: date(at),
+      /** Sortable timestamp (activity is listed newest first). */
+      at: at ? String(at) : null,
+    })),
     sources: sources.map((s) => ({ name: s.source_name as string, amount: Number(s.net_income) })),
     applications: applications.map((a) => ({
       code: a.app_code as string,
@@ -96,6 +101,8 @@ export async function getTracker(code: string) {
       department: localized(a, "department_name"),
       status: msg(statusHi[a.status as keyof typeof statusHi]),
       overdue: Boolean(a.is_overdue),
+      /** Still awaiting a decision (pending days apply only then). */
+      open: ["submitted", "under_review", "info_requested"].includes(a.status as string),
       days: Math.max(0, Number(a.days_pending)),
     })),
     gaps: gaps.map((g) => ({

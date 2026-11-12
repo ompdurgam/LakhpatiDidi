@@ -98,9 +98,10 @@ function TrackerBody({ code }: { code: string }) {
         <div className="card activity-log">
           <h3>{tr("हाल की गतिविधि")}</h3>
           {data.milestones.some((m) => m.date) ? (
+            // Newest first, by the date each step happened.
             data.milestones
-              .filter((m) => m.date)
-              .reverse()
+              .filter((m) => m.at)
+              .sort((a, b) => (b.at ?? "").localeCompare(a.at ?? ""))
               .map((m) => (
                 <p key={m.label}>
                   <i />
@@ -210,7 +211,7 @@ function Applications({ tracker }: { tracker: Tracker }) {
                   <td>
                     <span className={`status ${a.overdue ? "red" : "blue"}`}>{a.status}</span>
                   </td>
-                  <td>{tr("{{n}} दिन", { n: a.days })}</td>
+                  <td>{a.open ? tr("{{n}} दिन", { n: a.days }) : "—"}</td>
                 </tr>
               ))}
             </tbody>

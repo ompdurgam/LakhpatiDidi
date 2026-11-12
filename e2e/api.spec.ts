@@ -212,6 +212,8 @@ test.describe("households & surveys", () => {
     const body = survey({
       "ऋण विवरण": JSON.stringify(loans),
       "D • PM किसान • स्थिति": "आवेदन नहीं",
+      // An entitlement added by migration 017.
+      "D • आयुष्मान कार्ड • स्थिति": "आवेदन लंबित",
       "क्या संभावित लखपति दीदी (PLD) हैं?": "हाँ",
     })
     // A source reported as ₹0 is not stored.
@@ -225,7 +227,10 @@ test.describe("households & surveys", () => {
       "पशुपालन",
       "फसल/खेती",
     ])
-    expect(tracker.gaps).toEqual([expect.objectContaining({ open: true })])
+    expect(tracker.gaps).toHaveLength(2)
+    expect(tracker.gaps).toContainEqual(
+      expect.objectContaining({ scheme: "आयुष्मान कार्ड", open: true }),
+    )
     const overview = await (await request.get("/api/monitoring/overview", { headers })).json()
     expect(overview.loans).toContainEqual(
       expect.objectContaining({ lender: "bank", amount: 40000 }),
@@ -237,7 +242,11 @@ test.describe("households & surveys", () => {
     const after = await (
       await request.get("/api/households/HH-BST-JGD-000124/tracker", { headers })
     ).json()
-    expect(after.gaps).toEqual([expect.objectContaining({ open: false })])
+    // PM Kisan closed; Ayushman (not asked again) stays open.
+    expect(after.gaps).toContainEqual(expect.objectContaining({ scheme: "PM किसान", open: false }))
+    expect(after.gaps).toContainEqual(
+      expect.objectContaining({ scheme: "आयुष्मान कार्ड", open: true }),
+    )
   })
 
   test("block staff download the PLD list as Excel; a CRP cannot", async ({ request }) => {

@@ -16,6 +16,7 @@
     "db:reset": "node --env-file-if-exists=.env server/db/migrate.ts reset",
     "db:status": "node --env-file-if-exists=.env server/db/migrate.ts status",
     "geo:lgd": "node --env-file-if-exists=.env server/db/geo/importLgd.ts",
+    "survey:backfill-gaps": "node --env-file-if-exists=.env server/db/backfillGaps.ts",
     "pld:import": "node --env-file-if-exists=.env server/db/pld/importPld.ts",
     "geo:boundaries": "node --env-file-if-exists=.env server/db/geo/importBoundaries.ts",
     "typecheck": "tsc --noEmit",

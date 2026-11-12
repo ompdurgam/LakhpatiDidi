@@ -14,7 +14,7 @@ export type Tracker = {
     status: string
   }
   /** Hindi label keys with the date reached (null = not yet). */
-  milestones: { label: string; date: string | null }[]
+  milestones: { label: string; date: string | null; at: string | null }[]
   sources: { name: string; amount: number }[]
   applications: {
     code: string
@@ -22,6 +22,7 @@ export type Tracker = {
     department: string
     status: string
     overdue: boolean
+    open: boolean
     days: number
   }[]
   gaps: { scheme: string; department: string; open: boolean; date: string | null }[]

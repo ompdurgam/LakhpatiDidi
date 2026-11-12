@@ -445,3 +445,11 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* "Nothing recorded yet" lines inside the tracker cards keep the card's padding. */
+.tracker-applications > .empty-note,
+.tracker-entitlements > .empty-note,
+.monthly-income-register > .empty-note {
+  margin: 0;
+  padding: 12px 13px;
+}
