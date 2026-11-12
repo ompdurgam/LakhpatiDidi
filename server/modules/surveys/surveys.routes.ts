@@ -9,18 +9,12 @@ import { parse } from "../../shared/validation.ts"
 import { audit } from "../audit/audit.service.ts"
 import { invalidateVillageStats } from "../monitoring/monitoring.area.ts"
 import { askAboutBestScheme } from "../recommendations/suggestions.ts"
-import { myDay } from "./myDay.ts"
 import { householdForSurvey, listForSurvey } from "./surveyList.ts"
 import { householdCode } from "./surveys.schemas.ts"
 import { submitSurvey } from "./surveys.service.ts"
 import { getVillageProfile, listVillages, saveVillageProfile } from "./villageProfile.ts"
 
 export const surveysRouter = Router()
-
-/** The CRP's "My day": Didis to survey, income due, information requested, DPRs in progress. */
-surveysRouter.get("/my-day", async (_req, res) => {
-  res.json(await myDay(currentUser(res)))
-})
 
 /** Didis on record in the surveyor's area, paged; pending (not yet surveyed) by default. */
 surveysRouter.get("/households", async (req, res) => {

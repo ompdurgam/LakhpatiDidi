@@ -5,7 +5,6 @@ import { useTr } from "@/i18n/tr"
 import { useSession } from "@/stores/session"
 
 import { DidiWorklist } from "./DidiWorklist"
-import { MyDay } from "./MyDay"
 import { type SurveyStatusFilter, useSurveyHouseholds } from "./surveyHouseholds"
 import { SyncBanner } from "./SyncBanner"
 import { useVillageOptions } from "./village/useVillageProfile"
@@ -60,7 +59,6 @@ export function SurveyHome({
           <span>{tr("पूर्ण")}</span>
         </div>
       </div>
-      <MyDay />
       <button className="start-survey" onClick={() => onOpenSurvey()}>
         <Icon name="plus" /> {tr("नई दीदी का सर्वे शुरू करें")}
       </button>

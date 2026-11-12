@@ -259,14 +259,6 @@ test.describe("households & surveys", () => {
     expect((await request.get("/api/households/export", { headers: crp })).status()).toBe(403)
   })
 
-  test("a CRP's My day lists what is waiting in her area", async ({ request }) => {
-    const day = await (await request.get("/api/surveys/my-day", { headers })).json()
-    expect(day.toSurvey).toBeGreaterThanOrEqual(0)
-    expect(day).toHaveProperty("incomeDue.items")
-    expect(day).toHaveProperty("dprs.items")
-    expect(Array.isArray(day.infoRequested)).toBe(true)
-  })
-
   test("validates survey fields", async ({ request }) => {
     // A new household needs her social category.
     expect(
