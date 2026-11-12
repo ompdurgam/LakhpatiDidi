@@ -58,7 +58,7 @@ function VillagePicker({ onPick, onBack }: { onPick: (code: string) => void; onB
         <p className="empty-note">{tr("लोड हो रहा है…")}</p>
       ) : data?.length ? (
         data.map((v) => (
-          <button key={v.code} className="generic-row" onClick={() => onPick(v.code)}>
+          <button key={v.code} className="picker-row" onClick={() => onPick(v.code)}>
             <div>
               <strong>{v.name}</strong>
               <span>

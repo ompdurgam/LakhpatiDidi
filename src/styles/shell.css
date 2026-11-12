@@ -1640,3 +1640,42 @@ nav a {
     padding: 8px 16px;
   }
 }
+
+/* A pick-one list (surveyed Didi, village): name over a muted detail line, arrow at the end. */
+.picker-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border: 0;
+  border-bottom: 1px solid #edf0ec;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.picker-row:hover,
+.picker-row:focus-visible {
+  background: #f4f8f4;
+}
+.picker-row > div {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+.picker-row strong {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.picker-row span:not(.status) {
+  color: #6d776f;
+  font-size: calc(13px * var(--font-scale));
+  overflow-wrap: anywhere;
+}
+.picker-row > svg {
+  flex: none;
+  color: #8b948d;
+}

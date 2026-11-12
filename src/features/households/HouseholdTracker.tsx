@@ -68,7 +68,7 @@ function TrackerPicker({ onPick }: { onPick: (code: string) => void }) {
         <p className="empty-note">{tr("लोड हो रहा है…")}</p>
       ) : data?.items?.length ? (
         data.items.map((item) => (
-          <button key={item.code} className="generic-row" onClick={() => onPick(item.code)}>
+          <button key={item.code} className="picker-row" onClick={() => onPick(item.code)}>
             <div>
               <strong>{item.name}</strong>
               <span>
