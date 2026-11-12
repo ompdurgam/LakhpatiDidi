@@ -20,11 +20,12 @@ monitoringRouter.get("/overview", async (req, res) => {
         .trim()
         .regex(/^[A-Za-z0-9-]{1,20}$/, { error: () => msg("अमान्य क्षेत्र कोड") })
         .optional(),
+      escalations: z.coerce.number().int().min(1).max(200).catch(8),
     }),
     req.query,
   )
   const requested = query.level && query.code ? { level: query.level, code: query.code } : undefined
-  res.json(await overview(currentUser(res), requested))
+  res.json(await overview(currentUser(res), requested, query.escalations))
 })
 
 /** Scheme-wise convergence for the user's own area. */

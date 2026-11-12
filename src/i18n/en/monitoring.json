@@ -392,5 +392,19 @@
   "दीदी फोटो": "Didi photo",
   "सर्वेयर घोषणा": "Surveyor declaration",
   "PLD सूची (Excel)": "PLD list (Excel)",
-  "डाउनलोड हो रहा है… {{mb}} MB": "Downloading… {{mb}} MB"
+  "डाउनलोड हो रहा है… {{mb}} MB": "Downloading… {{mb}} MB",
+  "PLD सूची": "PLD list",
+  "{{area}} मासिक सारांश": "{{area}} monthly summary",
+  "{{a}} भेजे • {{s}} स्वीकृत • {{d}} वितरित • {{o}} अतिदेय": "{{a}} sent • {{s}} sanctioned • {{d}} delivered • {{o}} overdue",
+  "{{n}} / {{t}} दीदी • {{p}}%": "{{n}} / {{t}} Didis • {{p}}%",
+  "{{n}} क्षेत्र": "{{n}} areas",
+  "{{n}} दीदी • सर्वेक्षित का {{p}}%": "{{n}} Didis • {{p}}% of surveyed",
+  "अभी कोई गाँव इस स्तर तक नहीं पहुँचा। गाँव तब दिखेगा जब उसकी कम से कम 10 PLD का सर्वे हो और उनमें से 50% से अधिक की वार्षिक आय ₹1 लाख+ हो।": "No village has reached this level yet. A village appears once at least 10 of its PLDs are surveyed and more than 50% of them earn ₹1 lakh+ a year.",
+  "कोई आवेदन SLA समय सीमा पार नहीं — सभी आवेदन समय पर हैं।": "No application is past its SLA — all are on time.",
+  "क्षेत्र-वार कवरेज": "Coverage by area",
+  "क्षेत्र-वार प्रगति": "Progress by area",
+  "रिकॉर्ड में दीदी": "Didis on record",
+  "शीर्षक पर क्लिक कर क्रम बदलें": "Click a heading to sort",
+  "सर्वे कवरेज": "Survey coverage",
+  "हर दीदी • सर्वे और आय स्थिति सहित": "Every Didi • with survey and income status"
 }

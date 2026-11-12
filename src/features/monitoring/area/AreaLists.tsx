@@ -36,7 +36,11 @@ export function CandidateVillages({ rows }: { rows: Overview["candidates"] }) {
           ))}
         </div>
       ) : (
-        <p className="empty-note">{tr("अभी कोई गाँव इस स्तर तक नहीं पहुँचा")}</p>
+        <p className="empty-note">
+          {tr(
+            "अभी कोई गाँव इस स्तर तक नहीं पहुँचा। गाँव तब दिखेगा जब उसकी कम से कम 10 PLD का सर्वे हो और उनमें से 50% से अधिक की वार्षिक आय ₹1 लाख+ हो।",
+          )}
+        </p>
       )}
     </div>
   )
@@ -79,7 +83,9 @@ export function Escalations({ rows }: { rows: Overview["escalations"] }) {
           </div>
         ))
       ) : (
-        <p className="empty-note">{tr("कोई आवेदन अतिदेय नहीं है")}</p>
+        <p className="empty-note">
+          {tr("कोई आवेदन SLA समय सीमा पार नहीं — सभी आवेदन समय पर हैं।")}
+        </p>
       )}
     </div>
   )

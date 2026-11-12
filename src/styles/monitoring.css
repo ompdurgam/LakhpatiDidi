@@ -643,3 +643,16 @@
   min-height: 0;
   border-radius: 10px;
 }
+
+/* Sortable column headers (area-wise progress table). */
+.sort-head {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.sort-head.active {
+  color: var(--ld-green-650, #2e754d);
+}

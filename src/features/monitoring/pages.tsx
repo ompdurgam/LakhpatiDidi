@@ -1,6 +1,29 @@
-import { AreaDashboard } from "./area/AreaDashboard"
+import { useLocation } from "react-router"
 
-// Every district / state menu item opens the live area dashboard; the map
-// item opens the LGD map explorer.
-export const DistrictPage = () => <AreaDashboard level="district" />
-export const StatePage = () => <AreaDashboard level="state" />
+import { AreaDashboard, type AreaSection } from "./area/AreaDashboard"
+
+/** Menu path segment → page (/state/districts, /district/lakhpati-gram…). */
+const SECTIONS: Record<string, AreaSection> = {
+  districts: "areas",
+  blocks: "areas",
+  departments: "departments",
+  certification: "certification",
+  "lakhpati-gram": "certification",
+  escalations: "escalations",
+  reports: "reports",
+}
+
+function useSection(): AreaSection {
+  const segment = useLocation().pathname.split("/")[2] ?? ""
+  return SECTIONS[segment] ?? "overview"
+}
+
+export function DistrictPage() {
+  const section = useSection()
+  return <AreaDashboard key={section} level="district" section={section} />
+}
+
+export function StatePage() {
+  const section = useSection()
+  return <AreaDashboard key={section} level="state" section={section} />
+}

@@ -17,7 +17,12 @@ import {
   surveyors,
 } from "./monitoring.households.ts"
 
-export async function overview(user: SessionUser, requested?: { level: DashLevel; code: string }) {
+/** `escalationLimit`: how many overdue applications to list (the escalations page asks for more). */
+export async function overview(
+  user: SessionUser,
+  requested?: { level: DashLevel; code: string },
+  escalationLimit = 8,
+) {
   const area = await resolveArea(user, requested)
   // Every area the user covers in this role, for the dashboard's area picker.
   const own = (await dashboardAreas(user)).map((a) => ({
@@ -42,7 +47,7 @@ export async function overview(user: SessionUser, requested?: { level: DashLevel
     applicationFunnel(area),
     departmentPerformance(area),
     departmentMatrix(area),
-    escalations(area),
+    escalations(area, escalationLimit),
     deadlines(area),
     entitlementGaps(area),
     sectors(area),
