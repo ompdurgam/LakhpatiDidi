@@ -47,24 +47,24 @@ export function NeedsBlock({
       <ChipField label="कहाँ बेचते हैं">
         <ChipGroup
           options={["स्थानीय हाट", "मंडी", "बिचौलिया", "अन्य", "लागू नहीं"]}
-          selected={["स्थानीय हाट"]}
+          selected={[]}
         />
       </ChipField>
       <ChipField label="शासकीय सहायता प्राप्त हुई (एक से अधिक)">
-        <ChipGroup options={received} selected={received.slice(0, 1)} />
+        <ChipGroup options={received} selected={[]} />
       </ChipField>
       <ChipField label="चल संपत्ति हेतु सहायता चाहिए">
-        <ChipGroup options={movable} selected={movable.slice(0, 2)} />
+        <ChipGroup options={movable} selected={[]} />
       </ChipField>
       <ChipField label="अचल संपत्ति हेतु सहायता चाहिए">
-        <ChipGroup options={fixed} selected={fixed.slice(0, 1)} />
+        <ChipGroup options={fixed} selected={[]} />
       </ChipField>
       <div className="needs-binary">
         <ChipField label="कौशल प्रशिक्षण चाहिए?">
-          <ChipGroup options={["हाँ", "नहीं"]} selected={["हाँ"]} single />
+          <ChipGroup options={["हाँ", "नहीं"]} selected={[]} single />
         </ChipField>
         <ChipField label="ऋण चाहिए?">
-          <ChipGroup options={["हाँ", "नहीं"]} selected={["हाँ"]} single />
+          <ChipGroup options={["हाँ", "नहीं"]} selected={[]} single />
         </ChipField>
       </div>
     </section>

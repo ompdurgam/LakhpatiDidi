@@ -1,20 +1,19 @@
-import { useState } from "react"
-
 import { ChipField, ChipGroup } from "@/components/ui/ChipGroup"
+import { useDraftState } from "@/components/ui/draft"
 import { FormGroup } from "@/components/ui/FormGroup"
 import { IncomeMismatch, NeedsBlock } from "@/features/survey/sections/livelihood/shared"
 import { useTr } from "@/i18n/tr"
 
 export function TourismSection({ baseline }: { baseline: number }) {
   const tr = useTr()
-  const [engaged, setEngaged] = useState("हाँ")
-  const [income, setIncome] = useState(0)
+  const [engaged, setEngaged] = useDraftState("सदस्य संलग्न?", "")
+  const [income, setIncome] = useDraftState("वार्षिक पर्यटन आय ₹", 0)
   return (
     <div className="section-form livelihood-form">
       <IncomeMismatch income={engaged === "हाँ" ? income : 0} baseline={baseline} />
       <FormGroup title={tr("पर्यटन गतिविधि")}>
         <ChipField label="आस-पास स्थल">
-          <ChipGroup options={["जल", "वन", "ऐतिहासिक", "धार्मिक"]} selected={["वन", "ऐतिहासिक"]} />
+          <ChipGroup options={["जल", "वन", "ऐतिहासिक", "धार्मिक"]} selected={[]} />
         </ChipField>
         <ChipField label="सदस्य संलग्न?">
           <ChipGroup options={["हाँ", "नहीं"]} selected={[engaged]} onToggle={setEngaged} single />
@@ -24,7 +23,7 @@ export function TourismSection({ baseline }: { baseline: number }) {
             <ChipField label="गतिविधि">
               <ChipGroup
                 options={["टूर गाइड", "जल क्रीड़ा", "पेटी शॉप", "होम स्टे"]}
-                selected={["टूर गाइड"]}
+                selected={[]}
               />
             </ChipField>
             <label className="section-total">

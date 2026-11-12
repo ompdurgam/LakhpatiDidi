@@ -1,6 +1,6 @@
 import { useContext } from "react"
 
-import { SurveyDraftContext } from "@/components/ui/FormDraftContext"
+import { SurveyDraftContext, useDraftKey } from "@/components/ui/draft"
 import { useTr } from "@/i18n/tr"
 
 export function TextControl({
@@ -14,15 +14,16 @@ export function TextControl({
 }) {
   const tr = useTr()
   const draft = useContext(SurveyDraftContext)
-  if (draft && draft[label] === undefined) draft[label] = value
+  const key = useDraftKey(label)
+  if (draft && draft[key] === undefined) draft[key] = value
   return (
     <label className="text-control">
       <span>{tr(label)}</span>
       <input
         type={type}
-        defaultValue={draft?.[label] ?? value}
+        defaultValue={draft?.[key] ?? value}
         onChange={(event) => {
-          if (draft) draft[label] = event.target.value
+          if (draft) draft[key] = event.target.value
         }}
       />
     </label>

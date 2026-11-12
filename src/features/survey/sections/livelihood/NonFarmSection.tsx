@@ -1,24 +1,27 @@
-import { useState } from "react"
-
 import { ChipField, ChipGroup } from "@/components/ui/ChipGroup"
+import { useDraftState } from "@/components/ui/draft"
 import { FormGroup } from "@/components/ui/FormGroup"
 import { TextControl } from "@/components/ui/TextControl"
 import { IncomeMismatch, NeedsBlock } from "@/features/survey/sections/livelihood/shared"
 import { useTr } from "@/i18n/tr"
 
+import { AmountGrid } from "./AmountGrid"
+
 export function NonFarmSection({ baseline }: { baseline: number }) {
   const tr = useTr()
-  const [income, setIncome] = useState(0)
+  const [income, setIncome] = useDraftState("कुल उद्यम आय ₹", 0)
   return (
     <div className="section-form livelihood-form">
       <IncomeMismatch income={income} baseline={baseline} />
       <FormGroup title={tr("उद्यम विवरण")}>
         <ChipField label="प्रकार">
-          <ChipGroup options={["सेवा", "विनिर्माण", "व्यापार"]} selected={["विनिर्माण"]} single />
+          <ChipGroup options={["सेवा", "विनिर्माण", "व्यापार"]} selected={[]} single />
         </ChipField>
         <TextControl label="गतिविधि विवरण" value="" />
-        <div className="income-chip-grid">
-          {[
+        <AmountGrid
+          name="गतिविधि-वार आय"
+          className="income-chip-grid"
+          items={[
             "ढोकरा/बेल मेटल",
             "लौह शिल्प",
             "टेराकोटा/काष्ठ",
@@ -29,13 +32,8 @@ export function NonFarmSection({ baseline }: { baseline: number }) {
             "पेवर ब्लॉक",
             "बायोचार",
             "सौर उद्यम",
-          ].map((item) => (
-            <label key={item}>
-              <span>{tr(item)}</span>
-              <input type="number" defaultValue={0} />
-            </label>
-          ))}
-        </div>
+          ]}
+        />
         <label className="section-total">
           <span>{tr("कुल उद्यम आय ₹")}</span>
           <input

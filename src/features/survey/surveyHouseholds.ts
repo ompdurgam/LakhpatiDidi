@@ -79,6 +79,12 @@ export const prefillDraft = (h: SurveyHousehold): Record<string, string> => ({
   "माता-पिता/पति का नाम": h.guardian ?? "",
   आयु: h.age ? String(h.age) : "",
   "मोबाइल (10 अंक)": h.mobile ?? "",
+  "सामाजिक वर्ग": categoryLabel(h.category),
+  // She is on the state's PLD list, in her SHG.
+  "क्या संभावित लखपति दीदी (PLD) हैं?": "हाँ",
+  "क्या महिला SHG सदस्य है?": h.shg ? "हाँ" : "",
+  "सदस्य किस संगठन की": JSON.stringify(h.shg ? ["SHG"] : []),
+  "सदस्य ID / LokOS ID": h.memberCode ?? "",
 })
 
 /** Household category code → the survey's chip label. */

@@ -1,6 +1,7 @@
 import { useState } from "react"
 
 import { ChipField, ChipGroup } from "@/components/ui/ChipGroup"
+import { useDraftState } from "@/components/ui/draft"
 import { Icon } from "@/components/ui/Icon"
 import type { LoanEntry } from "@/features/survey/types"
 import { useTr } from "@/i18n/tr"
@@ -9,7 +10,8 @@ export function LoansForm() {
   const tr = useTr()
   const [expanded, setExpanded] = useState(0)
   // One row per lender type, unanswered until the Didi says otherwise.
-  const [loans, setLoans] = useState<LoanEntry[]>(
+  const [loans, setLoans] = useDraftState<LoanEntry[]>(
+    "ऋण विवरण",
     ["SHG/VO/CLF (CIF/CEF)", "बैंक/PACS", "MFI/NBFC", "साहूकार/अनौपचारिक"].map((source) => ({
       source,
       taken: "नहीं",
@@ -62,7 +64,7 @@ export function LoansForm() {
                     <label className="loan-purpose">
                       <span>{tr("उद्देश्य")}</span>
                       <input
-                        value={tr(loan.purpose)}
+                        value={loan.purpose}
                         onChange={(event) => updateLoan(index, { purpose: event.target.value })}
                       />
                     </label>

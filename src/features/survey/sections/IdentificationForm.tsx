@@ -1,7 +1,6 @@
-import { useState } from "react"
-
 import { useMeta } from "@/api/hooks"
 import { ChipField, ChipGroup } from "@/components/ui/ChipGroup"
+import { useDraftState } from "@/components/ui/draft"
 import { FormGroup } from "@/components/ui/FormGroup"
 import { Icon } from "@/components/ui/Icon"
 import { NumberControl } from "@/components/ui/NumberStepper"
@@ -9,7 +8,8 @@ import { SelectControl } from "@/components/ui/Select"
 import { TextControl } from "@/components/ui/TextControl"
 import { useTr } from "@/i18n/tr"
 
-import { categoryLabel, type SurveyHousehold } from "../surveyHouseholds"
+import type { SurveyHousehold } from "../surveyHouseholds"
+import { Acreage } from "./Acreage"
 import { LocationFields } from "./LocationFields"
 
 export function IdentificationForm({
@@ -25,17 +25,17 @@ export function IdentificationForm({
   onNotify: (message: string) => void
 }) {
   const tr = useTr()
-  const [organizations, setOrganizations] = useState<string[]>(
-    household ? [household.shg ? "SHG" : "कोई नहीं"] : [],
-  )
+  // Every answer lives in the survey draft (keyed by its field label), so it is
+  // submitted and still there when the CRP comes back to this section.
+  const [organizations, setOrganizations] = useDraftState<string[]>("सदस्य किस संगठन की", [])
   const meta = useMeta().data
-  const [shgMember, setShgMember] = useState(household?.shg ? "हाँ" : "")
-  const [pld, setPld] = useState(household ? "हाँ" : "")
-  const [disability, setDisability] = useState("")
-  const [landStatus, setLandStatus] = useState("")
-  const [familyTypes, setFamilyTypes] = useState<string[]>([])
-  const [ciRoles, setCiRoles] = useState<string[]>([])
-  const [counts, setCounts] = useState({
+  const [shgMember, setShgMember] = useDraftState("क्या महिला SHG सदस्य है?", "")
+  const [pld, setPld] = useDraftState("क्या संभावित लखपति दीदी (PLD) हैं?", "")
+  const [disability, setDisability] = useDraftState("दिव्यांगता", "")
+  const [landStatus, setLandStatus] = useDraftState("भूमि स्थिति", "")
+  const [familyTypes, setFamilyTypes] = useDraftState<string[]>("परिवार प्रकार (एक से अधिक)", [])
+  const [ciRoles, setCiRoles] = useDraftState<string[]>("CI भूमिका (एक से अधिक)", [])
+  const [counts, setCounts] = useDraftState("परिवार सदस्य संख्या", {
     total: 0,
     male: 0,
     female: 0,
@@ -92,12 +92,7 @@ export function IdentificationForm({
               <TextControl label="SHG नाम" value="" />
             ))}
         </div>
-        <label className="verified-input">
-          <span>{tr("सदस्य ID / LokOS ID")}</span>
-          <div>
-            <input defaultValue={household?.memberCode ?? ""} />
-          </div>
-        </label>
+        <TextControl label="सदस्य ID / LokOS ID" value="" />
         <ChipField label="क्या संभावित लखपति दीदी (PLD) हैं?">
           <ChipGroup options={["हाँ", "नहीं"]} selected={[pld]} onToggle={setPld} single />
         </ChipField>
@@ -112,7 +107,7 @@ export function IdentificationForm({
         <ChipField label="वैवाहिक स्थिति">
           <ChipGroup
             options={["अविवाहित", "विवाहित", "विधवा", "तलाकशुदा-अलग"]}
-            selected={["विवाहित"]}
+            selected={[]}
             single
           />
         </ChipField>
@@ -126,7 +121,7 @@ export function IdentificationForm({
               "हायर सेकेंडरी",
               "स्नातक+",
             ]}
-            selected={["माध्यमिक"]}
+            selected={[]}
             single
           />
         </ChipField>
@@ -140,17 +135,10 @@ export function IdentificationForm({
         </ChipField>
         {disability === "हाँ" && <TextControl label="दिव्यांगता विवरण" value="" />}
         <ChipField label="सामाजिक वर्ग">
-          <ChipGroup
-            options={["सामान्य", "ST", "SC", "OBC", "अन्य"]}
-            selected={[household ? categoryLabel(household.category) : "ST"]}
-            single
-          />
+          <ChipGroup options={["सामान्य", "ST", "SC", "OBC", "अन्य"]} selected={[]} single />
         </ChipField>
         <ChipField label="विशेष समुदाय">
-          <ChipGroup
-            options={["FRA अधिकारधारी", "PVTG", "अल्पसंख्यक", "कोई नहीं"]}
-            selected={["FRA अधिकारधारी"]}
-          />
+          <ChipGroup options={["FRA अधिकारधारी", "PVTG", "अल्पसंख्यक", "कोई नहीं"]} selected={[]} />
         </ChipField>
       </FormGroup>
       <FormGroup title={tr("नेतृत्व")}>
@@ -171,12 +159,12 @@ export function IdentificationForm({
               "जिला पंचायत अध्यक्ष",
               "जिला पंचायत सदस्य",
             ]}
-            selected={["पंच"]}
+            selected={[]}
             single
           />
         </ChipField>
         <ChipField label="CI पद">
-          <ChipGroup options={["CRP", "CLF स्टाफ", "अन्य"]} selected={["CRP"]} single />
+          <ChipGroup options={["CRP", "CLF स्टाफ", "अन्य"]} selected={[]} single />
         </ChipField>
       </FormGroup>
       <FormGroup title={tr("परिवार")}>
@@ -235,18 +223,7 @@ export function IdentificationForm({
         </ChipField>
         {landStatus !== "भूमिहीन" && (
           <>
-            <div className="control-grid acreage">
-              <TextControl label="स्वामित्व एकड़" value="" type="number" />
-              <TextControl label="पट्टा एकड़" value="" type="number" />
-              <TextControl label="बटाई एकड़" value="" type="number" />
-              <TextControl label="FRA एकड़" value="" type="number" />
-              <label className="auto-control">
-                <span>{tr("कुल एकड़ (स्वतः)")}</span>
-                <div>3.0</div>
-              </label>
-              <TextControl label="सिंचित एकड़" value="" type="number" />
-              <TextControl label="असिंचित एकड़" value="" type="number" />
-            </div>
+            <Acreage />
           </>
         )}
       </FormGroup>

@@ -1,5 +1,4 @@
-import { useState } from "react"
-
+import { useDraftState } from "@/components/ui/draft"
 import { FormGroup } from "@/components/ui/FormGroup"
 import { SelectControl } from "@/components/ui/Select"
 import { TextControl } from "@/components/ui/TextControl"
@@ -8,7 +7,7 @@ import { useTr } from "@/i18n/tr"
 
 export function FisheriesSection({ baseline }: { baseline: number }) {
   const tr = useTr()
-  const [income, setIncome] = useState(0)
+  const [income, setIncome] = useDraftState("वार्षिक आय ₹", 0)
   return (
     <div className="section-form livelihood-form">
       <IncomeMismatch income={income} baseline={baseline} />
@@ -17,8 +16,8 @@ export function FisheriesSection({ baseline }: { baseline: number }) {
           <TextControl label="तालाब क्षेत्रफल (एकड़)" value="" type="number" />
           <SelectControl
             label="स्वामित्व"
-            value="स्वयं"
-            options={["स्वयं", "पंचायत पट्टा", "लीज्ड", "अन्य"]}
+            value=""
+            options={["", "स्वयं", "पंचायत पट्टा", "लीज्ड", "अन्य"]}
           />
           <label className="text-control">
             <span>{tr("वार्षिक आय ₹")}</span>

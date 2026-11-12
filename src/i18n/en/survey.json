@@ -592,5 +592,15 @@
   "शीर्ष अवसंरचना जरूरतें": "Top infrastructure needs",
   "1. कोल्ड स्टोरेज": "1. Cold storage",
   "2. SHG कार्यशेड": "2. SHG workshed",
-  "3. धान सुखाने का प्लेटफॉर्म": "3. Paddy drying platform"
+  "3. धान सुखाने का प्लेटफॉर्म": "3. Paddy drying platform",
+  " • स्थिति": " • Status",
+  "ऋण विवरण": "Loan details",
+  "गतिविधि-वार आय": "Income by activity",
+  "परिवार सदस्य संख्या": "Family member counts",
+  "पशु वार्षिक आय": "Annual income from animals",
+  "पशु संख्या": "Animal counts",
+  "भूमि (एकड़)": "Land (acres)",
+  "लिया?": "Taken?",
+  "वन उपज विवरण": "Forest produce details",
+  "सिंचित + असिंचित ({{w}}) कुल एकड़ ({{t}}) के बराबर होना चाहिए।": "Irrigated + unirrigated ({{w}}) must equal total acres ({{t}})."
 }

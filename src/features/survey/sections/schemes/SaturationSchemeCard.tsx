@@ -1,26 +1,38 @@
-import { useState } from "react"
+import { useEffect } from "react"
 
 import { ChipGroup } from "@/components/ui/ChipGroup"
+import { useDraftState } from "@/components/ui/draft"
+import { DraftScope } from "@/components/ui/DraftScope"
 import { NumberControl } from "@/components/ui/NumberStepper"
 import { TextControl } from "@/components/ui/TextControl"
 import { useTr } from "@/i18n/tr"
 
-export function SaturationSchemeCard({
-  scheme,
-  department,
-  initialStatus,
-}: {
+const SCHEME_STATUSES = ["प्राप्त", "आवेदन लंबित", "आवेदन नहीं"] as const
+
+type CardProps = {
   scheme: string
   department: string
-  initialStatus: string
-}) {
-  const tr = useTr()
-  const [eligible, setEligible] = useState(
-    scheme.includes("पेंशन") ? 1 : scheme === "मनरेगा जॉब कार्ड" ? 1 : 2,
+  /** Called when the status changes, so the section summary can recount. */
+  onChange?: () => void
+}
+
+/** One entitlement scheme: eligible / benefited members, status and awareness. */
+export function SaturationSchemeCard(props: CardProps) {
+  // Each scheme keeps its own answers ("D • <scheme> • स्थिति"…).
+  return (
+    <DraftScope name={props.scheme}>
+      <SchemeCardBody {...props} />
+    </DraftScope>
   )
-  const [benefited, setBenefited] = useState(initialStatus === "प्राप्त" ? 1 : 0)
-  const [status, setStatus] = useState(initialStatus)
-  const [aware, setAware] = useState("हाँ")
+}
+
+function SchemeCardBody({ scheme, department, onChange }: CardProps) {
+  const tr = useTr()
+  const [eligible, setEligible] = useDraftState("पात्र सदस्य", 0)
+  const [benefited, setBenefited] = useDraftState("लाभ प्राप्त", 0)
+  const [status, setStatus] = useDraftState("स्थिति", "")
+  const [aware, setAware] = useDraftState("जानकारी है?", "")
+  useEffect(() => onChange?.(), [status, onChange])
   const changeEligible = (value: number) => {
     const next = Math.max(0, value)
     setEligible(next)
@@ -33,13 +45,15 @@ export function SaturationSchemeCard({
           <strong>{tr(scheme)}</strong>
           <span>{tr(department)}</span>
         </div>
-        <span
-          className={`status ${
-            status === "प्राप्त" ? "green" : status === "आवेदन लंबित" ? "amber" : "red"
-          }`}
-        >
-          {status === "प्राप्त" ? `${tr("प्राप्त")} ✓` : tr(status)}
-        </span>
+        {status && (
+          <span
+            className={`status ${
+              status === "प्राप्त" ? "green" : status === "आवेदन लंबित" ? "amber" : "red"
+            }`}
+          >
+            {status === "प्राप्त" ? `${tr("प्राप्त")} ✓` : tr(status)}
+          </span>
+        )}
       </div>
       <div className="scheme-steppers">
         <NumberControl label="पात्र सदस्य" value={eligible} onChange={changeEligible} />
@@ -51,13 +65,14 @@ export function SaturationSchemeCard({
       </div>
       <div className="scheme-status-control">
         <span>{tr("स्थिति")}</span>
-        {["प्राप्त", "आवेदन लंबित", "आवेदन नहीं"].map((option) => (
+        {SCHEME_STATUSES.map((option) => (
           <button
+            type="button"
             key={option}
             className={`${status === option ? "selected" : ""} ${
               option === "प्राप्त" ? "green" : option === "आवेदन लंबित" ? "amber" : "red"
             }`}
-            onClick={() => setStatus(option)}
+            onClick={() => setStatus(status === option ? "" : option)}
           >
             {tr(option)}
             {option === "प्राप्त" && " ✓"}
@@ -66,7 +81,12 @@ export function SaturationSchemeCard({
       </div>
       <div className="awareness-control">
         <span>{tr("जानकारी है?")}</span>
-        <ChipGroup options={["हाँ", "नहीं"]} selected={[aware]} onToggle={setAware} single />
+        <ChipGroup
+          options={["हाँ", "नहीं"]}
+          selected={aware ? [aware] : []}
+          onToggle={setAware}
+          single
+        />
       </div>
       {scheme === "मनरेगा जॉब कार्ड" && (
         <div className="mgnrega-extra">

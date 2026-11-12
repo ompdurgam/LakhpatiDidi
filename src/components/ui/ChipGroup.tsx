@@ -1,14 +1,18 @@
-import { type ReactNode, useState } from "react"
+import { createContext, type ReactNode, useContext } from "react"
 
+import { useDraftState } from "@/components/ui/draft"
 import { Icon } from "@/components/ui/Icon"
 import { useTr } from "@/i18n/tr"
+
+/** The label of the enclosing ChipField: an uncontrolled ChipGroup saves its answer under it. */
+const ChipLabelContext = createContext("")
 
 export function ChipField({ label, children }: { label: string; children: ReactNode }) {
   const tr = useTr()
   return (
     <div className="chip-field">
       <span>{tr(label)}</span>
-      {children}
+      <ChipLabelContext.Provider value={label}>{children}</ChipLabelContext.Provider>
     </div>
   )
 }
@@ -25,7 +29,17 @@ export function ChipGroup({
   single?: boolean
 }) {
   const tr = useTr()
-  const [localSelected, setLocalSelected] = useState(selected)
+  // Without onToggle the group keeps its own answer, saved in the survey draft
+  // under its field's label (so it is submitted and survives leaving the section).
+  // A single choice is saved as its text ("ST"), several as a JSON list.
+  const field = useContext(ChipLabelContext)
+  const [saved, setSaved] = useDraftState<string>(
+    field || "chips",
+    single ? (selected[0] ?? "") : JSON.stringify(selected),
+  )
+  const localSelected: string[] = single ? (saved ? [saved] : []) : parseList(saved)
+  const setLocalSelected = (next: string[]) =>
+    setSaved(single ? (next[0] ?? "") : JSON.stringify(next))
   const active = onToggle ? selected : localSelected
   const handleToggle = (option: string) => {
     if (onToggle) {
@@ -56,4 +70,13 @@ export function ChipGroup({
       ))}
     </div>
   )
+}
+
+function parseList(raw: string): string[] {
+  try {
+    const value = JSON.parse(raw)
+    return Array.isArray(value) ? value : []
+  } catch {
+    return []
+  }
 }

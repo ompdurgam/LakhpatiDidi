@@ -1,9 +1,9 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useParams } from "react-router"
 
 import { api } from "@/api/client"
 import { useRefreshData } from "@/api/hooks"
-import { SurveyDraftContext } from "@/components/ui/FormDraftContext"
+import { SurveyDraftContext } from "@/components/ui/draft"
 import { Icon } from "@/components/ui/Icon"
 import { IdentificationForm } from "@/features/survey/sections/IdentificationForm"
 import { IncomeBaselineForm } from "@/features/survey/sections/IncomeBaselineForm"
@@ -109,6 +109,15 @@ function SurveyFormBody({
   const conditionalCodes = ["E", "F", "G", "H", "I", "J", "K"]
   const isApplicable = (index: number) =>
     index < 4 || index === 11 || selectedLivelihoods.includes(conditionalCodes[index - 4])
+  // A new section opens at its first field: reset the form's own scroll (phone frame)
+  // and bring the form's top into view (when the page itself scrolls).
+  const formTop = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const el = formTop.current
+    if (!el) return
+    el.scrollTop = 0
+    if (el.getBoundingClientRect().top < 0) el.scrollIntoView({ block: "start" })
+  }, [step])
   const nextStep = () => {
     for (let index = step + 1; index < sections.length; index += 1) {
       if (isApplicable(index)) {
@@ -175,7 +184,7 @@ function SurveyFormBody({
     )
   return (
     <SurveyDraftContext.Provider value={draft}>
-      <div className="phone-content survey-form">
+      <div className="phone-content survey-form" ref={formTop}>
         <div className="form-top">
           <button onClick={previousStep}>‹</button>
           <div>

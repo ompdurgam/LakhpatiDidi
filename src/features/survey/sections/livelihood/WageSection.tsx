@@ -1,9 +1,10 @@
-import { useContext, useState } from "react"
+import { useContext } from "react"
 
 import { ChipField, ChipGroup } from "@/components/ui/ChipGroup"
-import { SurveyDraftContext } from "@/components/ui/FormDraftContext"
+import { SurveyDraftContext, useDraftState } from "@/components/ui/draft"
 import { FormGroup } from "@/components/ui/FormGroup"
 import { Icon } from "@/components/ui/Icon"
+import { SelectControl } from "@/components/ui/Select"
 import { TextControl } from "@/components/ui/TextControl"
 import { IncomeMismatch } from "@/features/survey/sections/livelihood/shared"
 import type { WageRow } from "@/features/survey/types"
@@ -11,10 +12,15 @@ import { useTr } from "@/i18n/tr"
 
 export function WageSection({ baseline }: { baseline: number }) {
   const tr = useTr()
-  const [rows, setRows] = useState<WageRow[]>([{ member: "", skill: "", months: 0 }])
-  const [income, setIncome] = useState(0)
-  // Section D's job card number, when entered there.
-  const jobCard = useContext(SurveyDraftContext)?.["जॉब कार्ड नंबर"]
+  const [rows, setRows] = useDraftState<WageRow[]>("सदस्य, कार्य और कौशल", [
+    { member: "", skill: "", months: 0 },
+  ])
+  const [income, setIncome] = useDraftState("वार्षिक मजदूरी आय ₹", 0)
+  // Section D's job card number (saved under its scheme card), when entered there.
+  const draft = useContext(SurveyDraftContext)
+  const jobCard = Object.entries(draft ?? {}).find(
+    ([key, value]) => key.endsWith("जॉब कार्ड नंबर") && value,
+  )?.[1]
   const update = (index: number, patch: Partial<WageRow>) =>
     setRows(rows.map((row, rowIndex) => (rowIndex === index ? { ...row, ...patch } : row)))
   return (
@@ -28,14 +34,14 @@ export function WageSection({ baseline }: { baseline: number }) {
                 <label className="text-control">
                   <span>{tr("सदस्य")}</span>
                   <input
-                    value={tr(row.member)}
+                    value={row.member}
                     onChange={(event) => update(index, { member: event.target.value })}
                   />
                 </label>
                 <label className="text-control">
                   <span>{tr("कार्य/कौशल")}</span>
                   <input
-                    value={tr(row.skill)}
+                    value={row.skill}
                     onChange={(event) => update(index, { skill: event.target.value })}
                   />
                 </label>
@@ -53,7 +59,7 @@ export function WageSection({ baseline }: { baseline: number }) {
         </div>
         <button
           className="add-row-button"
-          onClick={() => setRows([...rows, { member: "नया सदस्य", skill: "", months: 0 }])}
+          onClick={() => setRows([...rows, { member: "", skill: "", months: 0 }])}
         >
           <Icon name="plus" size={14} /> {tr("सदस्य जोड़ें")}
         </button>
@@ -62,11 +68,11 @@ export function WageSection({ baseline }: { baseline: number }) {
         <ChipField label="रोजगार प्राथमिकता">
           <ChipGroup
             options={["गाँव", "ब्लॉक-जिला", "राज्य", "राज्य के बाहर", "स्वरोजगार"]}
-            selected={["गाँव", "ब्लॉक-जिला"]}
+            selected={[]}
           />
         </ChipField>
         <ChipField label="प्रकार">
-          <ChipGroup options={["नियमित नौकरी", "मनरेगा", "प्रवासन"]} selected={["मनरेगा"]} />
+          <ChipGroup options={["नियमित नौकरी", "मनरेगा", "प्रवासन"]} selected={[]} />
         </ChipField>
         <div className="mgnrega-linked">
           <span>
@@ -76,14 +82,11 @@ export function WageSection({ baseline }: { baseline: number }) {
         </div>
         <div className="control-grid">
           <TextControl label="कार्य दिवस" value="" type="number" />
-          <label className="text-control">
-            <span>{tr("मजदूरी स्थिति")}</span>
-            <select defaultValue="समय पर">
-              <option value="समय पर">{tr("समय पर")}</option>
-              <option value="विलंब">{tr("विलंब")}</option>
-              <option value="बकाया">{tr("बकाया")}</option>
-            </select>
-          </label>
+          <SelectControl
+            label="मजदूरी स्थिति"
+            value=""
+            options={["", "समय पर", "विलंब", "बकाया"]}
+          />
         </div>
         <label className="section-total">
           <span>{tr("वार्षिक मजदूरी आय ₹")}</span>

@@ -1,6 +1,6 @@
-import { useState } from "react"
-
 import { ChipField, ChipGroup } from "@/components/ui/ChipGroup"
+import { useDraftState } from "@/components/ui/draft"
+import { DraftScope } from "@/components/ui/DraftScope"
 import { FormGroup } from "@/components/ui/FormGroup"
 import { NumberControl } from "@/components/ui/NumberStepper"
 import { IncomeMismatch, NeedsBlock } from "@/features/survey/sections/livelihood/shared"
@@ -15,14 +15,14 @@ export function LivestockSection({ baseline }: { baseline: number }) {
     ["duck", "🦆", "बत्तख"],
     ["pig", "🐖", "सूअर/अन्य"],
   ]
-  const [counts, setCounts] = useState<Record<string, number>>({
+  const [counts, setCounts] = useDraftState<Record<string, number>>("पशु संख्या", {
     cattle: 0,
     goat: 0,
     poultry: 0,
     duck: 0,
     pig: 0,
   })
-  const [incomes, setIncomes] = useState<Record<string, number>>({
+  const [incomes, setIncomes] = useDraftState<Record<string, number>>("पशु वार्षिक आय", {
     cattle: 0,
     goat: 0,
     poultry: 0,
@@ -48,9 +48,11 @@ export function LivestockSection({ baseline }: { baseline: number }) {
               />
               {counts[key] > 0 && (
                 <>
-                  <ChipField label="नस्ल">
-                    <ChipGroup options={["स्थानीय", "संकर"]} selected={["स्थानीय"]} single />
-                  </ChipField>
+                  <DraftScope name={label}>
+                    <ChipField label="नस्ल">
+                      <ChipGroup options={["स्थानीय", "संकर"]} selected={[]} single />
+                    </ChipField>
+                  </DraftScope>
                   <label className="animal-income">
                     <span>{tr("वार्षिक आय ₹")}</span>
                     <input
@@ -76,16 +78,13 @@ export function LivestockSection({ baseline }: { baseline: number }) {
       </FormGroup>
       <FormGroup title={tr("पालन प्रबंधन")}>
         <ChipField label="पोल्ट्री प्रकार">
-          <ChipGroup options={["ब्रॉयलर", "लेयर", "बैकयार्ड"]} selected={["बैकयार्ड"]} />
+          <ChipGroup options={["ब्रॉयलर", "लेयर", "बैकयार्ड"]} selected={[]} />
         </ChipField>
         <ChipField label="चारा स्रोत">
-          <ChipGroup options={["घर पर", "चराई", "बाजार"]} selected={["घर पर", "चराई"]} />
+          <ChipGroup options={["घर पर", "चराई", "बाजार"]} selected={[]} />
         </ChipField>
         <ChipField label="पशु सखी सहायता">
-          <ChipGroup
-            options={["टीकाकरण-कृमिनाशन", "प्रशिक्षण", "मार्गदर्शन"]}
-            selected={["टीकाकरण-कृमिनाशन"]}
-          />
+          <ChipGroup options={["टीकाकरण-कृमिनाशन", "प्रशिक्षण", "मार्गदर्शन"]} selected={[]} />
         </ChipField>
       </FormGroup>
       <NeedsBlock

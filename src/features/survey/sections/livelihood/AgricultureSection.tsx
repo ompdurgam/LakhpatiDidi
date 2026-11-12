@@ -1,6 +1,5 @@
-import { useState } from "react"
-
 import { ChipField, ChipGroup } from "@/components/ui/ChipGroup"
+import { useDraftState } from "@/components/ui/draft"
 import { FormGroup } from "@/components/ui/FormGroup"
 import { Icon } from "@/components/ui/Icon"
 import { NumberControl } from "@/components/ui/NumberStepper"
@@ -8,13 +7,15 @@ import { IncomeMismatch, NeedsBlock } from "@/features/survey/sections/livelihoo
 import type { CropRow } from "@/features/survey/types"
 import { useTr } from "@/i18n/tr"
 
+import { AmountGrid } from "./AmountGrid"
+
 export function AgricultureSection({ baseline }: { baseline: number }) {
   const tr = useTr()
-  const [irrigationMonths, setIrrigationMonths] = useState(0)
-  const [crops, setCrops] = useState<CropRow[]>([
-    { crop: "धान", season: "खरीफ", acres: 0, production: 0, sold: 0, consumed: 0 },
+  const [irrigationMonths, setIrrigationMonths] = useDraftState("सिंचाई महीने (0–12)", 0)
+  const [crops, setCrops] = useDraftState<CropRow[]>("फसल विवरण", [
+    { crop: "", season: "खरीफ", acres: 0, production: 0, sold: 0, consumed: 0 },
   ])
-  const [income, setIncome] = useState({
+  const [income, setIncome] = useDraftState("वार्षिक आय", {
     kharif: 0,
     rabi: 0,
     horticulture: 0,
@@ -48,10 +49,7 @@ export function AgricultureSection({ baseline }: { baseline: number }) {
       <IncomeMismatch income={total} baseline={baseline} />
       <FormGroup title={tr("सिंचाई, मिट्टी और जोखिम")}>
         <ChipField label="सिंचाई स्रोत">
-          <ChipGroup
-            options={["कुआँ", "तालाब", "नहर", "वर्षा", "अन्य"]}
-            selected={["तालाब", "वर्षा"]}
-          />
+          <ChipGroup options={["कुआँ", "तालाब", "नहर", "वर्षा", "अन्य"]} selected={[]} />
         </ChipField>
         <NumberControl
           label="सिंचाई महीने (0–12)"
@@ -61,14 +59,14 @@ export function AgricultureSection({ baseline }: { baseline: number }) {
         <ChipField label="मृदा परीक्षण">
           <ChipGroup
             options={["पिछले 2 वर्षों में", "नहीं", "रिपोर्ट नहीं मिली"]}
-            selected={["पिछले 2 वर्षों में"]}
+            selected={[]}
             single
           />
         </ChipField>
         <ChipField label="जलवायु जोखिम">
           <ChipGroup
             options={["सूखा", "बाढ़", "अत्यधिक गर्मी", "कीट", "असमय वर्षा", "पता नहीं"]}
-            selected={["सूखा", "असमय वर्षा"]}
+            selected={[]}
           />
         </ChipField>
       </FormGroup>
@@ -92,14 +90,14 @@ export function AgricultureSection({ baseline }: { baseline: number }) {
                 <label className="text-control">
                   <span>{tr("फसल")}</span>
                   <input
-                    value={tr(crop.crop)}
+                    value={crop.crop}
                     onChange={(event) => updateCrop(index, { crop: event.target.value })}
                   />
                 </label>
                 <label className="text-control">
                   <span>{tr("मौसम")}</span>
                   <select
-                    value={tr(crop.season)}
+                    value={crop.season}
                     onChange={(event) => updateCrop(index, { season: event.target.value })}
                   >
                     <option value="खरीफ">{tr("खरीफ")}</option>
@@ -132,7 +130,7 @@ export function AgricultureSection({ baseline }: { baseline: number }) {
             setCrops([
               ...crops,
               {
-                crop: "नई फसल",
+                crop: "",
                 season: "खरीफ",
                 acres: 0,
                 production: 0,
@@ -146,14 +144,12 @@ export function AgricultureSection({ baseline }: { baseline: number }) {
         </button>
       </FormGroup>
       <FormGroup title={tr("फसल-वार क्षेत्र (एकड़)")}>
-        <div className="crop-acre-grid">
-          {cropTypes.map((crop, index) => (
-            <label key={crop}>
-              <span>{tr(crop)}</span>
-              <input type="number" defaultValue={index === 0 ? 1.5 : 0} step=".1" />
-            </label>
-          ))}
-        </div>
+        <AmountGrid
+          name="फसल-वार क्षेत्र (एकड़)"
+          items={cropTypes}
+          className="crop-acre-grid"
+          step="0.1"
+        />
       </FormGroup>
       <FormGroup title={tr("वार्षिक आय")}>
         <div className="income-entry-grid">

@@ -1,6 +1,6 @@
 import { useContext, useState } from "react"
 
-import { SurveyDraftContext } from "@/components/ui/FormDraftContext"
+import { SurveyDraftContext } from "@/components/ui/draft"
 import { FormGroup } from "@/components/ui/FormGroup"
 import { Icon } from "@/components/ui/Icon"
 import { SelectControl } from "@/components/ui/Select"

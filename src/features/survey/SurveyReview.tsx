@@ -1,5 +1,6 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 
+import { SurveyDraftContext } from "@/components/ui/draft"
 import { Icon } from "@/components/ui/Icon"
 import type { IncomeEntry } from "@/features/survey/types"
 import { useTr } from "@/i18n/tr"
@@ -42,6 +43,7 @@ export function SurveyReview({
     year: "numeric",
   })
   const [declaration, setDeclaration] = useState(false)
+  const draft = useContext(SurveyDraftContext)
   const net = incomeEntries.reduce((sum, entry) => sum + entry.gross - entry.cost, 0)
   const applicableSections = sections
     .map((name, index) => ({ name, index }))
@@ -220,7 +222,15 @@ export function SurveyReview({
       <button
         className="submit-survey-final"
         disabled={!declaration || !photo || otp.some((digit) => !digit)}
-        onClick={() => onSubmit(method === "OTP" ? "OTP" : "thumb")}
+        onClick={() => {
+          // The consent record goes with the answers.
+          if (draft) {
+            draft["दीदी फोटो"] = photoAt
+            draft["सहमति"] = method === "OTP" ? "OTP" : "अंगूठा"
+            draft["सर्वेयर घोषणा"] = "हाँ"
+          }
+          onSubmit(method === "OTP" ? "OTP" : "thumb")
+        }}
       >
         <Icon name="check" size={17} /> {tr("सर्वे जमा करें")}
       </button>
