@@ -1,3 +1,4 @@
+import compression from "compression"
 import express from "express"
 import fs from "node:fs"
 import path from "node:path"
@@ -11,6 +12,8 @@ import { languageMiddleware } from "./shared/i18n.ts"
 export function createApp() {
   const app = express()
   app.set("trust proxy", "loopback")
+  // Gzip JSON and the built app: map boundaries shrink to about a fifth on slow phone networks.
+  app.use(compression())
   app.use(express.json({ limit: config.jsonLimit }))
   app.use(languageMiddleware)
   app.use("/api", apiRouter())

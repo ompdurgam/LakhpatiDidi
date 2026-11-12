@@ -2,14 +2,16 @@ import { one, query } from "../../db/pool.ts"
 import { notFound } from "../../shared/errors.ts"
 import { msg, requestLang } from "../../shared/i18n.ts"
 import type { Row } from "../../shared/types.ts"
+import { type VillageStats, villageStats } from "../monitoring/monitoring.area.ts"
 import { childOf, type GeoLevel, levels, parentOf } from "./geo.levels.ts"
 
-// Households joined up to the state, so any level can be rolled up.
-const HOUSEHOLD_JOIN = `tbl_households h
-  JOIN master_villages v         ON v.id  = h.village_id
-  JOIN master_gram_panchayats gp ON gp.id = v.gram_panchayat_id
-  JOIN master_blocks b           ON b.id  = gp.block_id
-  JOIN master_districts d        ON d.id  = b.district_id`
+// Which village-stats field names the child area a village lies in.
+const STATS_KEY: Partial<Record<GeoLevel, keyof VillageStats>> = {
+  district: "districtId",
+  block: "blockId",
+  gram_panchayat: "gpId",
+  village: "villageId",
+}
 
 /** Area name in the request language (LGD-imported rows only have English). */
 const areaName = (row: Row): string =>
@@ -45,7 +47,7 @@ async function pathTo(level: GeoLevel, row: Row): Promise<AreaRef[]> {
   return trail
 }
 
-/** Child areas with their own child counts and household / Lakhpati totals. */
+/** Child areas with their own child counts (household totals are added from the stats cache). */
 async function childrenOf(level: GeoLevel, id: number) {
   const childLevel = childOf(level)!
   const def = levels[childLevel]
@@ -56,12 +58,8 @@ async function childrenOf(level: GeoLevel, id: number) {
   const rows = await query<Row>(
     `SELECT c.id, c.${def.codeColumn} AS code, c.name_hi, c.name_en,
             ${childLevel === "gram_panchayat" ? "c.local_body_type" : "NULL"} AS body_type,
-            ${childCount} AS child_count,
-            COALESCE(hh.households, 0) AS households, COALESCE(hh.lakhpati, 0) AS lakhpati
+            ${childCount} AS child_count
      FROM ${def.table} c
-     LEFT JOIN (SELECT ${def.rollup} AS area_id, COUNT(*) AS households,
-                       SUM(h.lifecycle_status = 'lakhpati') AS lakhpati
-                FROM ${HOUSEHOLD_JOIN} GROUP BY ${def.rollup}) hh ON hh.area_id = c.id
      WHERE c.${def.parentFk} = ?
      ORDER BY c.name_en`,
     [id],
@@ -77,9 +75,43 @@ async function boundaries(level: GeoLevel, codes: string[]) {
   )
 }
 
+// Names, boundaries and child lists change only on an LGD / boundary import, so
+// they are kept for a while; the household figures are always current (below).
+const SHAPE_TTL_MS = 10 * 60_000
+const shapeCache = new Map<string, { at: number; value: Promise<AreaShape> }>()
+type AreaShape = Awaited<ReturnType<typeof loadAreaShape>>
+
 /** One area: breadcrumb, children with stats, and child boundaries if imported. */
 export async function getArea(level: GeoLevel, code: string) {
   if (level === "village") throw notFound(msg("क्षेत्र नहीं मिला"))
+  const key = `${level}:${code}:${requestLang()}`
+  let hit = shapeCache.get(key)
+  if (!hit || Date.now() - hit.at > SHAPE_TTL_MS) {
+    if (shapeCache.size > 500) shapeCache.clear()
+    hit = { at: Date.now(), value: loadAreaShape(level, code) }
+    shapeCache.set(key, hit)
+    hit.value.catch(() => shapeCache.delete(key))
+  }
+  const [shape, stats] = await Promise.all([hit.value, villageStats()])
+  const field = STATS_KEY[shape.childLevel]!
+  const totals = new Map<number, { households: number; lakhpati: number }>()
+  for (const v of stats) {
+    const t = totals.get(v[field] as number) ?? { households: 0, lakhpati: 0 }
+    t.households += v.households
+    t.lakhpati += v.lakhpati
+    totals.set(v[field] as number, t)
+  }
+  return {
+    ...shape,
+    children: shape.children.map(({ id, ...child }) => ({
+      ...child,
+      households: totals.get(id)?.households ?? 0,
+      lakhpati: totals.get(id)?.lakhpati ?? 0,
+    })),
+  }
+}
+
+async function loadAreaShape(level: GeoLevel, code: string) {
   const row = await findArea(level, code)
   const [path, { childLevel, rows }] = await Promise.all([
     pathTo(level, row),
@@ -94,12 +126,11 @@ export async function getArea(level: GeoLevel, code: string) {
     path,
     childLevel,
     children: rows.map((r) => ({
+      id: r.id as number,
       code: r.code as string | null,
       name: areaName(r),
       bodyType: r.body_type as string | null,
       childCount: Number(r.child_count),
-      households: Number(r.households),
-      lakhpati: Number(r.lakhpati),
       hasBoundary: shapeByCode.has(r.code),
     })),
     boundaries: {
