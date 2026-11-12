@@ -4,30 +4,45 @@ import { notFound } from "../../shared/errors.ts"
 import { msg } from "../../shared/i18n.ts"
 import type { Row } from "../../shared/types.ts"
 
+// List columns plus the live figures dashboards need: days past the SLA, the
+// amount actually sanctioned, and whether the asset has started earning.
+const LIST = `SELECT l.*, a.sanctioned_amount, a.department_id,
+    GREATEST(DATEDIFF(CURDATE(), l.sla_due_on), 0) AS days_overdue,
+    EXISTS (SELECT 1 FROM tbl_application_events e
+            WHERE e.application_id = l.id AND e.event_type = 'income_active') AS income_active
+  FROM v_application_list l JOIN tbl_applications a ON a.id = l.id`
+
 /**
- * Applications, optionally only those inside `area`: district / block areas by the
- * routing block (b, as on the dashboards), GP / village areas by the Didi's village (gp / v).
+ * Applications, optionally only those inside `area` (district / block areas by the
+ * routing block b, as on the dashboards; GP / village areas by the Didi's village gp / v)
+ * and only those of `departmentIds`.
  */
-export const listApplications = (area?: { sql: string; params: unknown[] } | null) =>
+export const listApplications = (
+  area?: { sql: string; params: unknown[] } | null,
+  departmentIds?: number[],
+) =>
   query<Row>(
-    `SELECT * FROM v_application_list
+    `${LIST}
+     WHERE ${departmentIds ? "a.department_id IN (?)" : "TRUE"}
      ${
        area
-         ? `WHERE app_code IN (
-              SELECT a.app_code FROM tbl_applications a
-              JOIN tbl_households h          ON h.id  = a.household_id
+         ? `AND l.app_code IN (
+              SELECT a2.app_code FROM tbl_applications a2
+              JOIN tbl_households h          ON h.id  = a2.household_id
               JOIN master_villages v         ON v.id  = h.village_id
               JOIN master_gram_panchayats gp ON gp.id = v.gram_panchayat_id
-              JOIN master_blocks b           ON b.id  = a.block_id
+              JOIN master_blocks b           ON b.id  = a2.block_id
               WHERE ${area.sql})`
          : ""
      }
-     ORDER BY received_on DESC, app_code DESC`,
-    area?.params ?? [],
+     ORDER BY l.received_on DESC, l.app_code DESC`,
+    [
+      ...(departmentIds ? [departmentIds.length ? departmentIds : [0]] : []),
+      ...(area?.params ?? []),
+    ],
   )
 
-export const findListRow = (code: string) =>
-  one<Row>("SELECT * FROM v_application_list WHERE app_code = ?", [code])
+export const findListRow = (code: string) => one<Row>(`${LIST} WHERE l.app_code = ?`, [code])
 
 /** Loads an application; with `forUpdate` the row is locked for the transaction. */
 export async function findApplication(code: string, db?: Db, forUpdate = false) {

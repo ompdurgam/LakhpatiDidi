@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 
 import { api } from "@/api/client"
+import { LIVE_MS } from "@/api/hooks"
 import { useSession } from "@/stores/session"
 
 export type DashLevel = "state" | "district" | "block"
@@ -94,6 +95,8 @@ export function useOverview(area?: { level: DashLevel; code: string }) {
     queryKey: ["monitoring", "overview", area?.level ?? "", area?.code ?? ""],
     queryFn: () => api<Overview>(`/monitoring/overview${search}`),
     enabled: signedIn,
-    staleTime: 60_000,
+    // Live dashboards: re-read every 30 s and when the tab is opened again.
+    refetchInterval: LIVE_MS,
+    refetchOnWindowFocus: true,
   })
 }

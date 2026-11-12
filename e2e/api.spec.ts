@@ -45,6 +45,18 @@ test.describe("auth", () => {
 })
 
 test.describe("applications", () => {
+  test("a department officer sees only her department's applications, with live figures", async ({
+    request,
+  }) => {
+    const fisheries = await signIn(request, "9425118881")
+    const list = await (await request.get("/api/applications", { headers: fisheries })).json()
+    expect(list.length).toBeGreaterThan(0)
+    for (const app of list) expect(app.deptCode).toBe("FISH")
+    const overdue = list.find((a: { overdue: boolean }) => a.overdue)
+    expect(overdue.daysOverdue).toBeGreaterThan(0)
+    expect(typeof list[0].incomeActive).toBe("boolean")
+  })
+
   test("lists and details", async ({ request }) => {
     // A block manager sees only her own block's applications (15 of the 20 in the fixtures).
     const list = await (await request.get("/api/applications", { headers })).json()

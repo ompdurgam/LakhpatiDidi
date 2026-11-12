@@ -16,6 +16,14 @@ export type ApplicationRow = {
   subsidy: string
   received: string
   hhCode: string
+  deptCode: string
+  /** Days past the SLA due date (0 when not overdue). */
+  daysOverdue: number
+  subsidyAmount: number
+  /** Amount the department sanctioned (null until sanctioned). */
+  sanctionedAmount: number | null
+  /** The asset has started earning (an "income active" event). */
+  incomeActive: boolean
 }
 
 export type ApplicationDetail = ApplicationRow & {

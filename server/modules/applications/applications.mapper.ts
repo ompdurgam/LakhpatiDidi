@@ -28,6 +28,13 @@ export function toApplicationRow(r: Row) {
     subsidy: inr(r.subsidy_amount),
     received: formatDate(r.received_on),
     hhCode: r.hh_code as string,
+    deptCode: r.department_code as string,
+    /** Days past the SLA due date (0 when not overdue). */
+    daysOverdue: r.is_overdue ? Number(r.days_overdue) : 0,
+    subsidyAmount: Number(r.subsidy_amount),
+    /** What the department actually sanctioned (null until sanctioned). */
+    sanctionedAmount: r.sanctioned_amount === null ? null : Number(r.sanctioned_amount),
+    incomeActive: Boolean(r.income_active),
   }
 }
 

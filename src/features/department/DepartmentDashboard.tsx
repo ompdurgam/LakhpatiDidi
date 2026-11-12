@@ -5,10 +5,11 @@ import { api } from "@/api/client"
 import { useData } from "@/api/hooks"
 import type { ApplicationRow } from "@/api/types"
 import { Icon } from "@/components/ui/Icon"
-import { departmentByCode, departmentByHindiName, departments } from "@/data/departments"
+import { departmentByCode, departments } from "@/data/departments"
 import { DepartmentInboxTable } from "@/features/department/DepartmentInboxTable"
 import { useAreaLabel } from "@/features/monitoring/useAreaLabel"
 import { useTr } from "@/i18n/tr"
+import { useSession } from "@/stores/session"
 
 import { DepartmentAnalytics } from "./DepartmentAnalytics"
 
@@ -24,9 +25,20 @@ export function DepartmentWorkspace({
   const tr = useTr()
   const { deptCode } = useParams()
   const navigate = useNavigate()
-  const dept = (departmentByCode(deptCode) ?? departments[0]).name.hi
-  const setDept = (name: string) =>
-    navigate(`/dept/${departmentByHindiName(name)?.code ?? departments[0].code}`)
+  // A department officer works only in her own department(s); others may open any.
+  const session = useSession((s) => s.user)
+  const role = useSession((s) => s.role)
+  const ownCodes = new Set(
+    (session?.assignments ?? [])
+      .filter((a) => a.role === "department" && a.departmentCode)
+      .map((a) => a.departmentCode),
+  )
+  const allowed =
+    role === "department" && ownCodes.size
+      ? departments.filter((d) => ownCodes.has(d.code))
+      : departments
+  const current = allowed.find((d) => d.code === departmentByCode(deptCode)?.code) ?? allowed[0]
+  const dept = current.name.hi
   const [overdueOnly, setOverdueOnly] = useState(false)
   const [schemeFilter, setSchemeFilter] = useState("सभी")
   const [blockFilter, setBlockFilter] = useState("सभी")
@@ -34,30 +46,17 @@ export function DepartmentWorkspace({
   const { meta, refresh } = useData()
   const area = useAreaLabel()
   const [bulkBusy, setBulkBusy] = useState(false)
-  const fallbackDepartments = [
-    "मत्स्य विभाग",
-    "कृषि विभाग",
-    "उद्यानिकी विभाग",
-    "पशुपालन विभाग",
-    "वन / CGMFP",
-    "महिला एवं बाल विकास",
-    "श्रम विभाग",
-    "DTIC / उद्योग",
-    "रेशम विभाग",
-    "हथकरघा विभाग",
-    "पर्यटन विभाग",
-    "संस्थागत वित्त/बैंक",
-    "अंत्यावसायी सहकारी विकास समिति",
-    "पंचायत एवं ग्रामीण विकास",
-  ]
-  const departmentOptions = meta?.departments.map((d) => d.name) ?? fallbackDepartments
-  const scopedRows = rows.filter((row) => row.dept === dept)
+  // Matched on the department code (names differ between Hindi and English).
+  const scopedRows = rows.filter((row) => row.deptCode === current.code)
   const count = (codes: string[]) =>
     scopedRows.filter((row) => codes.includes(row.statusCode)).length
+  // What was actually sanctioned (the requested subsidy until an amount is recorded).
   const sanctionedTotal = scopedRows
     .filter((row) => ["sanctioned", "delivered"].includes(row.statusCode))
-    .reduce((sum, row) => sum + Number(row.subsidy.replace(/[^\d]/g, "")), 0)
-  const escalations = scopedRows.filter((row) => row.overdue).sort((a, b) => b.days - a.days)
+    .reduce((sum, row) => sum + (row.sanctionedAmount ?? row.subsidyAmount), 0)
+  const escalations = scopedRows
+    .filter((row) => row.overdue)
+    .sort((a, b) => b.daysOverdue - a.daysOverdue)
   const bulkSanction = async () => {
     setBulkBusy(true)
     try {
@@ -96,13 +95,19 @@ export function DepartmentWorkspace({
           <h2>{tr(dept)}</h2>
           <p>{area}</p>
         </div>
-        <select className="workspace-select" value={dept} onChange={(e) => setDept(e.target.value)}>
-          {departmentOptions.map((x) => (
-            <option key={x} value={x}>
-              {tr(x)}
-            </option>
-          ))}
-        </select>
+        {allowed.length > 1 && (
+          <select
+            className="workspace-select"
+            value={current.code}
+            onChange={(e) => navigate(`/dept/${e.target.value}`)}
+          >
+            {allowed.map((d) => (
+              <option key={d.code} value={d.code}>
+                {tr(d.name.hi)}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
       <section className="department-kpis">
         {[
@@ -113,7 +118,7 @@ export function DepartmentWorkspace({
           ["अस्वीकृत", String(count(["rejected"])), "red"],
           ["अतिदेय", String(escalations.length), "red"],
           ["स्वीकृत राशि", `₹${sanctionedTotal.toLocaleString("en-IN")}`, "green"],
-          ["आय सक्रिय लाभार्थी", String(count(["delivered"])), "green"],
+          ["आय सक्रिय लाभार्थी", String(scopedRows.filter((r) => r.incomeActive).length), "green"],
         ].map(([label, value, color]) => (
           <div className="card" key={label}>
             <span>{tr(label)}</span>
@@ -210,7 +215,7 @@ export function DepartmentWorkspace({
                 </small>
               </div>
               <b>
-                {x.days} {tr("दिन अतिदेय")}
+                {x.daysOverdue} {tr("दिन अतिदेय")}
               </b>
             </div>
           ))}

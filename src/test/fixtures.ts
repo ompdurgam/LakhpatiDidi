@@ -24,6 +24,11 @@ export const applicationFixture: ApplicationRow = {
   subsidy: "₹72,000",
   received: "18 अक्टू. 2026",
   hhCode: "HH-BST-JGD-000123",
+  deptCode: "FISH",
+  daysOverdue: 3,
+  subsidyAmount: 72000,
+  sanctionedAmount: null,
+  incomeActive: false,
 }
 
 export const householdFixture: HouseholdRow = {

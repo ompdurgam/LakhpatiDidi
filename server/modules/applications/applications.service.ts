@@ -1,8 +1,8 @@
-import { transaction } from "../../db/pool.ts"
+import { query, transaction } from "../../db/pool.ts"
 import { badRequest, notFound } from "../../shared/errors.ts"
 import { today } from "../../shared/format.ts"
 import { msg } from "../../shared/i18n.ts"
-import type { SessionUser } from "../../shared/types.ts"
+import type { Row, SessionUser } from "../../shared/types.ts"
 import { parse } from "../../shared/validation.ts"
 import { sessionCondition } from "../auth/assignments.ts"
 import { notifyApplication } from "../notifications/notifications.applications.ts"
@@ -13,7 +13,23 @@ import { actions, assertAllowed, isActionName } from "./applications.workflow.ts
 
 /** Applications of households inside the areas of the session's role (all for statewide roles). */
 export async function listApplications(user: SessionUser) {
-  return (await repo.listApplications(await sessionCondition(user))).map(toApplicationRow)
+  // A department officer sees only the department(s) on her assignment. An account
+  // whose department role names no department (older accounts) sees every department,
+  // and picks one on screen.
+  const own =
+    user.role === "department"
+      ? (
+          await query<Row>(
+            `SELECT DISTINCT department_id FROM master_user_assignments
+             WHERE user_id = ? AND role = 'department' AND department_id IS NOT NULL`,
+            [user.id],
+          )
+        ).map((r) => r.department_id as number)
+      : []
+  const departments = own.length ? own : undefined
+  return (await repo.listApplications(await sessionCondition(user), departments)).map(
+    toApplicationRow,
+  )
 }
 
 export async function getApplicationDetail(code: string) {

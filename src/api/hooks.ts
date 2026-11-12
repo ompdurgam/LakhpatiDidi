@@ -10,12 +10,18 @@ import type { ApplicationRow, HouseholdRow, Meta } from "./types"
 /** Staff data is only fetched for staff: a Didi account is refused it by the API (403). */
 const useSignedIn = () => useSession((s) => Boolean(s.token) && s.user?.role !== "didi")
 
+/** How often live screens re-read the server. */
+export const LIVE_MS = 30_000
+
 export function useApplications() {
   const signedIn = useSignedIn()
   return useQuery({
     queryKey: queryKeys.applications,
     queryFn: () => api<ApplicationRow[]>("/applications"),
     enabled: signedIn,
+    // Live: inboxes and KPIs pick up other officers' actions without a reload.
+    refetchInterval: LIVE_MS,
+    refetchOnWindowFocus: true,
   })
 }
 
