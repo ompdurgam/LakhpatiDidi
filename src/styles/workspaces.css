@@ -2021,3 +2021,51 @@ dl.editor-fields dd {
   color: #6d776f;
   font-size: calc(14px * var(--font-scale));
 }
+
+/* Department: one application on its own page, with its progress track. */
+.application-page {
+  display: grid;
+  gap: 14px;
+}
+.application-back {
+  justify-self: start;
+}
+.application-back svg {
+  transform: rotate(180deg);
+}
+.application-page-head {
+  padding: 18px;
+}
+.application-page-head .drawer-person {
+  padding: 0;
+  border: 0;
+}
+.application-page-head h2 {
+  margin: 2px 0;
+}
+.application-track {
+  margin-top: 16px;
+}
+.application-track-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: #ecefec;
+  overflow: hidden;
+}
+.application-track-bar i {
+  display: block;
+  height: 100%;
+  background: #2e754d;
+  transition: width 0.3s ease;
+}
+.application-page-body {
+  padding: 4px 0 0;
+}
+/* On the page the drawer's fixed action bar becomes a bar at the bottom of the card. */
+.application-page .drawer-actions {
+  position: sticky;
+  right: auto;
+  width: auto;
+  z-index: 2;
+  border-radius: 0 0 12px 12px;
+}

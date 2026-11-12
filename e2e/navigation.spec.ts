@@ -55,11 +55,15 @@ test("every role's screens are reachable by URL", async ({ page }) => {
   }
 })
 
-test("department inbox opens an application by URL and closes back", async ({ page }) => {
+test("department application opens as a page with its track bar, and back to the inbox", async ({
+  page,
+}) => {
   await login(page, "विभाग", "9425118881")
   await page.goto("/dept/FISH/applications/APP-260142")
-  await expect(page.locator(".drawer h2")).toHaveText("APP-260142")
-  await page.locator(".drawer-head .icon-button").click()
+  await expect(page.locator(".application-page .eyebrow")).toHaveText("APP-260142")
+  await expect(page.locator(".application-track .horizontal-timeline > div").first()).toBeVisible()
+  await expect(page.locator(".drawer")).toHaveCount(0)
+  await page.locator(".application-back").click()
   await expect(page).toHaveURL(/\/dept\/FISH$/)
 })
 

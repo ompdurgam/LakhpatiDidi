@@ -1,18 +1,15 @@
-import { useState } from "react"
-
-import { api } from "@/api/client"
-import { useRefreshData, useResource } from "@/api/hooks"
-import type { ApplicationDetail, ApplicationRow } from "@/api/types"
+import type { ApplicationRow } from "@/api/types"
 import { Drawer } from "@/components/ui/Drawer"
 import { statusClass } from "@/components/ui/statusClass"
 import { useTr } from "@/i18n/tr"
 
-import { ApplicationActionBar, type FormAction } from "./ApplicationActionBar"
+import { ApplicationActionBar } from "./ApplicationActionBar"
 import { ApplicationActionForm } from "./ApplicationActionForm"
 import { ApplicationComments } from "./ApplicationComments"
 import { PrintableApplication } from "./ApplicationDocument"
 import { ApplicationOverview } from "./ApplicationOverview"
 import { ApplicationPdfModal } from "./ApplicationPdfModal"
+import { type ApplicationDetailState, useApplicationDetail } from "./useApplicationDetail"
 
 /** Right-hand panel with one application's details and workflow actions. */
 export function ApplicationDrawer({
@@ -27,52 +24,8 @@ export function ApplicationDrawer({
   onNotify: (s: string) => void
 }) {
   const tr = useTr()
-  const refresh = useRefreshData()
-  const {
-    data: detail,
-    error: loadError,
-    reload,
-  } = useResource<ApplicationDetail>(`/applications/${item.id}`)
-  const [action, setAction] = useState<FormAction | null>(null)
-  const [pdfOpen, setPdfOpen] = useState(false)
-  const [busy, setBusy] = useState(false)
-  const [actionError, setActionError] = useState("")
-  const view = detail ?? item
-
-  /** Runs a request with the busy/error handling every drawer action shares. */
-  const submit = async (work: () => Promise<string>, after: () => Promise<unknown>) => {
-    setBusy(true)
-    setActionError("")
-    try {
-      onNotify(await work())
-      await after()
-      return true
-    } catch (e) {
-      setActionError((e as Error).message)
-      return false
-    } finally {
-      setBusy(false)
-    }
-  }
-
-  const run = (payload: Record<string, unknown>) =>
-    submit(
-      async () => {
-        const { message } = await api<{ message: string }>(`/applications/${item.id}/actions`, {
-          body: payload,
-        })
-        setAction(null)
-        return message
-      },
-      () => Promise.all([reload(), refresh()]),
-    )
-
-  const sendComment = (body: string) =>
-    submit(async () => {
-      await api(`/applications/${item.id}/comments`, { body: { body } })
-      return "टिप्पणी भेजी गई"
-    }, reload)
-
+  const state = useApplicationDetail(item.id, onNotify)
+  const view = state.detail ?? item
   return (
     <>
       <Drawer eyebrow={tr("आवेदन विवरण")} title={item.id} onClose={onClose}>
@@ -86,41 +39,72 @@ export function ApplicationDrawer({
           </div>
           <span className={`status ${statusClass[view.status] || "blue"}`}>{tr(view.status)}</span>
         </div>
-        {loadError && <p className="form-error drawer-error">{tr(loadError)}</p>}
-        {!detail && !loadError && <div className="drawer-loading">{tr("लोड हो रहा है…")}</div>}
-        {detail && (
-          <>
-            <ApplicationOverview detail={detail} onOpenPdf={() => setPdfOpen(true)} />
-            <ApplicationComments comments={detail.comments} busy={busy} onSend={sendComment} />
-          </>
-        )}
-        {action && detail && (
-          <ApplicationActionForm
-            action={action}
-            detail={detail}
-            busy={busy}
-            onCancel={() => {
-              setAction(null)
-              setActionError("")
-            }}
-            onSubmit={(payload) => run({ action, ...payload })}
-          />
-        )}
-        {actionError && (
-          <p className="form-error drawer-error" role="alert">
-            {tr(actionError)}
-          </p>
-        )}
-        <ApplicationActionBar
-          role={role}
-          statusCode={view.statusCode}
-          escalation={detail?.escalation}
-          busy={busy}
-          onRun={run}
-          onOpenForm={setAction}
-        />
+        <ApplicationBody state={state} role={role} statusCode={view.statusCode} />
       </Drawer>
-      {pdfOpen && detail && <ApplicationPdfModal item={detail} onClose={() => setPdfOpen(false)} />}
+      <ApplicationExtras state={state} />
+    </>
+  )
+}
+
+/** Overview, comments, the action form and the action bar (drawer and full page). */
+export function ApplicationBody({
+  state,
+  role,
+  statusCode,
+}: {
+  state: ApplicationDetailState
+  role: string
+  statusCode: string
+}) {
+  const tr = useTr()
+  const { detail, loadError, action, busy, actionError } = state
+  return (
+    <>
+      {loadError && <p className="form-error drawer-error">{tr(loadError)}</p>}
+      {!detail && !loadError && <div className="drawer-loading">{tr("लोड हो रहा है…")}</div>}
+      {detail && (
+        <>
+          <ApplicationOverview detail={detail} onOpenPdf={() => state.setPdfOpen(true)} />
+          <ApplicationComments comments={detail.comments} busy={busy} onSend={state.sendComment} />
+        </>
+      )}
+      {action && detail && (
+        <ApplicationActionForm
+          action={action}
+          detail={detail}
+          busy={busy}
+          onCancel={() => {
+            state.setAction(null)
+            state.setActionError("")
+          }}
+          onSubmit={(payload) => state.run({ action, ...payload })}
+        />
+      )}
+      {actionError && (
+        <p className="form-error drawer-error" role="alert">
+          {tr(actionError)}
+        </p>
+      )}
+      <ApplicationActionBar
+        role={role}
+        statusCode={statusCode}
+        escalation={detail?.escalation}
+        busy={busy}
+        onRun={state.run}
+        onOpenForm={state.setAction}
+      />
+    </>
+  )
+}
+
+/** The PDF preview and the print-only copy of the application. */
+export function ApplicationExtras({ state }: { state: ApplicationDetailState }) {
+  const { detail, pdfOpen } = state
+  return (
+    <>
+      {pdfOpen && detail && (
+        <ApplicationPdfModal item={detail} onClose={() => state.setPdfOpen(false)} />
+      )}
       {detail && <PrintableApplication item={detail} />}
     </>
   )

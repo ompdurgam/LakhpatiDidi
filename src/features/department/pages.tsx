@@ -1,10 +1,10 @@
-import { useEffect } from "react"
 import { Navigate, useNavigate, useParams } from "react-router"
 
-import { useApplications } from "@/api/hooks"
 import { DEFAULT_DEPARTMENT } from "@/app/navigation"
 import { departmentByCode } from "@/data/departments"
+import { ApplicationPage } from "@/features/applications/ApplicationPage"
 import { useFilteredApplications } from "@/features/applications/useFilteredApplications"
+import { useSession } from "@/stores/session"
 import { useUi } from "@/stores/ui"
 
 import { DepartmentWorkspace } from "./DepartmentDashboard"
@@ -25,16 +25,21 @@ export function DepartmentPage() {
   )
 }
 
-/** /dept/:deptCode/applications/:id — same page with the application drawer open. */
+/** /dept/:deptCode/applications/:id — the application on its own page, with its track bar. */
 export function DepartmentApplicationPage() {
-  const { id } = useParams()
-  const { data: applications } = useApplications()
-  const openApplication = useUi((s) => s.openApplication)
-  const row = applications?.find((a) => a.id === id)
-  useEffect(() => {
-    if (row) openApplication(row)
-  }, [row, openApplication])
-  return <DepartmentPage />
+  const { deptCode, id } = useParams()
+  const navigate = useNavigate()
+  const role = useSession((s) => s.role)
+  const notify = useUi((s) => s.notify)
+  return (
+    <ApplicationPage
+      key={id}
+      code={id ?? ""}
+      role={role}
+      onBack={() => navigate(`/dept/${deptCode}`)}
+      onNotify={notify}
+    />
+  )
 }
 
 export const DepartmentIndexRedirect = () => <Navigate to={`/dept/${DEFAULT_DEPARTMENT}`} replace />

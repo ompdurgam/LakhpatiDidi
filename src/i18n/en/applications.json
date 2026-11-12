@@ -98,5 +98,7 @@
   "जारी तिथि: {{date}} • यह कंप्यूटर द्वारा बनाया गया दस्तावेज़ है": "Issued on {{date}} • This is a computer-generated document",
   "आवेदन पत्र": "Application",
   "प्रिंट करें": "Print",
-  "डाउनलोड के लिए प्रिंट विंडो में “PDF के रूप में सेव करें” चुनें": "To download, choose “Save as PDF” in the print window"
+  "डाउनलोड के लिए प्रिंट विंडो में “PDF के रूप में सेव करें” चुनें": "To download, choose “Save as PDF” in the print window",
+  "इनबॉक्स पर वापस": "Back to inbox",
+  "आवेदन की प्रगति": "Application progress"
 }

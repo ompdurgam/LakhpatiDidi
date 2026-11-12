@@ -1,6 +1,6 @@
 import { Suspense } from "react"
 import { useTranslation } from "react-i18next"
-import { Outlet, useMatch, useNavigate } from "react-router"
+import { Outlet } from "react-router"
 
 import { useData } from "@/api/hooks"
 import { EmptyState } from "@/components/ui/EmptyState"
@@ -24,13 +24,7 @@ export function AppShell() {
   const notify = useUi((s) => s.notify)
   const menuOpen = useUi((s) => s.menuOpen)
   const setMenuOpen = useUi((s) => s.setMenuOpen)
-  const navigate = useNavigate()
-  const deptApplication = useMatch("/dept/:deptCode/applications/:id")
-  const closeDrawer = () => {
-    openApplication(null)
-    // Leave the application URL so a reload doesn't reopen it.
-    if (deptApplication) navigate(`/dept/${deptApplication.params.deptCode}`)
-  }
+  const closeDrawer = () => openApplication(null)
 
   return (
     <div className="app-shell">
