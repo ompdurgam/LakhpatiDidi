@@ -153,6 +153,11 @@ export const didiFixture = {
     total: 3,
     percent: 33,
   },
+  monthlyIncome: [{ month: "2026-10", amount: 6500 }],
+  entitlements: [
+    { name: "PM आवास", department: "ग्रामीण विकास", status: "missing" },
+    { name: "PM आवास", department: "ग्रामीण विकास", status: "received" },
+  ],
 }
 
 /** Minimal fake of the REST API for component and route tests. */
@@ -210,6 +215,7 @@ const englishData: Record<string, string> = {
   बकावंड: "Bakawand",
   धुरगुड़ा: "Dhurguda",
   नानगुर: "Nangur",
+  "ग्रामीण विकास": "Rural Development",
   "गीता नेताम": "Geeta Netam",
   "PM आवास": "PM Awas",
   कृषि: "Agriculture",

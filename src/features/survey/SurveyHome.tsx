@@ -5,7 +5,9 @@ import { useTr } from "@/i18n/tr"
 import { useSession } from "@/stores/session"
 
 import { DidiWorklist } from "./DidiWorklist"
+import { MyDay } from "./MyDay"
 import { type SurveyStatusFilter, useSurveyHouseholds } from "./surveyHouseholds"
+import { SyncBanner } from "./SyncBanner"
 import { useVillageOptions } from "./village/useVillageProfile"
 
 export function SurveyHome({
@@ -36,10 +38,7 @@ export function SurveyHome({
   const stats = list.data
   return (
     <div className="phone-content survey-home">
-      <div className="offline-banner">
-        <Icon name="alert" size={15} />
-        <span>{tr("ऑफलाइन मोड • डेटा फोन में सुरक्षित है")}</span>
-      </div>
+      <SyncBanner />
       <div className="mobile-greeting">
         <small>{tr("नमस्ते, {{name}}", { name: tr(userName) })}</small>
         <h3>{tr("आज का फील्ड कार्य")}</h3>
@@ -61,6 +60,7 @@ export function SurveyHome({
           <span>{tr("पूर्ण")}</span>
         </div>
       </div>
+      <MyDay />
       <button className="start-survey" onClick={() => onOpenSurvey()}>
         <Icon name="plus" /> {tr("नई दीदी का सर्वे शुरू करें")}
       </button>

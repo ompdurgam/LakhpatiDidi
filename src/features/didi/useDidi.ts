@@ -35,6 +35,10 @@ export type DidiProfileData = {
   }
   incomeSources: { name: string; months: string[]; gross: number; cost: number; net: number }[]
   gaps: { code: string; name: string; department: string; open: boolean; identifiedOn: string }[]
+  /** Monthly income recorded by her CRP, last 12 months (YYYY-MM), oldest first. */
+  monthlyIncome: { month: string; amount: number }[]
+  /** Every entitlement from her latest survey, missing first. */
+  entitlements: { name: string; department: string; status: "received" | "pending" | "missing" }[]
   applications: ApplicationRow[]
   tasks: { items: DidiTask[]; done: number; total: number; percent: number }
 }

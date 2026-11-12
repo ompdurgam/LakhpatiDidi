@@ -117,10 +117,7 @@ export async function saveEntitlementGaps(
   householdId: number,
   responses: Record<string, string>,
 ) {
-  const answers = Object.entries(responses).flatMap(([key, status]) => {
-    const match = SCHEME_STATUS.exec(key)
-    return match && status ? [{ scheme: SCHEME_ALIAS[match[1]] ?? match[1], status }] : []
-  })
+  const answers = schemeAnswers(responses)
   if (!answers.length) return
   const schemes = await query<Row>(
     "SELECT id, name_hi FROM master_schemes WHERE name_hi IN (?)",
@@ -149,4 +146,12 @@ export async function saveEntitlementGaps(
         db,
       )
   }
+}
+
+/** Section D answers: each scheme (by its scheme-master Hindi name) and its status. */
+export function schemeAnswers(responses: Record<string, string>) {
+  return Object.entries(responses).flatMap(([key, status]) => {
+    const match = SCHEME_STATUS.exec(key)
+    return match && status ? [{ scheme: SCHEME_ALIAS[match[1]] ?? match[1], status }] : []
+  })
 }

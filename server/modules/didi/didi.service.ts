@@ -8,6 +8,7 @@ import {
   lifecycleHi,
   type LifecycleStatus,
 } from "../households/households.labels.ts"
+import { entitlements, monthlyIncome } from "./didi.journey.ts"
 import { buildTasks, progress } from "./didi.tasks.ts"
 
 /** Income at which a Didi is "on the threshold" of Lakhpati. */
@@ -40,7 +41,7 @@ export async function getDidiProfile(mobile: string) {
   )
   if (!h) return null
 
-  const [sources, gaps, applications] = await Promise.all([
+  const [sources, gaps, applications, monthly, entitlementList] = await Promise.all([
     query<Row>(
       `SELECT source_name, months_active, gross_income, cost, net_income
        FROM tbl_household_income_sources
@@ -63,6 +64,8 @@ export async function getDidiProfile(mobile: string) {
       "SELECT * FROM v_application_list WHERE hh_code = ? ORDER BY received_on DESC, app_code DESC",
       [h.hh_code],
     ),
+    monthlyIncome(h.id),
+    entitlements(h.id),
   ])
 
   const income = Number(h.current_annual_income)
@@ -123,5 +126,9 @@ export async function getDidiProfile(mobile: string) {
     gaps: gapRows,
     applications: appRows,
     tasks: { items: tasks, ...progress(tasks) },
+    /** Monthly income recorded by her CRP, last 12 months. */
+    monthlyIncome: monthly,
+    /** Every entitlement asked in her latest survey, missing first. */
+    entitlements: entitlementList,
   }
 }

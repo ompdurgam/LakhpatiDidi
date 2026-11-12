@@ -6,6 +6,7 @@ import { Icon } from "@/components/ui/Icon"
 import { StatusBadge } from "@/components/ui/StatusBadge"
 import { useTr } from "@/i18n/tr"
 
+import { DidiJourney, EntitlementChecklist } from "./DidiJourney"
 import { LakhpatiMeter } from "./LakhpatiMeter"
 import { TasksCard } from "./TasksCard"
 import { useDidi } from "./useDidi"
@@ -49,6 +50,10 @@ export function DidiProfile() {
 
       <div className="didi-grid">
         <LakhpatiMeter meter={meter} />
+
+        <DidiJourney data={data} />
+
+        <EntitlementChecklist data={data} />
 
         <Card title={tr("मेरी जानकारी")}>
           <dl className="didi-facts">

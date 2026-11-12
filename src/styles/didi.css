@@ -426,3 +426,66 @@
 .didi-scheme-answer button.primary {
   flex: 1.7;
 }
+
+/* Her income journey: progress to ₹1 lakh and a 12-month bar chart. */
+.journey-summary {
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+.journey-track {
+  height: 8px;
+  border-radius: 999px;
+  background: #ecefec;
+  overflow: hidden;
+}
+.journey-track i {
+  display: block;
+  height: 100%;
+  background: #2e754d;
+}
+.journey-bars {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 4px;
+  align-items: end;
+  height: 120px;
+  margin-top: 14px;
+}
+.journey-bars > div {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: 100%;
+  text-align: center;
+}
+.journey-bars i {
+  align-self: end;
+  min-height: 2px;
+  border-radius: 4px 4px 0 0;
+  background: #85a965;
+}
+.journey-bars small {
+  font-size: calc(10.5px * var(--font-scale));
+  color: #6d776f;
+}
+
+/* Her entitlements: missing first, each with where to apply. */
+.entitlement-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.entitlement-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid #edf0ec;
+}
+.entitlement-list li > div {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+}
+.entitlement-list small {
+  color: #6d776f;
+}

@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react"
 import { useParams } from "react-router"
 
-import { api } from "@/api/client"
+import { api, ApiError } from "@/api/client"
 import { useRefreshData } from "@/api/hooks"
 import { SurveyDraftContext } from "@/components/ui/draft"
 import { Icon } from "@/components/ui/Icon"
+import { clearDraft, loadDraft, queueSurvey, saveDraft } from "@/features/survey/offlineSurvey"
 import { IdentificationForm } from "@/features/survey/sections/IdentificationForm"
 import { IncomeBaselineForm } from "@/features/survey/sections/IncomeBaselineForm"
 import { LivelihoodSection } from "@/features/survey/sections/livelihood/LivelihoodSection"
@@ -63,24 +64,30 @@ function SurveyFormBody({
 }: SurveyFormProps & { household?: SurveyHousehold }) {
   const tr = useTr()
   const [submitted, setSubmitted] = useState<SurveyResult | null>(null)
+  const [queued, setQueued] = useState(false)
   const [submitError, setSubmitError] = useState("")
+  // The copy of this survey saved on the phone, if the CRP left it unfinished.
+  const [local] = useState(() => loadDraft(household?.code))
   // Every TextControl / SelectControl in the form writes its value here (keyed by label).
-  // A Didi on record starts from her details (name, place, SHG…).
-  const [draft] = useState<Record<string, string>>(() => (household ? prefillDraft(household) : {}))
+  // A Didi on record starts from her details (name, place, SHG…), then any saved draft.
+  const [draft] = useState<Record<string, string>>(() => ({
+    ...(household ? prefillDraft(household) : {}),
+    ...(local?.responses ?? {}),
+  }))
   const refreshData = useRefreshData()
   const refreshList = useRefreshSurveyList()
   const submitSurvey = async (consentMethod: string) => {
     setSubmitError("")
+    const body = {
+      householdCode: household?.code,
+      responses: draft,
+      incomeEntries,
+      sections: sections.map((name) => name.trim().charAt(0)),
+      consentMethod,
+    }
     try {
-      const result = await api<SurveyResult>("/surveys", {
-        body: {
-          householdCode: household?.code,
-          responses: draft,
-          incomeEntries,
-          sections: sections.map((name) => name.trim().charAt(0)),
-          consentMethod,
-        },
-      })
+      const result = await api<SurveyResult>("/surveys", { body })
+      clearDraft(household?.code)
       setSubmitted(result)
       onNotify(
         result.created
@@ -90,22 +97,61 @@ function SurveyFormBody({
       void refreshData()
       void refreshList()
     } catch (e) {
+      // No network: keep it in the phone's outbox; it is sent when the connection returns.
+      if (e instanceof ApiError && e.status === 0) {
+        queueSurvey(draft["SHG सदस्य का नाम"] || household?.name || "", body)
+        clearDraft(household?.code)
+        setQueued(true)
+        onNotify(tr("इंटरनेट नहीं — सर्वे फोन में सुरक्षित, नेटवर्क आते ही अपने आप भेजा जाएगा"))
+        return
+      }
       setSubmitError((e as Error).message)
       onNotify((e as Error).message)
     }
   }
-  const [incomeEntries, setIncomeEntries] = useState<IncomeEntry[]>([
-    { name: "फसल/खेती", months: [], gross: 0, cost: 0 },
-    { name: "अन्य कृषि/बागवानी", months: [], gross: 0, cost: 0 },
-    { name: "पशुपालन", months: [], gross: 0, cost: 0 },
-    { name: "मत्स्य पालन", months: [], gross: 0, cost: 0 },
-    { name: "वन उपज", months: [], gross: 0, cost: 0 },
-    { name: "गैर-कृषि उद्यम", months: [], gross: 0, cost: 0 },
-    { name: "पर्यटन", months: [], gross: 0, cost: 0 },
-    { name: "स्थानीय मजदूरी", months: [], gross: 0, cost: 0 },
-    { name: "प्रवासन/रोजगार", months: [], gross: 0, cost: 0 },
-    { name: "अन्य", months: [], gross: 0, cost: 0 },
-  ])
+  const [incomeEntries, setIncomeEntries] = useState<IncomeEntry[]>(
+    () =>
+      local?.incomeEntries ?? [
+        { name: "फसल/खेती", months: [], gross: 0, cost: 0 },
+        { name: "अन्य कृषि/बागवानी", months: [], gross: 0, cost: 0 },
+        { name: "पशुपालन", months: [], gross: 0, cost: 0 },
+        { name: "मत्स्य पालन", months: [], gross: 0, cost: 0 },
+        { name: "वन उपज", months: [], gross: 0, cost: 0 },
+        { name: "गैर-कृषि उद्यम", months: [], gross: 0, cost: 0 },
+        { name: "पर्यटन", months: [], gross: 0, cost: 0 },
+        { name: "स्थानीय मजदूरी", months: [], gross: 0, cost: 0 },
+        { name: "प्रवासन/रोजगार", months: [], gross: 0, cost: 0 },
+        { name: "अन्य", months: [], gross: 0, cost: 0 },
+      ],
+  )
+
+  // Reopening an unfinished survey returns to where the CRP stopped.
+  useEffect(() => {
+    if (!local) return
+    setStep(local.step)
+    setSelectedLivelihoods(local.livelihoods)
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once, when the form opens
+  }, [])
+  // Save the survey on the phone every few seconds while it is being filled.
+  const latest = useRef({ incomeEntries, step, selectedLivelihoods })
+  latest.current = { incomeEntries, step, selectedLivelihoods }
+  const done = Boolean(submitted) || queued
+  useEffect(() => {
+    if (done) return
+    const save = () =>
+      saveDraft(household?.code, {
+        responses: draft,
+        incomeEntries: latest.current.incomeEntries,
+        step: latest.current.step,
+        livelihoods: latest.current.selectedLivelihoods,
+        savedAt: new Date().toISOString(),
+      })
+    const timer = window.setInterval(save, 3000)
+    return () => {
+      window.clearInterval(timer)
+      save()
+    }
+  }, [done, draft, household?.code])
   const conditionalCodes = ["E", "F", "G", "H", "I", "J", "K"]
   const isApplicable = (index: number) =>
     index < 4 || index === 11 || selectedLivelihoods.includes(conditionalCodes[index - 4])
@@ -174,6 +220,19 @@ function SurveyFormBody({
             : step === 11
               ? tr("समीक्षा और सहमति")
               : sections[step]
+  if (queued)
+    return (
+      <div className="phone-content survey-form">
+        <div className="survey-queued">
+          <Icon name="clock" size={28} />
+          <h3>{tr("सर्वे फोन में सुरक्षित")}</h3>
+          <p>{tr("अभी इंटरनेट नहीं है। नेटवर्क मिलते ही यह सर्वे अपने आप भेज दिया जाएगा।")}</p>
+          <button className="primary" onClick={onNextFamily}>
+            {tr("अगली दीदी")}
+          </button>
+        </div>
+      </div>
+    )
   if (submitted)
     return (
       <SurveySuccess
@@ -197,6 +256,28 @@ function SurveyFormBody({
             {step + 1}/{sections.length}
           </b>
         </div>
+        {local && (
+          <div className="draft-restored" role="status">
+            <Icon name="check" size={14} />
+            <span>
+              {tr("फोन में सहेजा अधूरा सर्वे खोला गया • {{at}}", {
+                at: new Date(local.savedAt).toLocaleString("en-IN", {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                }),
+              })}
+            </span>
+            <button
+              className="text-button"
+              onClick={() => {
+                clearDraft(household?.code)
+                window.location.reload()
+              }}
+            >
+              {tr("नया शुरू करें")}
+            </button>
+          </div>
+        )}
         <div className="mini-stepper">
           {sections.map((section, index) => (
             <button
