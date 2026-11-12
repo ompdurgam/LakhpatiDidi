@@ -22,6 +22,7 @@ export const categoryCode: Record<string, string> = {
   SC: "SC",
   OBC: "OBC",
   सामान्य: "GEN",
+  अन्य: "OTHER",
 }
 
 export const LAKHPATI_INCOME = 100_000

@@ -154,6 +154,7 @@ test.describe("households & surveys", () => {
       "SHG सदस्य का नाम": "रीना मंडावी",
       "मोबाइल (10 अंक)": "9876500011",
       गाँव: "नानगुर",
+      "सामाजिक वर्ग": "ST",
       ...overrides,
     },
     incomeEntries: [
@@ -175,7 +176,79 @@ test.describe("households & surveys", () => {
     })
   })
 
+  test("stores income sources, loans, scheme gaps and the PLD answer", async ({ request }) => {
+    const loans = [
+      {
+        source: "बैंक/PACS",
+        taken: "हाँ",
+        purpose: "KCC",
+        principal: 40000,
+        outstanding: 25000,
+        rate: 7,
+        year: 2026,
+      },
+      {
+        source: "MFI/NBFC",
+        taken: "नहीं",
+        purpose: "",
+        principal: 0,
+        outstanding: 0,
+        rate: 0,
+        year: 2026,
+      },
+    ]
+    const body = survey({
+      "ऋण विवरण": JSON.stringify(loans),
+      "D • PM किसान • स्थिति": "आवेदन नहीं",
+      "क्या संभावित लखपति दीदी (PLD) हैं?": "हाँ",
+    })
+    // A source reported as ₹0 is not stored.
+    body.incomeEntries.push({ name: "पर्यटन", months: [], gross: 0, cost: 0 })
+    expect((await post(request, "/api/surveys", body)).status()).toBe(201)
+
+    const tracker = await (
+      await request.get("/api/households/HH-BST-JGD-000124/tracker", { headers })
+    ).json()
+    expect(tracker.sources.map((s: { name: string }) => s.name).sort()).toEqual([
+      "पशुपालन",
+      "फसल/खेती",
+    ])
+    expect(tracker.gaps).toEqual([expect.objectContaining({ open: true })])
+    const overview = await (await request.get("/api/monitoring/overview", { headers })).json()
+    expect(overview.loans).toContainEqual(
+      expect.objectContaining({ lender: "bank", amount: 40000 }),
+    )
+
+    // Marked received on the next survey, the gap closes.
+    const received = survey({ "D • PM किसान • स्थिति": "प्राप्त" })
+    expect((await post(request, "/api/surveys", received)).status()).toBe(201)
+    const after = await (
+      await request.get("/api/households/HH-BST-JGD-000124/tracker", { headers })
+    ).json()
+    expect(after.gaps).toEqual([expect.objectContaining({ open: false })])
+  })
+
+  test("block staff download the PLD list as Excel; a CRP cannot", async ({ request }) => {
+    const res = await request.get("/api/households/export", { headers })
+    expect(res.status()).toBe(200)
+    expect(res.headers()["content-type"]).toContain("spreadsheetml")
+    const file = await res.body()
+    expect(file.subarray(0, 2).toString()).toBe("PK") // an .xlsx is a zip
+    const crp = await signIn(request, "9752314412")
+    expect((await request.get("/api/households/export", { headers: crp })).status()).toBe(403)
+  })
+
   test("validates survey fields", async ({ request }) => {
+    // A new household needs her social category.
+    expect(
+      (
+        await post(
+          request,
+          "/api/surveys",
+          survey({ "मोबाइल (10 अंक)": "9876500099", "सामाजिक वर्ग": "" }),
+        )
+      ).status(),
+    ).toBe(400)
     expect((await post(request, "/api/surveys", survey({ गाँव: "दिल्ली" }))).status()).toBe(400)
     expect(
       (await post(request, "/api/surveys", survey({ "मोबाइल (10 अंक)": "123" }))).status(),
@@ -350,6 +423,7 @@ test.describe("didi (PLD) profile", () => {
           "SHG सदस्य का नाम": "नयी दीदी",
           "मोबाइल (10 अंक)": mobile,
           गाँव: "बड़ांजी",
+          "सामाजिक वर्ग": "OBC",
         },
         incomeEntries: [{ name: "फसल/खेती", months: ["Jun"], gross: 90000, cost: 10000 }],
         sections: ["A"],

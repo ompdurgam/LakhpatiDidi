@@ -8,6 +8,7 @@ import type { Row, SessionUser } from "../../shared/types.ts"
 import { parse } from "../../shared/validation.ts"
 import { categoryCode, lifecycleFor } from "../households/households.labels.ts"
 import { areaOf } from "./surveyList.ts"
+import { saveSurveyDetails } from "./surveys.details.ts"
 import { FIELD, householdFields, type IncomeEntry, surveyBody } from "./surveys.schemas.ts"
 
 const net = (e: IncomeEntry) => e.gross - e.cost
@@ -69,6 +70,8 @@ export async function submitSurvey(body: unknown, user: SessionUser) {
       : undefined
     if (householdCode && !onRecord) throw notFound(msg("परिवार नहीं मिला"))
     if (!onRecord && !villageName) throw badRequest(msg("गाँव चुनें"))
+    // A new household needs her real category (there is no safe default).
+    if (!onRecord && !category) throw badRequest(msg("सामाजिक वर्ग चुनें"))
     // A Didi on record stays in her village; a new one is placed in the village chosen,
     // looked up inside the surveyor's own areas (village names repeat across the state).
     const village = onRecord
@@ -143,7 +146,7 @@ export async function submitSurvey(body: unknown, user: SessionUser) {
           ...common,
           mobile,
           shg?.id ?? null,
-          category ?? "ST",
+          category,
           income,
           active.length,
           status,
@@ -170,18 +173,14 @@ export async function submitSurvey(body: unknown, user: SessionUser) {
       [householdId, surveyorId, sections, JSON.stringify(responses), consentMethod],
       db,
     )
-    const fy = financialYear()
-    for (const e of incomeEntries) {
-      await exec(
-        `INSERT INTO tbl_household_income_sources
-           (household_id, survey_id, source_name, months_active, gross_income, cost, financial_year)
-         VALUES (?, ?, ?, ?, ?, ?, ?)
-         ON DUPLICATE KEY UPDATE survey_id = VALUES(survey_id), months_active = VALUES(months_active),
-           gross_income = VALUES(gross_income), cost = VALUES(cost)`,
-        [householdId, survey.insertId, e.name, e.months.join(","), e.gross, e.cost, fy],
-        db,
-      )
-    }
+    await saveSurveyDetails(
+      db,
+      householdId,
+      survey.insertId,
+      financialYear(),
+      incomeEntries,
+      responses,
+    )
     return { hhCode, name, village: village.name_hi as string, created: !existing }
   })
 }
