@@ -48,6 +48,7 @@ const screens: [Role, string, RegExp][] = [
   ["district", "/district/lakhpati-gram", /जिला/],
   ["state", "/state", /राज्य/],
   ["state", "/state/certification", /राज्य/],
+  ["state", "/state/districts/122027", /जिला प्रोफ़ाइल/],
   ["didi", "/didi", /मेरी प्रोफ़ाइल/],
   ["didi", "/didi/tasks", /मेरे कार्य/],
   ["didi", "/didi/applications", /मेरे आवेदन/],

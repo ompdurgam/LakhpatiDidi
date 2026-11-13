@@ -20,13 +20,17 @@ type SchemeRow = {
   gapsClosed: number
 }
 
-/** Scheme-wise progress from suggestion to delivery, and entitlement gaps, for the user's area. */
-export function SchemeConvergence() {
+/**
+ * Scheme-wise progress from suggestion to delivery, and entitlement gaps, for the user's
+ * area — or for `area` inside it (a district on the state's district profile).
+ */
+export function SchemeConvergence({ area }: { area?: { level: string; code: string } }) {
   const tr = useTr()
   const signedIn = useSession((s) => Boolean(s.token))
+  const search = area ? `?level=${area.level}&code=${area.code}` : ""
   const { data, isLoading, error } = useQuery({
-    queryKey: ["monitoring", "schemes"],
-    queryFn: () => api<SchemeRow[]>("/monitoring/schemes"),
+    queryKey: ["monitoring", "schemes", area?.level ?? "", area?.code ?? ""],
+    queryFn: () => api<SchemeRow[]>(`/monitoring/schemes${search}`),
     enabled: signedIn,
   })
   if (isLoading) return <EmptyState>{tr("लोड हो रहा है…")}</EmptyState>

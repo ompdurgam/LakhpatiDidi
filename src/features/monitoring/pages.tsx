@@ -27,3 +27,5 @@ export function StatePage() {
   const section = useSection()
   return <AreaDashboard key={section} level="state" section={section} />
 }
+
+export { DistrictProfile as StateDistrictPage } from "./district/DistrictProfile"

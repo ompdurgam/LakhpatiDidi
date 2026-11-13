@@ -90,7 +90,8 @@ export const routes: RouteObject[] = [
       ]),
       guarded("state", [
         { path: "state", ...statePage },
-        { path: "state/districts/:districtId?", ...statePage },
+        { path: "state/districts", ...statePage },
+        { path: "state/districts/:districtId", ...page(monitoring, (m) => m.StateDistrictPage) },
         { path: "state/departments", ...statePage },
         { path: "state/certification", ...statePage },
         { path: "state/escalations", ...statePage },

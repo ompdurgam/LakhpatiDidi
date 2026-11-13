@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router"
 
 import { Icon } from "@/components/ui/Icon"
 import { PldDownload } from "@/features/households/PldDownload"
@@ -27,6 +28,10 @@ const value = (c: ChildArea, key: SortKey) =>
 /** Every district (state) or block (district) with its survey and Lakhpati figures. */
 export function ChildAreaTable({ data }: { data: Overview }) {
   const tr = useTr()
+  const navigate = useNavigate()
+  // On the state dashboard each district opens its full profile.
+  const open =
+    data.area.level === "state" ? (c: ChildArea) => navigate(`/state/districts/${c.code}`) : null
   const [sort, setSort] = useState<SortKey>("households")
   const rows = [...data.children].sort((a, b) => {
     const x = value(a, sort)
@@ -49,6 +54,7 @@ export function ChildAreaTable({ data }: { data: Overview }) {
           <p>
             {num(rows.length)} {tr(CHILD_LABEL[data.area.childLevel] ?? "क्षेत्र")} •{" "}
             {tr("शीर्षक पर क्लिक कर क्रम बदलें")}
+            {open && ` • ${tr("पूरी जानकारी के लिए जिले पर क्लिक करें")}`}
           </p>
         </div>
       </div>
@@ -67,9 +73,25 @@ export function ChildAreaTable({ data }: { data: Overview }) {
           </thead>
           <tbody>
             {rows.map((c) => (
-              <tr key={c.id}>
+              <tr
+                key={c.id}
+                className={open ? "clickable-row" : undefined}
+                onClick={open ? () => open(c) : undefined}
+              >
                 <td>
-                  <strong>{c.name}</strong>
+                  {open ? (
+                    <button
+                      className="link-button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        open(c)
+                      }}
+                    >
+                      <strong>{c.name}</strong>
+                    </button>
+                  ) : (
+                    <strong>{c.name}</strong>
+                  )}
                 </td>
                 <td>{num(c.households)}</td>
                 <td>{num(c.pld)}</td>
@@ -110,7 +132,7 @@ function downloadCoverage(data: Overview) {
 }
 
 /** The area's report: live summary to print, and downloads. */
-export function AreaReports({ data }: { data: Overview }) {
+export function AreaReports({ data, pld = true }: { data: Overview; pld?: boolean }) {
   const tr = useTr()
   const { totals, funnel, gaps } = data
   const lines: [string, string][] = [
@@ -176,16 +198,18 @@ export function AreaReports({ data }: { data: Overview }) {
       <section className="report-downloads">
         <h3>{tr("डाउनलोड")}</h3>
         <div>
-          <article className="card">
-            <span>
-              <Icon name="file" size={20} />
-            </span>
-            <div>
-              <strong>{tr("PLD सूची")}</strong>
-              <small>{tr("हर दीदी • सर्वे और आय स्थिति सहित")}</small>
-            </div>
-            <PldDownload />
-          </article>
+          {pld && (
+            <article className="card">
+              <span>
+                <Icon name="file" size={20} />
+              </span>
+              <div>
+                <strong>{tr("PLD सूची")}</strong>
+                <small>{tr("हर दीदी • सर्वे और आय स्थिति सहित")}</small>
+              </div>
+              <PldDownload />
+            </article>
+          )}
           <article className="card">
             <span>
               <Icon name="file" size={20} />

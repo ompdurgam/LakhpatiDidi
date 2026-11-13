@@ -16,7 +16,8 @@ const CHILD_LABEL: Record<string, string> = {
 }
 
 /** The area's LGD map shaded by Lakhpati share, beside its child areas ranked. */
-export function AreaMapCard({ data }: { data: Overview }) {
+/** `role`: whose map pages a click opens (a state user viewing a district stays under /state). */
+export function AreaMapCard({ data, role }: { data: Overview; role?: "state" | "district" }) {
   const tr = useTr()
   const navigate = useNavigate()
   const { area, children } = data
@@ -54,7 +55,7 @@ export function AreaMapCard({ data }: { data: Overview }) {
               outline={geo.data?.outline ?? null}
               attribution={geo.data?.sources.join(" • ") ?? ""}
               stats={stats}
-              onSelect={(code) => navigate(`/${area.level}/map/${area.childLevel}/${code}`)}
+              onSelect={(code) => navigate(`/${role ?? area.level}/map/${area.childLevel}/${code}`)}
             />
           </Suspense>
         ) : (

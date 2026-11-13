@@ -1,4 +1,5 @@
 // Fake /api/monitoring/overview payload for route and component tests.
+import type { Trend } from "@/features/monitoring/district/useTrend"
 import type { Overview } from "@/features/monitoring/useOverview"
 
 export const overviewFixture: Overview = {
@@ -65,4 +66,21 @@ export const overviewFixture: Overview = {
   sectors: [{ name: "कृषि", households: 20 }],
   loans: [{ lender: "shg", amount: 50000, households: 4 }],
   surveyors: [{ name: "गीता नेताम", assigned: 120, submitted: 40, drafts: 2 }],
+}
+
+// Fake /api/monitoring/trend payload: 12 months, activity in the last few.
+export const trendFixture: Trend = {
+  months: Array.from({ length: 12 }, (_, i) => ({
+    month: `2026-${String(i + 1).padStart(2, "0")}`,
+    surveyed: i > 8 ? 10 * i : 0,
+    received: i > 9 ? 3 : 0,
+    sanctioned: i > 9 ? 2 : 0,
+    delivered: i === 11 ? 1 : 0,
+    sanctionedAmount: i > 9 ? 120000 : 0,
+    gapsIdentified: i > 8 ? 4 : 0,
+    gapsClosed: i === 11 ? 2 : 0,
+    incomeReporters: i > 9 ? 6 : 0,
+    avgMonthlyIncome: i > 9 ? 7500 + i * 100 : 0,
+  })),
+  before: { surveyed: 5, sanctioned: 1 },
 }

@@ -6,7 +6,7 @@ import {
   recommendationsFixture,
   surveyedFixture,
 } from "./fieldFixtures"
-import { overviewFixture } from "./monitoringFixtures"
+import { overviewFixture, trendFixture } from "./monitoringFixtures"
 
 export const applicationFixture: ApplicationRow = {
   id: "APP-260142",
@@ -188,6 +188,7 @@ export function fakeApi(url: string): unknown {
   if (path.startsWith("/geo/areas/")) return geoAreaFixture
   if (path.startsWith("/geo/villages/")) return geoVillageFixture
   if (path === "/monitoring/overview") return overviewFixture
+  if (path === "/monitoring/trend") return trendFixture
   return []
 }
 
