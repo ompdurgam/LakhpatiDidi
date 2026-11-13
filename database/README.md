@@ -95,6 +95,7 @@ npm run db:migrate    # apply pending migrations (creates the database if missin
 npm run db:rollback   # undo the most recent migration
 npm run db:reset      # drop database → migrate (empty, no demo data)
 npm run db:admin -- <mobile> [name]   # add an admin login
+npm run db:test-users                 # test login per role (see below); --remove deletes them
 npm run db:status     # ✓ applied / · pending
 ```
 
@@ -127,6 +128,21 @@ npm run geo:boundaries -- --level village        --file $D/chhattisgarh-villages
 # 5. The first admin login; the admin then adds everyone else under Admin → Users
 npm run db:admin -- 9XXXXXXXXX "Admin name"
 ```
+
+### Test logins
+
+`npm run db:test-users` creates one login per role, each placed in a real area (by default the district with the most Didis, its busiest block and village; pass `-- --district <LGD code>` to choose). Every name ends in "(टेस्ट)" and every mobile starts with `900000`. With `OTP_DEV_MODE` on, the login screen shows the OTP. Re-running refreshes them, and `npm run db:test-users -- --remove` deletes them (a login with recorded work is locked instead).
+
+| Mobile | Role |
+|---|---|
+| 9000000001 | State (SMMU) |
+| 9000000002 | Admin |
+| 9000000003 | District (DPM) |
+| 9000000004 | Block (BMMU) |
+| 9000000005 | Field (CRP), one village |
+| 9000000006 | Didi: linked to a PLD household in the CRP's village that had no mobile |
+| 9000000009 | Every role except Didi, to switch between them |
+| 9000000101 … | One department officer per department (FISH, AGRI, …) over the district |
 
 On a server that already has surveys, run `npm run survey:backfill-gaps` once after migration 017. It turns the section D answers of saved surveys into entitlement gaps, and is safe to re-run.
 
